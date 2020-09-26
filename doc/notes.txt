@@ -1,0 +1,23 @@
+#####################
+#QUICK & DIRTY NOTES#
+#####################
+
+Mobile Controller Emulator - Project Description:
+    - Emulate joystick and gamepad like controls on a smart phone or any wifi capable touch screen device, transmit them over wifi to a pc and use the input for a controller emulator on the pc.
+
+    Two main components:
+        1. Mobile Device Controller Emulator:
+            Receive input from touch screen a via widgets that emulate controller buttons and analog sticks, 
+            and transmit them via wifi to the target host machine
+
+        2. Target Device 
+
+
+
+
+RESEARCH NOTES:
+Look up uinput for linux
+Look up libevdev for linux, recommended over uinput
+
+
+

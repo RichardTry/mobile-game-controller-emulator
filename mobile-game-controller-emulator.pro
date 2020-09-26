@@ -11,3 +11,11 @@ SOURCES += \
 
 RESOURCES += \
     resources.qrc
+
+driver {
+TARGET = controller-driver-emulator
+}
+
+controller {
+TARGET = controller-emulator
+}
