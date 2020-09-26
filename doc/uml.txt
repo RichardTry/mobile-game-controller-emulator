@@ -1,10 +1,14 @@
 @startuml
 
-IControllerEmulator->IController
+IControllerEmulator-right->IController
 IControllerEmulator-down->IStick
 IControllerEmulator-down->IButton
 IControllerEmulator-down->ITransmitter
 IDriverEmulator-left->IController
 IDriverEmulator-down->IReceiver
+IDriverEmulator-down->IStick
+IDriverEmulator-down->IButton
+IController-down->IStick
+IController-down->IButton
 
 @enduml
