@@ -1,9 +1,10 @@
 TEMPLATE = app
 
-QT += qml quick
+CONFIG += c++11
 
-DISTFILES += \
-    qml/main.qml
+QT += core gui widgets
+
+DISTFILES +=
 
 SOURCES += \
     src/main.cpp
