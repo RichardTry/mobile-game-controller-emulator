@@ -1,14 +1,29 @@
 @startuml
 
 IControllerEmulator-right->IController
-IControllerEmulator-down->IStick
-IControllerEmulator-down->IButton
-IControllerEmulator-down->ITransmitter
+IControllerEmulator-down->IContinuousInput
+IControllerEmulator-down->IDiscreteInput
+IControllerEmulator-down->ITransceiver
 IDriverEmulator-left->IController
-IDriverEmulator-down->IReceiver
-IDriverEmulator-down->IStick
-IDriverEmulator-down->IButton
-IController-down->IStick
-IController-down->IButton
+IDriverEmulator-down->ITransceiver
+IDriverEmulator-down->IContinuousInput
+IDriverEmulator-down->IDiscreteInput
+IController-down->IContinuousInput
+IController-down->IDiscreteInput
+
+newpage
+
+AndroidJoystickEmulator-up--|>IControllerEmulator
+LinuxJoystickDriverEmulator-up--|>IDriverEmulator
+Joystick-up--|>IController
+AnalogStick-up--|>IContinuousInput
+PushButton-up--|>IDiscreteInput
+Slider-up--|>IContinuousInput
+NetworkTransceiver-up--|>ITransceiver
+Joystick-left->AnalogStick
+Joystick-left->Slider
+Joystick-left->PushButton
+AndroidJoystickEmulator-left->Joystick
+LinuxJoystickDriverEmulator-left->Joystick
 
 @enduml
