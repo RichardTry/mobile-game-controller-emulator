@@ -2,18 +2,15 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += core gui widgets
-
-DISTFILES +=
+QT += widgets core gui network
 
 SOURCES += \
     src/main.cpp
 
-RESOURCES += \
-    resources.qrc
+RESOURCES +=
 
 driver {
-TARGET = controller-driver-emulator
+TARGET = driver-emulator
 }
 
 controller {
