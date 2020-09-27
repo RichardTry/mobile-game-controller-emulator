@@ -25,5 +25,7 @@ Joystick-left->Slider
 Joystick-left->PushButton
 AndroidJoystickEmulator-left->Joystick
 LinuxJoystickDriverEmulator-left->Joystick
+AndroidJoystickEmulator-right->NetworkTransceiver
+LinuxJoystickDriverEmulator-right->NetworkTransceiver
 
 @enduml
