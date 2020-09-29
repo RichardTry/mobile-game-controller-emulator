@@ -19,5 +19,14 @@ RESEARCH NOTES:
 Look up uinput for linux
 Look up libevdev for linux, recommended over uinput
 
+SCTP PROTOCOL:
+A protocol over TCP that is message oriented like UDP but ensures the reliability of TCP.
+
+"Being message-oriented, SCTP transports a sequence of messages, rather than transporting an unbroken stream of bytes as does TCP. Like in UDP, in SCTP a sender sends a message in one operation, and that exact message is passed to the receiving application process in one operation. But unlike UDP, the delivery is guaranteed." - Qt QSctpSocket class documentation
+
+Important Note:
+Scratch that, SCTP isn't supported on windows without external libraries and QT online version is compiled with SCTP disabled.
+Even if Qt is compiled with SCTP enabled it still doesn't support SCTP on widnows.
+
 
 
