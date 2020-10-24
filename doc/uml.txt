@@ -7,12 +7,26 @@ IController-right->ITransceiver
 newpage
 
 AndroidJoystickEmulator-up--|>IControllerEmulator
+IOSJoystickEmulator-up--|>IControllerEmulator
 LinuxJoystickDriverEmulator-up--|>IDriverEmulator
+MacJoystickDriverEmulator-up--|>IDriverEmulator
+WindowsJoystickDriverEmulator-up--|>IDriverEmulator
 Joystick-up--|>IController
 NetworkTransceiver-up--|>ITransceiver
-AndroidJoystickEmulator-left->Joystick
+BluetoothTransceiver-up--|>ITransceiver
+AndroidJoystickEmulator-right->Joystick
+IOSJoystickEmulator-right->Joystick
 LinuxJoystickDriverEmulator-left->Joystick
-AndroidJoystickEmulator-right->NetworkTransceiver
-LinuxJoystickDriverEmulator-right->NetworkTransceiver
+MacJoystickDriverEmulator-left->Joystick
+WindowsJoystickDriverEmulator-left->Joystick
+MultiPlatformControllerApplication-up->AndroidJoystickEmulator
+MultiPlatformControllerApplication-up->IOSJoystickEmulator
+MultiPlatformControllerApplication-up->NetworkTransceiver
+MultiPlatformControllerApplication-up->BluetoothTransceiver
+MultiPlatformDriverApplication-up->LinuxJoystickDriverEmulator
+MultiPlatformDriverApplication-up->MacJoystickDriverEmulator
+MultiPlatformDriverApplication-up->WindowsJoystickDriverEmulator
+MultiPlatformDriverApplication-up->NetworkTransceiver
+MultiPlatformDriverApplication-up->BluetoothTransceiver
 
 @enduml
