@@ -23,4 +23,6 @@ HEADERS += \
     src/controller/icontroller.h \
     src/emulator/icontrolleremulator.h \
     src/emulator/idriveremulator.h \
-    src/transceiver/itransceiver.h
+    src/transceiver/abstracttransceiver.h
+
+ANDROID_ABIS = armeabi-v7a
