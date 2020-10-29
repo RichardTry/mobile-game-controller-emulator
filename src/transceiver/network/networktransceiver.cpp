@@ -169,6 +169,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitMaster::start() 
 
     m_transceiver->m_udpSocket->close();
     if(!m_transceiver->m_udpSocket->bind(QHostAddress::Any, m_transceiver->m_port)) {
+//    if(!m_transceiver->m_udpSocket->bind(m_transceiver->m_selectedInterface, m_transceiver->m_port)) {
         messageBox.setText(tr("Error binding socket to host: ") + m_transceiver->m_selectedInterface.toString() + tr(", port: ") + QString::number(m_transceiver->m_port));
         messageBox.exec();
         return nullptr;
@@ -232,11 +233,18 @@ qint64 NetworkTransceiver::StateListen::sendData(const QByteArray &data, const b
 
 // MASTER SEND INPUT
 NetworkTransceiver::StateSendInput::StateSendInput(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    transceiver->masterUi->stackedWidget->setCurrentWidget(transceiver->masterUi->stateListen);
+    transceiver->masterUi->stackedWidget->setCurrentWidget(transceiver->masterUi->stateSendnput);
+    m_transceiver->connected();
+    m_transceiver->m_udpSocket->connectToHost(m_transceiver->m_slaveHost, m_transceiver->m_port);
+    QMessageBox messageBox;
+    messageBox.setWindowTitle(tr("Info"));
+    messageBox.setText(tr("Connected to host: ") + m_transceiver->m_slaveHost.toString());
+    messageBox.exec();
 }
 
 NetworkTransceiver::StateSendInput::~StateSendInput() {
-
+    m_transceiver->m_udpSocket->disconnectFromHost();
+    m_transceiver->disconnected("");
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::start() {
@@ -255,14 +263,18 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::onReadyRe
     in << str;
     if(str == "quit") {
         return new StateListen(m_transceiver);
-    }
+    } else
+        return nullptr;
 }
 
 qint64 NetworkTransceiver::StateSendInput::sendData(const QByteArray &data, const bool &acknowledge) {
     QNetworkDatagram datagram;
-    datagram.setDestination(m_transceiver->m_slaveHost, m_transceiver->m_port);
     datagram.setData(data);
-    return m_transceiver->m_udpSocket->writeDatagram(datagram);
+    datagram.setSender(m_transceiver->m_selectedInterface, m_transceiver->m_port);
+    datagram.setDestination(m_transceiver->m_slaveHost, m_transceiver->m_port);
+//    m_transceiver->m_udpSocket->connectToHost(m_transceiver->m_slaveHost, m_transceiver->m_port);
+    return m_transceiver->m_udpSocket->write(data);
+//    return m_transceiver->m_udpSocket->writeDatagram(datagram);
 }
 
 // SLAVE INIT
@@ -342,10 +354,11 @@ qint64 NetworkTransceiver::StateBroadcast::sendData(const QByteArray &data, cons
 // SLAVE RECEIVE INPUT
 NetworkTransceiver::StateReceiveInput::StateReceiveInput(NetworkTransceiver *transceiver): AbstractState(transceiver) {
     m_transceiver->slaveUi->stackedWidget->setCurrentWidget(m_transceiver->slaveUi->StateReceiveInput);
+    m_transceiver->connected();
 }
 
 NetworkTransceiver::StateReceiveInput::~StateReceiveInput() {
-
+    m_transceiver->disconnected("");
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateReceiveInput::start() {
