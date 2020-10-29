@@ -2,20 +2,24 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network
+QT += widgets core gui network svg
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/transceiver/network/networktransceiver.cpp
 
-RESOURCES +=
+RESOURCES += \
+    resources/resources.qrc
 
-INCLUDEPATH += include/
+INCLUDEPATH += src/
 
 driver {
+DEFINES += DRIVER
 TARGET = driver-emulator
 }
 
 controller {
+DEFINES += CONTROLLER
 TARGET = controller-emulator
 }
 
@@ -23,6 +27,11 @@ HEADERS += \
     src/controller/icontroller.h \
     src/emulator/icontrolleremulator.h \
     src/emulator/idriveremulator.h \
-    src/transceiver/abstracttransceiver.h
+    src/transceiver/abstracttransceiver.h \
+    src/transceiver/network/networktransceiver.h
 
 ANDROID_ABIS = armeabi-v7a
+
+FORMS += \
+    ui/networktransceivermaster.ui \
+    ui/networktransceiverslave.ui

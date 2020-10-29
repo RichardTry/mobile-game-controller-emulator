@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>applications-simulation.svg</file>
+        <file>nm-stage01-connecting11.svg</file>
+        <file>nm-stage01-connecting09.svg</file>
+        <file>nm-stage01-connecting05.svg</file>
+        <file>nm-stage01-connecting03.svg</file>
+        <file>nm-stage01-connecting06.svg</file>
+        <file>nm-stage01-connecting08.svg</file>
+        <file>nm-stage01-connecting07.svg</file>
+        <file>nm-stage01-connecting10.svg</file>
+        <file>nm-stage01-connecting04.svg</file>
+        <file>nm-stage01-connecting01.svg</file>
+        <file>nm-stage01-connecting02.svg</file>
+        <file>network-transmit-receive.svg</file>
+        <file>network-transmit.svg</file>
+        <file>network-receive.svg</file>
+    </qresource>
+</RCC>

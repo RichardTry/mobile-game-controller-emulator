@@ -17,13 +17,20 @@ public:
 
     }
 
-    virtual QWidget *connectionMenu() = 0;
+    virtual ~AbstractTransceiver() {}
+
+    virtual QWidget *widget() = 0;
 
 signals:
-    void dataArrived(const QByteArray &data);
+    void dataArrived(QByteArray data);
+    void connected();
+    void disconnected(QString msg);
+    void quit();
 
 public slots:
     virtual qint64 sendData(const QByteArray &data, const bool &acknowledge = false) = 0;
+    virtual void onStart() = 0;
+    virtual void onStop() = 0;
 
 protected:
     Mode m_mode;
