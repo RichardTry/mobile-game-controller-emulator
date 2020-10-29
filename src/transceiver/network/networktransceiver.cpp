@@ -244,7 +244,7 @@ NetworkTransceiver::StateSendInput::StateSendInput(NetworkTransceiver *transceiv
 
 NetworkTransceiver::StateSendInput::~StateSendInput() {
     m_transceiver->m_udpSocket->disconnectFromHost();
-    m_transceiver->disconnected("");
+    m_transceiver->disconnected("Disconnected by user");
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::start() {
@@ -252,7 +252,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::start() {
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::stop() {
-    return new StateListen(m_transceiver);
+    return new StateInitMaster(m_transceiver);
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::onReadyRead() {
@@ -268,10 +268,10 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateSendInput::onReadyRe
 }
 
 qint64 NetworkTransceiver::StateSendInput::sendData(const QByteArray &data, const bool &acknowledge) {
-    QNetworkDatagram datagram;
-    datagram.setData(data);
-    datagram.setSender(m_transceiver->m_selectedInterface, m_transceiver->m_port);
-    datagram.setDestination(m_transceiver->m_slaveHost, m_transceiver->m_port);
+//    QNetworkDatagram datagram;
+//    datagram.setData(data);
+//    datagram.setSender(m_transceiver->m_selectedInterface, m_transceiver->m_port);
+//    datagram.setDestination(m_transceiver->m_slaveHost, m_transceiver->m_port);
 //    m_transceiver->m_udpSocket->connectToHost(m_transceiver->m_slaveHost, m_transceiver->m_port);
     return m_transceiver->m_udpSocket->write(data);
 //    return m_transceiver->m_udpSocket->writeDatagram(datagram);
