@@ -41,11 +41,8 @@ NetworkTransceiver::NetworkTransceiver(const Mode &mode, QObject *parent):
     }
 
     // Initilize udp socket and make connections
-    m_thread = new QThread();
-    m_thread->start();
     m_udpSocket = new QUdpSocket();
     connect(m_udpSocket, &QUdpSocket::readyRead, this, &NetworkTransceiver::onReadyRead);
-    m_udpSocket->moveToThread(m_thread);
 }
 
 NetworkTransceiver::~NetworkTransceiver() {

@@ -125,7 +125,6 @@ private:
 
     AbstractState *m_state;
     QUdpSocket *m_udpSocket;
-    QThread *m_thread;
     quint16 m_port;
     QWidget *m_widget;
     // Configured by master only, slave receives at the rate the master dictates
