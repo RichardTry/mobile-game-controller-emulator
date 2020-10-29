@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
         QDataStream in(&data, QIODevice::ReadOnly);
         QString str;
         in >> str;
-        qDebug() << '\r' << str;
+        qDebug() << str;
     });
     QObject::connect(transceiver, &AbstractTransceiver::quit, &app, &QApplication::quit);
 #elif defined(CONTROLLER)
@@ -26,12 +26,12 @@ int main(int argc, char **argv) {
     QObject::connect(&timer, &QTimer::timeout, [transceiver] () {
         QByteArray data;
         QDataStream out(&data, QIODevice::WriteOnly);
-        QString msg = "Pecket number: " + QString::number(++packetCount).rightJustified(10, ' ');
+        QString msg = "Packet number: " + QString::number(++packetCount).rightJustified(10, ' ');
         out << msg;
         if(transceiver->sendData(data) == -1) {
-            qDebug() << "\r" << "Failed to send packet : " + QString::number(packetCount).rightJustified(10, ' ');
+            qDebug() << "Failed to send packet : " + QString::number(packetCount).rightJustified(10, ' ');
         } else {
-            qDebug() << '\r' << "Sending packet number : " + QString::number(packetCount).rightJustified(10, ' ');
+            qDebug() << "Sending packet number : " + QString::number(packetCount).rightJustified(10, ' ');
         }
     });
     QObject::connect(transceiver, &AbstractTransceiver::connected, [&timer] () {
