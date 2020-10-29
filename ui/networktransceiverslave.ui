@@ -21,7 +21,14 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QGraphicsView" name="logoGraphicsView"/>
+          <widget class="QLabel" name="logoLabel">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_2">

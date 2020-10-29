@@ -5,10 +5,6 @@
 #include <QNetworkDatagram>
 #include <QMessageBox>
 #include <QDataStream>
-#include <QtSvg/QSvgRenderer>
-#include <QtSvg/QGraphicsSvgItem>
-#include <QGraphicsScene>
-#include <QGraphicsView>
 #include "ui_networktransceivermaster.h"
 #include "ui_networktransceiverslave.h"
 
@@ -84,6 +80,8 @@ void NetworkTransceiver::onReadyRead() {
 void NetworkTransceiver::loadMasterUI() {
     masterUi = new Ui::NetworkTransceiverMaster();
     masterUi->setupUi(m_widget);
+    masterUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
+    masterUi->sendingIconLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
 
     // Init
     connect(masterUi->startPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStart);
@@ -120,16 +118,8 @@ void NetworkTransceiver::loadMasterUI() {
 void NetworkTransceiver::loadSlaveUI() {
     slaveUi = new Ui::NetworkTransceiverSlave();
     slaveUi->setupUi(m_widget);
-    QGraphicsScene *scene = new QGraphicsScene();
-    QSvgRenderer *renderer = new QSvgRenderer(QStringLiteral(":/applications-simulation.svg"));
-    QGraphicsSvgItem *item = new QGraphicsSvgItem();
-    item->setSharedRenderer(renderer);
-    scene->addItem(item);
-    slaveUi->logoGraphicsView->setScene(scene);
-    slaveUi->logoGraphicsView->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
-//    slaveUi->logoGraphicsView->scale(slaveUi->logoGraphicsView->frameSize().width()/scene->width(), slaveUi->logoGraphicsView->frameSize().height()/scene->height());
-    slaveUi->logoGraphicsView->setAlignment(Qt::AlignCenter);
-    widget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    slaveUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
+    slaveUi->receiveAnimationLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
 
     // Init
     connect(slaveUi->startPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStart);
