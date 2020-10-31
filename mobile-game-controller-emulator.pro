@@ -5,6 +5,7 @@ CONFIG += c++11
 QT += widgets core gui network svg
 
 SOURCES += \
+    src/controller/gamepad/gamepad.cpp \
     src/main.cpp \
     src/transceiver/network/networktransceiver.cpp
 
@@ -24,6 +25,7 @@ TARGET = controller-emulator
 }
 
 HEADERS += \
+    src/controller/gamepad/gamepad.h \
     src/controller/icontroller.h \
     src/emulator/icontrolleremulator.h \
     src/emulator/idriveremulator.h \
