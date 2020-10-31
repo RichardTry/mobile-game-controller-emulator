@@ -8,7 +8,7 @@ public:
     IController();
     virtual ~IController() {}
 
-    virtual QByteArray getData() const = 0;
+    virtual QByteArray getData() = 0;
     virtual void setData(const QByteArray &data) = 0;
 };
 
