@@ -5,10 +5,10 @@
 #include <QPointF>
 #include <QObject>
 
-class Gamepad : public IController, QObject {
+class Gamepad : public QObject, public IController {
     Q_OBJECT
 public:
-    Gamepad();
+    Gamepad(QObject *parent = nullptr);
     ~Gamepad();
 
     QByteArray getData() override;

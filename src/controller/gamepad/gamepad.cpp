@@ -1,7 +1,8 @@
 #include "gamepad.h"
 #include <QDataStream>
+#include <QDebug>
 
-Gamepad::Gamepad() {
+Gamepad::Gamepad(QObject *parent ): QObject(parent), m_buttons(0), m_pressedEvents(0), m_releasedEvents(0) {
 
 }
 
@@ -54,8 +55,9 @@ bool Gamepad::getButton(Button button) const {
 
 void Gamepad::setButton(const Button &button, const bool &value) {
     if(value) {
-        m_buttons |= (1 >> button);
+        m_buttons |= (1 << button);
     } else {
-        m_buttons &= (~0) ^ (1 >> button);
+        m_buttons &= (~0) ^ (1 << button);
     }
+    qDebug() << QString::number(m_buttons, 2);
 }

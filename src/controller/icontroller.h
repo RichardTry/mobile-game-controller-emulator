@@ -5,7 +5,7 @@
 
 class IController {
 public:
-    IController();
+    IController() {}
     virtual ~IController() {}
 
     virtual QByteArray getData() = 0;
