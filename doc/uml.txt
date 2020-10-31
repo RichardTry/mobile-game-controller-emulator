@@ -6,19 +6,17 @@ IController-right->ITransceiver
 
 newpage
 
+/' CONTROLLER EMULATORS '/
 AndroidJoystickEmulator-up--|>IControllerEmulator
 IOSJoystickEmulator-up--|>IControllerEmulator
+/' DRIVERS EMULATORS'/
 LinuxJoystickDriverEmulator-up--|>IDriverEmulator
 MacJoystickDriverEmulator-up--|>IDriverEmulator
 WindowsJoystickDriverEmulator-up--|>IDriverEmulator
-Joystick-up--|>IController
+/' Transceivers '/
 NetworkTransceiver-up--|>ITransceiver
 BluetoothTransceiver-up--|>ITransceiver
-AndroidJoystickEmulator-right->Joystick
-IOSJoystickEmulator-right->Joystick
-LinuxJoystickDriverEmulator-left->Joystick
-MacJoystickDriverEmulator-left->Joystick
-WindowsJoystickDriverEmulator-left->Joystick
+/' FINAL APPLICAITONS'/
 MultiPlatformControllerApplication-up->AndroidJoystickEmulator
 MultiPlatformControllerApplication-up->IOSJoystickEmulator
 MultiPlatformControllerApplication-up->NetworkTransceiver
@@ -28,5 +26,48 @@ MultiPlatformDriverApplication-up->MacJoystickDriverEmulator
 MultiPlatformDriverApplication-up->WindowsJoystickDriverEmulator
 MultiPlatformDriverApplication-up->NetworkTransceiver
 MultiPlatformDriverApplication-up->BluetoothTransceiver
+
+newpage
+
+/' CONTROLLER EMULATORS '/
+AndroidGamepadEmulator-up--|>IControllerEmulator
+IOSGamepadEmulator-up--|>IControllerEmulator
+/' DRIVERS EMULATORS'/
+LinuxGamepadDriverEmulator-up--|>IDriverEmulator
+MacGamepadDriverEmulator-up--|>IDriverEmulator
+WindowsGamepadDriverEmulator-up--|>IDriverEmulator
+/'Transceivers'/
+NetworkTransceiver-up--|>ITransceiver
+BluetoothTransceiver-up--|>ITransceiver
+/' FINAL APPLICAITONS'/
+MultiPlatformControllerApplication-up->AndroidGamepadEmulator
+MultiPlatformControllerApplication-up->IOSGamepadEmulator
+MultiPlatformControllerApplication-up->NetworkTransceiver
+MultiPlatformControllerApplication-up->BluetoothTransceiver
+MultiPlatformDriverApplication-up->LinuxGamepadDriverEmulator
+MultiPlatformDriverApplication-up->MacGamepadDriverEmulator
+MultiPlatformDriverApplication-up->WindowsGamepadDriverEmulator
+MultiPlatformDriverApplication-up->NetworkTransceiver
+MultiPlatformDriverApplication-up->BluetoothTransceiver
+
+newpage
+
+/' JOYSTICK & CONTROLLER/EMULATOR RELATIONSHIPS '/
+Joystick-up--|>IController
+AndroidJoystickEmulator-right->Joystick
+IOSJoystickEmulator-right->Joystick
+LinuxJoystickDriverEmulator-left->Joystick
+MacJoystickDriverEmulator-left->Joystick
+WindowsJoystickDriverEmulator-left->Joystick
+
+newpage
+
+/' GAMEPAD & CONTROLLER/EMULATOR RELATIONSHIPS '/
+Gamepad-up--|>IController
+AndroidGamepadEmulator-right->Gamepad
+IOSGamepadEmulator-right->Gamepad
+LinuxGamepadDriverEmulator-left->Gamepad
+MacGamepadDriverEmulator-left->Gamepad
+WindowsGamepadDriverEmulator-left->Gamepad
 
 @enduml
