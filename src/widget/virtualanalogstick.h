@@ -2,6 +2,7 @@
 #define VIRTUALANALOGSTICK_H
 
 #include <QWidget>
+#include <QTimer>
 
 class VirtualAnalogStick : public QWidget {
     Q_OBJECT
@@ -27,6 +28,8 @@ private:
     QPixmap m_outerPixmap;
     QPointF m_touchPoint;
     QRect m_innerRect;
+
+    QTimer m_timer;
 };
 
 #endif // VIRTUALANALOGSTICK_H

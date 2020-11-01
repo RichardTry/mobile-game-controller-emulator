@@ -3,7 +3,7 @@
 #include <QTimer>
 #include "widget/virtualanalogstick.h"
 #include <QVBoxLayout>
-#include <QSpacerItem>
+#include <QHBoxLayout>
 
 int packetCount = 0;
 
@@ -14,11 +14,18 @@ int main(int argc, char **argv) {
     widget->setWindowTitle("Virtual Analog Stick Test Run");
 
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
+    analogStick->setMinimumSize(300, 300);
 
     auto vBoxLayout  = new QVBoxLayout;
+    auto hBoxLayout  = new QHBoxLayout;
     widget->setLayout(vBoxLayout);
-    vBoxLayout->addWidget(analogStick);
-//    vBoxLayout->addStretch();
+    vBoxLayout->addStretch();
+    vBoxLayout->addLayout(hBoxLayout);
+    vBoxLayout->addStretch();
+
+    hBoxLayout->addStretch();
+    hBoxLayout->addWidget(analogStick);
+    hBoxLayout->addStretch();
 
     widget->show();
     analogStick->show();
