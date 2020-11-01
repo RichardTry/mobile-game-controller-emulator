@@ -11,6 +11,7 @@ Gamepad::~Gamepad() {
 }
 
 QByteArray Gamepad::getData() {
+    m_data.clear();
     QDataStream out(&m_data, QIODevice::WriteOnly);
 
     out << m_leftStick;
