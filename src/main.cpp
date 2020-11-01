@@ -1,17 +1,27 @@
 #include <QApplication>
 #include <QWidget>
 #include <QTimer>
-#include "controller/gamepad/gamepad.h"
+#include "widget/virtualanalogstick.h"
+#include <QVBoxLayout>
+#include <QSpacerItem>
 
 int packetCount = 0;
 
 int main(int argc, char **argv) {
-//    QApplication app(argc, argv);
-    Gamepad gamePad;
+    QApplication app(argc, argv);
 
-    for(int i = Gamepad::Button::X; i <= Gamepad::Button::RIGHT; ++i) {
-        gamePad.setButton((Gamepad::Button)i, i%2);
-    }
+    QWidget *widget = new QWidget;
+    widget->setWindowTitle("Virtual Analog Stick Test Run");
+
+    VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
+
+    auto vBoxLayout  = new QVBoxLayout;
+    widget->setLayout(vBoxLayout);
+    vBoxLayout->addWidget(analogStick);
+//    vBoxLayout->addStretch();
+
+    widget->show();
+    analogStick->show();
 
 //#if defined(DRIVER)
 //    AbstractTransceiver *transceiver = new NetworkTransceiver(NetworkTransceiver::Mode::Slave);
@@ -47,6 +57,5 @@ int main(int argc, char **argv) {
 //        timer.stop();
 //    });
 //#endif
-//    return app.exec();
-    return 0;
+    return app.exec();
 }

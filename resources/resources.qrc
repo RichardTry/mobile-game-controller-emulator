@@ -15,5 +15,11 @@
         <file>network-transmit-receive.svg</file>
         <file>network-transmit.svg</file>
         <file>network-receive.svg</file>
+        <file>JoystickSplitted.png</file>
+        <file>Joystick.png</file>
+        <file>LargeHandleFilled.png</file>
+        <file>LargeHandleFilledGrey.png</file>
+        <file>SmallHandleFilledGrey.png</file>
+        <file>SmallHandle.png</file>
     </qresource>
 </RCC>

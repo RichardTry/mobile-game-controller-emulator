@@ -9,8 +9,6 @@ class QWidget;
 class IControllerEmulator
 {
 public:
-    IControllerEmulator();
-
     virtual void setTransceiver(AbstractTransceiver *transceiver) = 0;
     virtual QWidget *widget() = 0;
 };

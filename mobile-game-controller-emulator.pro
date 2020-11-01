@@ -8,7 +8,8 @@ SOURCES += \
     src/controller/gamepad/gamepad.cpp \
     src/emulator/gamepad/gamepadcontrolleremulator.cpp \
     src/main.cpp \
-    src/transceiver/network/networktransceiver.cpp
+    src/transceiver/network/networktransceiver.cpp \
+    src/widget/virtualanalogstick.cpp
 
 RESOURCES += \
     resources/resources.qrc
@@ -32,7 +33,8 @@ HEADERS += \
     src/emulator/icontrolleremulator.h \
     src/emulator/idriveremulator.h \
     src/transceiver/abstracttransceiver.h \
-    src/transceiver/network/networktransceiver.h
+    src/transceiver/network/networktransceiver.h \
+    src/widget/virtualanalogstick.h
 
 ANDROID_ABIS = armeabi-v7a
 
