@@ -1,22 +1,22 @@
 #ifndef GAMEPADCONTROLLEREMULATOR_H
 #define GAMEPADCONTROLLEREMULATOR_H
 
-#include "emulator/icontrolleremulator.h"
+#include "emulator/abstractcontrolleremulator.h"
+#include "controller/gamepad/gamepad.h"
 #include <QObject>
 #include <QWidget>
 
-class GamepadControllerEmulator : public QObject, public IControllerEmulator {
+class GamepadControllerEmulator : public AbstractControllerEmulator {
     Q_OBJECT
 public:
-    GamepadControllerEmulator(QObject *parent = nullptr);
+    GamepadControllerEmulator(QWidget *parent = nullptr);
     ~GamepadControllerEmulator();
 
     void setTransceiver(AbstractTransceiver *transceiver) override;
-    QWidget *widget() override;
 
 private:
     AbstractTransceiver *m_transceiver;
-    QWidget *m_widget;
+    Gamepad *m_gamepad;
 };
 
 #endif // GAMEPADCONTROLLEREMULATOR_H

@@ -1,7 +1,9 @@
 #include "gamepadcontrolleremulator.h"
 
-GamepadControllerEmulator::GamepadControllerEmulator(QObject *parent): QObject(parent), m_transceiver(nullptr) {
-    m_widget = new QWidget;
+GamepadControllerEmulator::GamepadControllerEmulator(QWidget *parent): AbstractControllerEmulator(parent), m_transceiver(nullptr) {
+    m_gamepad = new Gamepad(this);
+
+    // Setup ui
 }
 
 GamepadControllerEmulator::~GamepadControllerEmulator() {
@@ -10,8 +12,4 @@ GamepadControllerEmulator::~GamepadControllerEmulator() {
 
 void GamepadControllerEmulator::setTransceiver(AbstractTransceiver *transceiver) {
     m_transceiver = transceiver;
-}
-
-QWidget *GamepadControllerEmulator::widget() {
-
 }

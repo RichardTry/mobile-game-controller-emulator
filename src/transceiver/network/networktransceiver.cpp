@@ -10,14 +10,13 @@
 
 unsigned int NetworkTransceiver::m_datagramId = 0;
 
-NetworkTransceiver::NetworkTransceiver(const Mode &mode, QObject *parent):
+NetworkTransceiver::NetworkTransceiver(const Mode &mode, QWidget *parent):
     AbstractTransceiver(mode, parent),
     m_port(45800),
     m_selectedInterface(QHostAddress::Null),
     m_slaveHost(QHostAddress::Null),
     m_masterHost(QHostAddress::Null)
 {
-
     // Get available interfaces
     for(const QHostAddress &address: QNetworkInterface::allAddresses()) {
         if(address.isLoopback() || address.isNull())
@@ -27,7 +26,6 @@ NetworkTransceiver::NetworkTransceiver(const Mode &mode, QObject *parent):
     }
 
     // Load initial state and ui
-    m_widget = new QWidget();
     if(m_mode == Mode::Master) {
         loadMasterUI();
         m_state = new StateInitMaster(this);
@@ -43,10 +41,6 @@ NetworkTransceiver::NetworkTransceiver(const Mode &mode, QObject *parent):
 
 NetworkTransceiver::~NetworkTransceiver() {
     delete m_state;
-}
-
-QWidget *NetworkTransceiver::widget() {
-    return m_widget;
 }
 
 qint64 NetworkTransceiver::sendData(const QByteArray &data, const bool &acknowledge) {
@@ -79,7 +73,7 @@ void NetworkTransceiver::onReadyRead() {
 
 void NetworkTransceiver::loadMasterUI() {
     masterUi = new Ui::NetworkTransceiverMaster();
-    masterUi->setupUi(m_widget);
+    masterUi->setupUi(this);
     masterUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
     masterUi->sendingIconLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
 
@@ -117,7 +111,7 @@ void NetworkTransceiver::loadMasterUI() {
 
 void NetworkTransceiver::loadSlaveUI() {
     slaveUi = new Ui::NetworkTransceiverSlave();
-    slaveUi->setupUi(m_widget);
+    slaveUi->setupUi(this);
     slaveUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
     slaveUi->receiveAnimationLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
 

@@ -104,10 +104,9 @@ class NetworkTransceiver : public AbstractTransceiver {
     };
 
 public:
-    NetworkTransceiver(const Mode &mode, QObject *parent = nullptr);
+    NetworkTransceiver(const Mode &mode, QWidget *parent = nullptr);
     ~NetworkTransceiver();
 
-    QWidget *widget() override;
     qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
 
 public slots:
@@ -126,7 +125,6 @@ private:
     AbstractState *m_state;
     QUdpSocket *m_udpSocket;
     quint16 m_port;
-    QWidget *m_widget;
     // Configured by master only, slave receives at the rate the master dictates
     int m_pollPeriodMS;
     // Common to both modes
