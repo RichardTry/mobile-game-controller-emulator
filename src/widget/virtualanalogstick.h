@@ -43,9 +43,6 @@ private:
     QColor m_innerColor;
     QColor m_outerColor;
 
-//    QPixmap m_innerPixmap;
-//    QPixmap m_outerPixmap;
-
     QPointF m_touchPoint;
     QRect m_innerRect;
 
