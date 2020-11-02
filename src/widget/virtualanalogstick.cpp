@@ -40,21 +40,25 @@ bool VirtualAnalogStick::event(QEvent *event) {
     switch (event->type()) {
         case QEvent::TouchEnd: {
             m_touchPoint = this->rect().center();
+            emit touchPointMoved(normalisedTouchPoint());
             return true;
         }
         case QEvent::TouchCancel: {
             m_touchPoint = this->rect().center();
+            emit touchPointMoved(normalisedTouchPoint());
             return true;
         }
         default: {
-            m_touchPoint = touchEvent->touchPoints().first().pos();
+            const QPointF rawTouchPoint = touchEvent->touchPoints().first().pos();
             const QPoint origin = this->rect().center();
-            if((m_touchPoint - origin).manhattanLength() > m_outerRadius - m_innerRadius) {
-                QLineF line(origin, m_touchPoint.toPoint());
+            if((rawTouchPoint - origin).manhattanLength() > m_outerRadius - m_innerRadius) {
+                QLineF line(origin, rawTouchPoint.toPoint());
                 m_touchPoint.setY(qSin(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.y());
                 m_touchPoint.setX(qCos(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.x());
+            } else {
+                m_touchPoint = rawTouchPoint;
             }
-
+            emit touchPointMoved(normalisedTouchPoint());
             return true;
         }
     }
@@ -63,6 +67,10 @@ bool VirtualAnalogStick::event(QEvent *event) {
 
 QPointF VirtualAnalogStick::touchPoint() const {
     return m_touchPoint;
+}
+
+QPointF VirtualAnalogStick::normalisedTouchPoint() const {
+    return (m_touchPoint - rect().center())/(m_outerRadius - m_innerRadius);
 }
 
 void VirtualAnalogStick::paintEvent(QPaintEvent *event) {

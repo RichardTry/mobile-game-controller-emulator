@@ -13,6 +13,7 @@ public:
 
 
     QPointF touchPoint() const;
+    QPointF normalisedTouchPoint() const;
 
     int outerRadius() const;
     void setOuterRadius(int outerRadius);
@@ -29,6 +30,7 @@ public:
     QSize minimumSizeHint() const override;
 
 signals:
+    void touchPointMoved(QPointF normalisedTouchPoint);
 
 protected:
     bool event(QEvent *event) override;

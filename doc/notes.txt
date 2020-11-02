@@ -37,3 +37,6 @@ java -jar ~/Downloads/plantuml.jar -svg doc/uml.txt && eog doc/uml.svg
 
 IMPORTANT TIP WHEN SUBCLASSING QWIDGET
 Make sure to implement the minimumSizeHint function, or the layouts will resize the widget to zero unless minimum size specified.
+
+TO MAKE AWESOME SCREEN RECORDING ON ANDROID USING ADB SHELL
+/home/palpatine/Android/Sdk/platform-tools/adb shell screenrecord /sdcard/Download/test.mp4

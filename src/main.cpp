@@ -4,6 +4,7 @@
 #include "widget/virtualanalogstick.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
 
 int packetCount = 0;
 
@@ -23,10 +24,17 @@ int main(int argc, char **argv) {
     analogStick->setOuterColor(QColor(32, 32, 32, 128));
     analogStick->setInnerColor(QColor(32, 32, 32, 255));
 
+    QLabel *label = new QLabel(widget);
+    label->setAlignment(Qt::AlignCenter);
+    QObject::connect(analogStick, &VirtualAnalogStick::touchPointMoved, [label] (QPointF normalisedTouchPoint){
+        label->setText("x :" + QString::number((double)normalisedTouchPoint.x()).rightJustified(5, ' ', true) + ", y : " + QString::number((double)normalisedTouchPoint.y()).rightJustified(5, ' ', true));
+    });
+
     auto vBoxLayout  = new QVBoxLayout;
     auto hBoxLayout  = new QHBoxLayout;
     widget->setLayout(vBoxLayout);
     vBoxLayout->addStretch();
+    vBoxLayout->addWidget(label);
     vBoxLayout->addLayout(hBoxLayout);
     vBoxLayout->addStretch();
 
