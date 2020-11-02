@@ -31,3 +31,9 @@ Even if Qt is compiled with SCTP enabled it still doesn't support SCTP on widnow
 
 UDP Related look this up:
 IP_ADD_SOURCE_MEMBERSHIP, "Join a multicast group and allow receiving data only from a specified source" linux manual pages
+
+PLANTUML COMMAND TO CONSTRUCT AND VIEW UML DIAGRAMS
+java -jar ~/Downloads/plantuml.jar -svg doc/uml.txt && eog doc/uml.svg
+
+IMPORTANT TIP WHEN SUBCLASSING QWIDGET
+Make sure to implement the minimumSizeHint function, or the layouts will resize the widget to zero unless minimum size specified.
