@@ -26,6 +26,8 @@ public:
     QColor outerColor() const;
     void setOuterColor(const QColor &outerColor);
 
+    QSize minimumSizeHint() const override;
+
 signals:
 
 protected:

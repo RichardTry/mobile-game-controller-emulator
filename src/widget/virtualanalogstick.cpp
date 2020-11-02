@@ -114,3 +114,7 @@ int VirtualAnalogStick::outerRadius() const {
 void VirtualAnalogStick::setOuterRadius(int outerRadius) {
     m_outerRadius = outerRadius;
 }
+
+QSize VirtualAnalogStick::minimumSizeHint() const {
+    return QSize(m_outerRadius * 2.1, m_outerRadius * 2.1);
+}
