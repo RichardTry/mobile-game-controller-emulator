@@ -48,14 +48,13 @@ bool VirtualAnalogStick::event(QEvent *event) {
         }
         default: {
             m_touchPoint = touchEvent->touchPoints().first().pos();
-            if((m_touchPoint - this->rect().center()).manhattanLength() > m_outerRadius - m_innerRadius) {
-                QLineF line(m_touchPoint.toPoint(), this->rect().center());
-                QPointF closestPoint;
-                closestPoint.setY(qSin(qDegreesToRadians(line.angle())) * (m_outerRadius - m_innerRadius) + this->rect().center().y());
-                closestPoint.setX(qCos(qDegreesToRadians(line.angle()) + M_PI) * (m_outerRadius - m_innerRadius) + this->rect().center().x());
-                m_touchPoint = closestPoint;
-                return true;
+            const QPoint origin = this->rect().center();
+            if((m_touchPoint - origin).manhattanLength() > m_outerRadius - m_innerRadius) {
+                QLineF line(origin, m_touchPoint.toPoint());
+                m_touchPoint.setY(qSin(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.y());
+                m_touchPoint.setX(qCos(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.x());
             }
+
             return true;
         }
     }
@@ -71,16 +70,42 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
 
     QPen pen = painter.pen();
     pen.setWidth(m_lineWidth);
+    const QPoint origin = this->rect().center();
 
     // Outer circle
     pen.setColor(m_outerColor);
     painter.setPen(pen);
-    painter.drawEllipse(this->rect().center(), m_outerRadius - m_lineWidth, m_outerRadius - m_lineWidth);
+    painter.drawEllipse(origin, m_outerRadius - m_lineWidth, m_outerRadius - m_lineWidth);
 
     // Inner circle
     pen.setColor(m_innerColor);
     painter.setPen(pen);
     painter.drawEllipse(m_touchPoint, m_innerRadius - m_lineWidth, m_innerRadius - m_lineWidth);
+
+//#if defined (QT_DEBUG)
+//    // Draw x axis positive side
+//    pen.setColor(QColor(0, 255, 0));
+//    painter.setPen(pen);
+//    painter.drawLine(QLine(origin + QPoint(m_lineWidth, 0), origin + QPoint(m_outerRadius, 0)));
+//    // Label axis
+//    QFontMetrics fm(painter.font());
+//    int textWidth = fm.horizontalAdvance("+x");
+//    painter.drawText(origin + QPoint(m_outerRadius - textWidth, -20), "+x");
+
+//    // Draw y axis positive side
+//    pen.setColor(QColor(255, 0, 0));
+//    painter.setPen(pen);
+//    painter.drawLine(QLine(origin + QPoint(0, m_lineWidth), origin + QPoint(0, m_outerRadius)));
+//    // Label axis
+//    int textHeight = fm.boundingRect("+y").height();
+//    painter.drawText(origin + QPoint(-textHeight, m_outerRadius), "+y");
+
+//    // Draw line from origin to touch point's center
+//    pen.setColor(QColor(0, 0, 0));
+//    pen.setWidth(m_lineWidth/2 > 0 ? m_lineWidth/2 : 1);
+//    painter.setPen(pen);
+//    painter.drawLine(QLine(origin, m_touchPoint.toPoint()));
+//#endif
 }
 
 int VirtualAnalogStick::heightForWidth(int w) const {

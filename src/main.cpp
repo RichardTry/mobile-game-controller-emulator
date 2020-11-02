@@ -14,8 +14,8 @@ int main(int argc, char **argv) {
     widget->setWindowTitle("Virtual Analog Stick Test Run");
 
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
-    const int outerRadius = 200;
-    const int innerRadius = 75;
+    const int outerRadius = 250;
+    const int innerRadius = 100;
 
     analogStick->setOuterRadius(outerRadius);
     analogStick->setInnerRadius(innerRadius);
