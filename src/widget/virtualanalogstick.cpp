@@ -40,16 +40,14 @@ bool VirtualAnalogStick::event(QEvent *event) {
         }
         default: {
             m_touchPoint = touchEvent->touchPoints().first().pos();
-            if((m_touchPoint - this->rect().center()).manhattanLength() > m_outerRadius - m_lineWidth) {
+            if((m_touchPoint - this->rect().center()).manhattanLength() > m_outerRadius - m_innerRadius) {
                 QLineF line(m_touchPoint.toPoint(), this->rect().center());
                 QPointF closestPoint;
-                closestPoint.setY(qSin(qDegreesToRadians(line.angle())) * (m_outerRadius - m_innerRadius - m_lineWidth) + this->rect().center().y());
-                closestPoint.setX(qCos(qDegreesToRadians(line.angle()) + M_PI) * (m_outerRadius - m_innerRadius - m_lineWidth) + this->rect().center().x());
+                closestPoint.setY(qSin(qDegreesToRadians(line.angle())) * (m_outerRadius - m_innerRadius) + this->rect().center().y());
+                closestPoint.setX(qCos(qDegreesToRadians(line.angle()) + M_PI) * (m_outerRadius - m_innerRadius) + this->rect().center().x());
                 m_touchPoint = closestPoint;
-//                qDebug() << m_touchPoint;
                 return true;
             }
-//            qDebug() << m_touchPoint;
             return true;
         }
     }
@@ -69,12 +67,12 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
     // Outer circle
     pen.setColor(m_outerColor);
     painter.setPen(pen);
-    painter.drawEllipse(this->rect().center(), m_outerRadius - pen.width(), m_outerRadius - pen.width());
+    painter.drawEllipse(this->rect().center(), m_outerRadius - m_lineWidth, m_outerRadius - m_lineWidth);
 
     // Inner circle
     pen.setColor(m_innerColor);
     painter.setPen(pen);
-    painter.drawEllipse(m_touchPoint, m_innerRadius, m_innerRadius);
+    painter.drawEllipse(m_touchPoint, m_innerRadius - m_lineWidth, m_innerRadius - m_lineWidth);
 }
 
 int VirtualAnalogStick::heightForWidth(int w) const {
