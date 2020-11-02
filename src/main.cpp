@@ -14,7 +14,15 @@ int main(int argc, char **argv) {
     widget->setWindowTitle("Virtual Analog Stick Test Run");
 
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
-    analogStick->setMinimumSize(300, 300);
+    const int outerRadius = 150;
+    const int innerRadius = 50;
+    analogStick->setMinimumSize(outerRadius * 2, outerRadius * 2);
+
+    analogStick->setOuterRadius(outerRadius);
+    analogStick->setInnerRadius(innerRadius);
+
+    analogStick->setOuterColor(QColor(32, 32, 32, 128));
+    analogStick->setInnerColor(QColor(32, 32, 32, 255));
 
     auto vBoxLayout  = new QVBoxLayout;
     auto hBoxLayout  = new QHBoxLayout;

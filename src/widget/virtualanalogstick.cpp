@@ -6,9 +6,12 @@
 
 VirtualAnalogStick::VirtualAnalogStick(QWidget *parent) : QWidget(parent), m_touchPoint(this->rect().center()) {
     setAttribute(Qt::WA_AcceptTouchEvents);
-    m_innerPixmap.load(":/SmallHandle.png");
-    m_outerPixmap.load(":/Joystick.png");
-    m_timer.setInterval(50);
+
+    m_innerColor = QColor(32, 32, 32, 128);
+    m_outerColor = QColor(255, 32, 32, 255);
+    m_lineWidth = 10;
+
+    m_timer.setInterval(25);
     QWidget::connect(&m_timer, &QTimer::timeout, this, QOverload <>::of (&QWidget::repaint));
     m_timer.start();
 }
@@ -37,16 +40,16 @@ bool VirtualAnalogStick::event(QEvent *event) {
         }
         default: {
             m_touchPoint = touchEvent->touchPoints().first().pos();
-            if(!this->rect().contains(m_touchPoint.toPoint())) {
+            if((m_touchPoint - this->rect().center()).manhattanLength() > m_outerRadius - m_lineWidth) {
                 QLineF line(m_touchPoint.toPoint(), this->rect().center());
                 QPointF closestPoint;
-                closestPoint.setY(qSin(qDegreesToRadians(line.angle())) * (height() / 2) + this->rect().center().y());
-                closestPoint.setX(qCos(qDegreesToRadians(line.angle()) + M_PI) * (width() / 2) + this->rect().center().x());
+                closestPoint.setY(qSin(qDegreesToRadians(line.angle())) * (m_outerRadius - m_innerRadius - m_lineWidth) + this->rect().center().y());
+                closestPoint.setX(qCos(qDegreesToRadians(line.angle()) + M_PI) * (m_outerRadius - m_innerRadius - m_lineWidth) + this->rect().center().x());
                 m_touchPoint = closestPoint;
-                qDebug() << m_touchPoint;
+//                qDebug() << m_touchPoint;
                 return true;
             }
-            qDebug() << m_touchPoint;
+//            qDebug() << m_touchPoint;
             return true;
         }
     }
@@ -59,13 +62,57 @@ QPointF VirtualAnalogStick::touchPoint() const {
 
 void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    painter.drawPixmap(this->rect(), m_outerPixmap);
 
-    const int innerWidth = m_innerPixmap.width();
-    QPoint topLeft = QPoint(m_touchPoint.x() - innerWidth/2, m_touchPoint.y() - innerWidth/2);
-    painter.drawPixmap(topLeft, m_innerPixmap);
+    QPen pen = painter.pen();
+    pen.setWidth(m_lineWidth);
+
+    // Outer circle
+    pen.setColor(m_outerColor);
+    painter.setPen(pen);
+    painter.drawEllipse(this->rect().center(), m_outerRadius - pen.width(), m_outerRadius - pen.width());
+
+    // Inner circle
+    pen.setColor(m_innerColor);
+    painter.setPen(pen);
+    painter.drawEllipse(m_touchPoint, m_innerRadius, m_innerRadius);
 }
 
 int VirtualAnalogStick::heightForWidth(int w) const {
     return w;
+}
+
+QColor VirtualAnalogStick::outerColor() const
+{
+    return m_outerColor;
+}
+
+void VirtualAnalogStick::setOuterColor(const QColor &outerColor)
+{
+    m_outerColor = outerColor;
+}
+
+QColor VirtualAnalogStick::innerColor() const
+{
+    return m_innerColor;
+}
+
+void VirtualAnalogStick::setInnerColor(const QColor &innerColor)
+{
+    m_innerColor = innerColor;
+}
+
+int VirtualAnalogStick::innerRadius() const {
+    return m_innerRadius;
+}
+
+void VirtualAnalogStick::setInnerRadius(int innerRadius) {
+    m_innerRadius = innerRadius;
+}
+
+int VirtualAnalogStick::outerRadius() const {
+    return m_outerRadius;
+}
+
+void VirtualAnalogStick::setOuterRadius(int outerRadius) {
+    m_outerRadius = outerRadius;
 }

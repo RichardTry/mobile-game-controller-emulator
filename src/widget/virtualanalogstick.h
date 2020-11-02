@@ -14,6 +14,18 @@ public:
 
     QPointF touchPoint() const;
 
+    int outerRadius() const;
+    void setOuterRadius(int outerRadius);
+
+    int innerRadius() const;
+    void setInnerRadius(int innerRadius);
+
+    QColor innerColor() const;
+    void setInnerColor(const QColor &innerColor);
+
+    QColor outerColor() const;
+    void setOuterColor(const QColor &outerColor);
+
 signals:
 
 protected:
@@ -24,8 +36,14 @@ protected:
 private:
     int m_outerRadius;
     int m_innerRadius;
-    QPixmap m_innerPixmap;
-    QPixmap m_outerPixmap;
+
+    int m_lineWidth;
+    QColor m_innerColor;
+    QColor m_outerColor;
+
+//    QPixmap m_innerPixmap;
+//    QPixmap m_outerPixmap;
+
     QPointF m_touchPoint;
     QRect m_innerRect;
 
