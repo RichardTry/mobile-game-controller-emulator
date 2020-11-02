@@ -7,11 +7,15 @@
 VirtualAnalogStick::VirtualAnalogStick(QWidget *parent) : QWidget(parent), m_touchPoint(this->rect().center()) {
     setAttribute(Qt::WA_AcceptTouchEvents);
 
+    m_innerRadius = 50;
+    m_innerRadius = 150;
+
     m_innerColor = QColor(32, 32, 32, 128);
     m_outerColor = QColor(255, 32, 32, 255);
     m_lineWidth = 10;
 
     m_timer.setInterval(25);
+    m_timer.setSingleShot(true);
     QWidget::connect(&m_timer, &QTimer::timeout, this, QOverload <>::of (&QWidget::repaint));
     m_timer.start();
 }
@@ -25,6 +29,10 @@ bool VirtualAnalogStick::event(QEvent *event) {
 
     if(eventType != QEvent::TouchBegin && eventType != QEvent::TouchUpdate && eventType != QEvent::TouchEnd && eventType != QEvent::TouchCancel) {
         return QWidget::event(event);
+    }
+
+    if(!m_timer.isActive()) {
+        m_timer.start();
     }
 
     const QTouchEvent *touchEvent = static_cast <const QTouchEvent*> (event);

@@ -16,7 +16,6 @@ int main(int argc, char **argv) {
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
     const int outerRadius = 200;
     const int innerRadius = 75;
-//    analogStick->setMinimumSize(outerRadius * 2, outerRadius * 2);
 
     analogStick->setOuterRadius(outerRadius);
     analogStick->setInnerRadius(innerRadius);
