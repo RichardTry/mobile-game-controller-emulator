@@ -40,3 +40,6 @@ Make sure to implement the minimumSizeHint function, or the layouts will resize 
 
 TO MAKE AWESOME SCREEN RECORDING ON ANDROID USING ADB SHELL
 /home/palpatine/Android/Sdk/platform-tools/adb shell screenrecord /sdcard/Download/test.mp4
+
+QPainter::drawText(point, text):
+Draws the text within a rectangle that has "point" as the "bottom left" corner.
