@@ -2,8 +2,6 @@
 
 GamepadControllerEmulator::GamepadControllerEmulator(QWidget *parent): AbstractControllerEmulator(parent), m_transceiver(nullptr) {
     m_gamepad = new Gamepad(this);
-
-    // Setup ui
 }
 
 GamepadControllerEmulator::~GamepadControllerEmulator() {

@@ -21,5 +21,9 @@
         <file>LargeHandleFilledGrey.png</file>
         <file>SmallHandleFilledGrey.png</file>
         <file>SmallHandle.png</file>
+        <file>sb_right_arrow.cur</file>
+        <file>sb_left_arrow.cur</file>
+        <file>sb_down_arrow.cur</file>
+        <file>sb_up_arrow.cur</file>
     </qresource>
 </RCC>
