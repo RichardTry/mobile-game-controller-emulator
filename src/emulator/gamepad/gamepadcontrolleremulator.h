@@ -3,7 +3,6 @@
 
 #include "emulator/abstractcontrolleremulator.h"
 #include "controller/gamepad/gamepad.h"
-#include <QObject>
 #include <QWidget>
 
 class GamepadControllerEmulator : public AbstractControllerEmulator {

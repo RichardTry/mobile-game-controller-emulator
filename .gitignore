@@ -73,3 +73,6 @@ Thumbs.db
 
 # Uml images
 *.svg
+
+# Android deployment configuration files
+android/*
