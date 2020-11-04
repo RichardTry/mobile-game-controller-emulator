@@ -2,6 +2,7 @@
 #define GAMEPAD_H
 
 #include "controller/icontroller.h"
+#include "common/common.h"
 #include <QPointF>
 #include <QObject>
 
@@ -14,27 +15,6 @@ public:
     QByteArray getData() override;
     void setData(const QByteArray &data) override;
 
-    enum Button {
-    // 4 Buttons on the right hands side
-        X = 0,
-        Y,
-        B,
-        A,
-    // Start, back and guide buttons in the middle
-        START,
-        BACK,
-        GUIDE,
-    // 4 Buttons on the front facing side
-        LEFTTRIGGER,
-        RIGHTTRIGGER,
-        LEFTBUMPER,
-        RIGHTBUMPER,
-    // D-Pad on the left hands side
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT,
-    };
 
 signals:
     void buttonPressed(Button button);

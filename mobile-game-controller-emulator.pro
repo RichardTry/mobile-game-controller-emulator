@@ -28,6 +28,7 @@ TARGET = controller-emulator
 }
 
 HEADERS += \
+    src/common/common.h \
     src/controller/gamepad/gamepad.h \
     src/controller/icontroller.h \
     src/emulator/abstractcontrolleremulator.h \

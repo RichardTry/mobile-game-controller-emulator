@@ -4,7 +4,7 @@
 #include <QLayout>
 #include <QObject>
 #include <QtSvg/QGraphicsSvgItem>
-#include "controller/gamepad/gamepad.h"
+#include "common/common.h"
 
 class GamepadSvgLayout : public QLayout {
     Q_OBJECT
@@ -12,7 +12,7 @@ public:
     GamepadSvgLayout();
     ~GamepadSvgLayout();
 
-    void addWidget(QWidget *widget, const Gamepad::Button &button);
+    void addWidget(QWidget *widget, const Button &button);
 
     // Mandatory to implement
     void addItem(QLayoutItem *item) override;
@@ -29,22 +29,22 @@ public:
 
 private:
     struct ItemWrapper {
-        ItemWrapper(QLayoutItem *i, Gamepad::Button b) {
+        ItemWrapper(QLayoutItem *i, Button b) {
             item = i;
             button = b;
         }
 
         QLayoutItem *item;
-        Gamepad::Button button;
+        Button button;
     };
 
     enum SizeType { MinimumSize, SizeHint };
     QSize calculateSize(SizeType sizeType) const;
-    QString getSvgLabel(const Gamepad::Button &button) const;
-    Gamepad::Button getButton(const QString &svgLabel) const;
+    QString getSvgLabel(const Button &button) const;
+    Button getButton(const QString &svgLabel) const;
 
     QList<ItemWrapper *> m_itemList;
-    QMap <Gamepad::Button, QString> m_buttonPropertyMap;
+    QMap <Button, QString> m_buttonPropertyMap;
 };
 
 #endif // SVGLAYOUT_H
