@@ -27,6 +27,18 @@ VirtualAnalogStick::~VirtualAnalogStick() {
 bool VirtualAnalogStick::event(QEvent *event) {
     QEvent::Type eventType = event->type();
 
+    if(eventType == QEvent::Resize) {
+        const QResizeEvent *resizeEvent = static_cast <const QResizeEvent *> (event);
+        const qreal w = resizeEvent->size().width();
+        const qreal h = resizeEvent->size().height();
+        qreal ri = (w < h ? w : h) / 2;
+        ri *= (qreal)innerRadius() / (qreal) outerRadius();
+        setInnerRadius(ri);
+        qreal ro = (w < h ? w : h) / 2;
+        setOuterRadius(ro);
+        return QWidget::event(event);
+    }
+
     if(eventType != QEvent::TouchBegin && eventType != QEvent::TouchUpdate && eventType != QEvent::TouchEnd && eventType != QEvent::TouchCancel) {
         return QWidget::event(event);
     }
@@ -157,5 +169,17 @@ void VirtualAnalogStick::setOuterRadius(int outerRadius) {
 }
 
 QSize VirtualAnalogStick::minimumSizeHint() const {
-    return QSize(m_outerRadius * 2.1, m_outerRadius * 2.1);
+    return QSize(m_outerRadius * 2, m_outerRadius * 2);
 }
+
+//void VirtualAnalogStick::setGeometry(const QRect &r) {
+//    setInnerRadius(r.width()/2 * (m_innerRadius/m_outerRadius));
+//    setOuterRadius(r.width()/2);
+//    QWidget::setGeometry(r);
+//}
+
+//void VirtualAnalogStick::setGeometry(int x, int y, int w, int h) {
+//    setInnerRadius(w/2 * (m_innerRadius/m_outerRadius));
+//    setOuterRadius(w/2);
+//    QWidget::setGeometry(x, y, w, h);
+//}

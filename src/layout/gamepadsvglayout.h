@@ -3,7 +3,8 @@
 
 #include <QLayout>
 #include <QObject>
-#include <QtSvg/QGraphicsSvgItem>
+#include <QXmlStreamReader>
+#include <QMap>
 #include "common/common.h"
 
 class GamepadSvgLayout : public QLayout {
@@ -11,6 +12,10 @@ class GamepadSvgLayout : public QLayout {
 public:
     GamepadSvgLayout();
     ~GamepadSvgLayout();
+
+    void load();
+
+    void add(QLayoutItem *item, const Button &button);
 
     void addWidget(QWidget *widget, const Button &button);
 
@@ -20,6 +25,7 @@ public:
     void setGeometry(const QRect &r) override;
     QLayoutItem *itemAt(int index) const override;
     QLayoutItem *takeAt(int index) override;
+    int count() const override;
 
     // Recommended
     QSize maximumSize() const override;
@@ -39,12 +45,12 @@ private:
     };
 
     enum SizeType { MinimumSize, SizeHint };
-    QSize calculateSize(SizeType sizeType) const;
-    QString getSvgLabel(const Button &button) const;
-    Button getButton(const QString &svgLabel) const;
 
     QList<ItemWrapper *> m_itemList;
-    QMap <Button, QString> m_buttonPropertyMap;
+    QMap <Button, QRectF> m_buttonRects;
+    QRectF m_rect;
+    QRectF m_svgRect;
+    QPointF m_scale; // scale = layout (this) dimensions / SVG dimensions or m_rect/m_svgRect
 };
 
 #endif // SVGLAYOUT_H

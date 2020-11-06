@@ -2,14 +2,17 @@
 #include <QWidget>
 #include <QTimer>
 #include "widget/virtualanalogstick.h"
+#include "layout/gamepadsvglayout.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QFrame>
 
 int packetCount = 0;
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
+
 
     QWidget *widget = new QWidget;
     widget->setWindowTitle("Virtual Analog Stick Test Run");
@@ -17,33 +20,61 @@ int main(int argc, char **argv) {
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
     const int outerRadius = 250;
     const int innerRadius = 100;
-
     analogStick->setOuterRadius(outerRadius);
     analogStick->setInnerRadius(innerRadius);
-
     analogStick->setOuterColor(QColor(32, 32, 32, 128));
     analogStick->setInnerColor(QColor(32, 32, 32, 255));
 
-    QLabel *label = new QLabel(widget);
-    label->setAlignment(Qt::AlignCenter);
-    QObject::connect(analogStick, &VirtualAnalogStick::touchPointMoved, [label] (QPointF normalisedTouchPoint){
-        label->setText("x :" + QString::number((double)normalisedTouchPoint.x()).rightJustified(5, ' ', true) + ", y : " + QString::number((double)normalisedTouchPoint.y()).rightJustified(5, ' ', true));
-    });
-
-    auto vBoxLayout  = new QVBoxLayout;
-    auto hBoxLayout  = new QHBoxLayout;
-    widget->setLayout(vBoxLayout);
-    vBoxLayout->addStretch();
-    vBoxLayout->addWidget(label);
-    vBoxLayout->addLayout(hBoxLayout);
-    vBoxLayout->addStretch();
-
-    hBoxLayout->addStretch();
-    hBoxLayout->addWidget(analogStick);
-    hBoxLayout->addStretch();
-
+    GamepadSvgLayout *svgLayout = new GamepadSvgLayout;
+    svgLayout->load();
+    svgLayout->setSizeConstraint(QLayout::SizeConstraint::SetMaximumSize);
+    widget->setLayout(svgLayout);
+    svgLayout->addWidget(analogStick, Button::LEFTSTICK);
+    auto label = new QLabel("RIGHT STICK", widget);
+    label->setFrameStyle(QFrame::Box);
+    label->setScaledContents(true);
+    label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    label->setMinimumSize(50, 50);
+    label->setStyleSheet("background-color:red");
+    svgLayout->addWidget(label, Button::RIGHTSTICK);
     widget->show();
     analogStick->show();
+
+
+//    QWidget *widget = new QWidget;
+//    widget->setWindowTitle("Virtual Analog Stick Test Run");
+
+//    VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
+//    const int outerRadius = 250;
+//    const int innerRadius = 100;
+
+//    analogStick->setOuterRadius(outerRadius);
+//    analogStick->setInnerRadius(innerRadius);
+
+//    analogStick->setOuterColor(QColor(32, 32, 32, 128));
+//    analogStick->setInnerColor(QColor(32, 32, 32, 255));
+
+//    QLabel *label = new QLabel(widget);
+//    label->setAlignment(Qt::AlignCenter);
+//    QObject::connect(analogStick, &VirtualAnalogStick::touchPointMoved, [label] (QPointF normalisedTouchPoint){
+//        label->setText("x :" + QString::number((double)normalisedTouchPoint.x()).rightJustified(5, ' ', true) + ", y : " + QString::number((double)normalisedTouchPoint.y()).rightJustified(5, ' ', true));
+//    });
+
+//    auto vBoxLayout  = new QVBoxLayout;
+//    auto hBoxLayout  = new QHBoxLayout;
+//    widget->setLayout(vBoxLayout);
+//    vBoxLayout->addStretch();
+//    vBoxLayout->addWidget(label);
+//    vBoxLayout->addLayout(hBoxLayout);
+//    vBoxLayout->addStretch();
+
+//    hBoxLayout->addStretch();
+//    hBoxLayout->addWidget(analogStick);
+//    hBoxLayout->addStretch();
+
+//    widget->show();
+//    analogStick->show();
 
 //#if defined(DRIVER)
 //    AbstractTransceiver *transceiver = new NetworkTransceiver(NetworkTransceiver::Mode::Slave);

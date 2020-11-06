@@ -2,7 +2,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network svg
+QT += widgets core gui network xml
 
 SOURCES += \
     src/controller/gamepad/gamepad.cpp \
@@ -52,6 +52,7 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    resources/controller-layout.svg
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

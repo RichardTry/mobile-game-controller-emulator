@@ -25,5 +25,6 @@
         <file>sb_left_arrow.cur</file>
         <file>sb_down_arrow.cur</file>
         <file>sb_up_arrow.cur</file>
+        <file>controller-layout.svg</file>
     </qresource>
 </RCC>

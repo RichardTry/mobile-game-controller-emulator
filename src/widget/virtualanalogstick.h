@@ -28,6 +28,8 @@ public:
     void setOuterColor(const QColor &outerColor);
 
     QSize minimumSizeHint() const override;
+//    void setGeometry(const QRect &r);
+//    void setGeometry(int x, int y, int w, int h);
 
 signals:
     void touchPointMoved(QPointF normalisedTouchPoint);
