@@ -171,15 +171,3 @@ void VirtualAnalogStick::setOuterRadius(int outerRadius) {
 QSize VirtualAnalogStick::minimumSizeHint() const {
     return QSize(m_outerRadius * 2, m_outerRadius * 2);
 }
-
-//void VirtualAnalogStick::setGeometry(const QRect &r) {
-//    setInnerRadius(r.width()/2 * (m_innerRadius/m_outerRadius));
-//    setOuterRadius(r.width()/2);
-//    QWidget::setGeometry(r);
-//}
-
-//void VirtualAnalogStick::setGeometry(int x, int y, int w, int h) {
-//    setInnerRadius(w/2 * (m_innerRadius/m_outerRadius));
-//    setOuterRadius(w/2);
-//    QWidget::setGeometry(x, y, w, h);
-//}

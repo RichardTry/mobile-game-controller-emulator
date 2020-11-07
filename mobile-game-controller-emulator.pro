@@ -10,7 +10,8 @@ SOURCES += \
     src/layout/gamepadsvglayout.cpp \
     src/main.cpp \
     src/transceiver/network/networktransceiver.cpp \
-    src/widget/virtualanalogstick.cpp
+    src/widget/virtualanalogstick.cpp \
+    src/widget/virtualdirectionalpad.cpp
 
 RESOURCES += \
     resources/resources.qrc
@@ -37,7 +38,8 @@ HEADERS += \
     src/layout/gamepadsvglayout.h \
     src/transceiver/abstracttransceiver.h \
     src/transceiver/network/networktransceiver.h \
-    src/widget/virtualanalogstick.h
+    src/widget/virtualanalogstick.h \
+    src/widget/virtualdirectionalpad.h
 
 ANDROID_ABIS = armeabi-v7a
 
