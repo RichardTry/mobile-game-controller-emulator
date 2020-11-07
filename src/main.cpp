@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QWidget>
+#include <QMainWindow>
 #include <QTimer>
 #include "widget/virtualanalogstick.h"
 #include "layout/gamepadsvglayout.h"
@@ -13,8 +14,9 @@ int packetCount = 0;
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
 
+    QMainWindow *mainWindow = new QMainWindow;
 
-    QWidget *widget = new QWidget;
+    QWidget *widget = new QWidget(mainWindow);
     widget->setWindowTitle("Virtual Analog Stick Test Run");
 
     VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
@@ -25,21 +27,30 @@ int main(int argc, char **argv) {
     analogStick->setOuterColor(QColor(32, 32, 32, 128));
     analogStick->setInnerColor(QColor(32, 32, 32, 255));
 
+    VirtualAnalogStick *rightStick = new VirtualAnalogStick(widget);
+    rightStick->setOuterRadius(outerRadius);
+    rightStick->setInnerRadius(innerRadius);
+    rightStick->setOuterColor(QColor(32, 32, 32, 128));
+    rightStick->setInnerColor(QColor(32, 32, 32, 255));
+
     GamepadSvgLayout *svgLayout = new GamepadSvgLayout;
     svgLayout->load();
-    svgLayout->setSizeConstraint(QLayout::SizeConstraint::SetMaximumSize);
+    svgLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinAndMaxSize);
     widget->setLayout(svgLayout);
     svgLayout->addWidget(analogStick, Button::LEFTSTICK);
-    auto label = new QLabel("RIGHT STICK", widget);
-    label->setFrameStyle(QFrame::Box);
-    label->setScaledContents(true);
-    label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    label->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    label->setMinimumSize(50, 50);
-    label->setStyleSheet("background-color:red");
-    svgLayout->addWidget(label, Button::RIGHTSTICK);
-    widget->show();
-    analogStick->show();
+    svgLayout->addWidget(rightStick, Button::RIGHTSTICK);
+    for(int index = 0; index <= Button::RIGHT; ++index) {
+        auto label = new QLabel(labelForButton(Button(index)), widget);
+        label->setFrameStyle(QFrame::Box);
+        label->setScaledContents(true);
+        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+        label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        label->setMinimumSize(50, 50);
+        label->setStyleSheet("background-color:green");
+        svgLayout->addWidget(label, Button(index));
+    }
+    mainWindow->setCentralWidget(widget);
+    mainWindow->show();
 
 
 //    QWidget *widget = new QWidget;

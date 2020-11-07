@@ -109,13 +109,13 @@ void GamepadSvgLayout::setGeometry(const QRect &r) {
     for(auto item: m_itemList) {
         QRectF bRect = m_buttonRects[item->button];
 
-        bRect.setWidth(bRect.width() * m_scale.x());
-        bRect.setHeight(bRect.height() * m_scale.y());
+        const qreal w = bRect.width() * m_scale.x();
+        const qreal h = bRect.height() * m_scale.y();
 
-        bRect.setX(bRect.topLeft().x() * m_scale.x());
-        bRect.setY(bRect.topLeft().y() * m_scale.y());
+        const qreal x = bRect.topLeft().x() * m_scale.x();
+        const qreal y = bRect.topLeft().y() * m_scale.y();
 
-        item->item->widget()->setGeometry(bRect.toRect());
+        item->item->widget()->setGeometry(x, y, w, h);
     }
     QLayout::setGeometry(r);
 }
@@ -140,7 +140,7 @@ int GamepadSvgLayout::count() const {
 
 // Recommended
 QSize GamepadSvgLayout::maximumSize() const {
-    return m_svgRect.size().toSize() * 2;
+    return m_svgRect.size().toSize() * 10;
 }
 
 QSize GamepadSvgLayout::minimumSize() const {
