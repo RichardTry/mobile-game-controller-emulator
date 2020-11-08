@@ -3,6 +3,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include "widget/virtualanalogstick.h"
+#include "widget/virtualdirectionalpad.h"
 #include "layout/gamepadsvglayout.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -19,36 +20,37 @@ int main(int argc, char **argv) {
     QWidget *widget = new QWidget(mainWindow);
     widget->setWindowTitle("Virtual Analog Stick Test Run");
 
-    VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
-    const int outerRadius = 250;
-    const int innerRadius = 100;
-    analogStick->setOuterRadius(outerRadius);
-    analogStick->setInnerRadius(innerRadius);
-    analogStick->setOuterColor(QColor(32, 32, 32, 128));
-    analogStick->setInnerColor(QColor(32, 32, 32, 255));
+//    VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
+//    const int outerRadius = 250;
+//    const int innerRadius = 100;
+//    analogStick->setOuterRadius(outerRadius);
+//    analogStick->setInnerRadius(innerRadius);
+//    analogStick->setOuterColor(QColor(32, 32, 32, 128));
+//    analogStick->setInnerColor(QColor(32, 32, 32, 255));
 
-    VirtualAnalogStick *rightStick = new VirtualAnalogStick(widget);
-    rightStick->setOuterRadius(outerRadius);
-    rightStick->setInnerRadius(innerRadius);
-    rightStick->setOuterColor(QColor(32, 32, 32, 128));
-    rightStick->setInnerColor(QColor(32, 32, 32, 255));
+//    VirtualAnalogStick *rightStick = new VirtualAnalogStick(widget);
+//    rightStick->setOuterRadius(outerRadius);
+//    rightStick->setInnerRadius(innerRadius);
+//    rightStick->setOuterColor(QColor(32, 32, 32, 128));
+//    rightStick->setInnerColor(QColor(32, 32, 32, 255));
 
     GamepadSvgLayout *svgLayout = new GamepadSvgLayout;
     svgLayout->load();
     svgLayout->setSizeConstraint(QLayout::SizeConstraint::SetMinAndMaxSize);
     widget->setLayout(svgLayout);
-    svgLayout->addWidget(analogStick, Button::LEFTSTICK);
-    svgLayout->addWidget(rightStick, Button::RIGHTSTICK);
-    for(int index = 0; index <= Button::RIGHT; ++index) {
-        auto label = new QLabel(labelForButton(Button(index)), widget);
-        label->setFrameStyle(QFrame::Box);
-        label->setScaledContents(true);
-        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-        label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        label->setMinimumSize(50, 50);
-        label->setStyleSheet("background-color:green");
-        svgLayout->addWidget(label, Button(index));
-    }
+//    svgLayout->addWidget(analogStick, Button::LEFTSTICK);
+//    svgLayout->addWidget(rightStick, Button::RIGHTSTICK);
+    svgLayout->addWidget(new VirtualDirectionalPad(widget), Button::LEFTSTICK);
+//    for(int index = 0; index <= Button::RIGHT; ++index) {
+//        auto label = new QLabel(labelForButton(Button(index)), widget);
+//        label->setFrameStyle(QFrame::Box);
+//        label->setScaledContents(true);
+//        label->setAlignment(Qt::AlignmentFlag::AlignCenter);
+//        label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+//        label->setMinimumSize(50, 50);
+//        label->setStyleSheet("background-color:green");
+//        svgLayout->addWidget(label, Button(index));
+//    }
     mainWindow->setCentralWidget(widget);
     mainWindow->show();
 

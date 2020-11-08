@@ -51,14 +51,14 @@ void Gamepad::setRightStick(const QPointF &rightStick){
 }
 
 bool Gamepad::getButton(Button button) const {
-    return m_buttons & (1 >> button);
+    return m_buttons & button;
 }
 
 void Gamepad::setButton(const Button &button, const bool &value) {
     if(value) {
-        m_buttons |= (1 << button);
+        m_buttons |= button;
     } else {
-        m_buttons &= (~0) ^ (1 << button);
+        m_buttons &= (~0) ^ button;
     }
     qDebug() << QString::number(m_buttons, 2);
 }

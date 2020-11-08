@@ -2,7 +2,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network xml
+QT += widgets core gui network xml svg
 
 SOURCES += \
     src/controller/gamepad/gamepad.cpp \
