@@ -92,19 +92,22 @@ bool VirtualDirectionalPad::event(QEvent *event) {
 
     switch (event->type()) {
         case QEvent::TouchEnd: {
-            emit released(m_pressedButtons);
+            if(m_pressedButtons != Button::DPAD)
+                emit released(m_pressedButtons);
             m_pressedButtons = Button::DPAD;
             repaint();
             return true;
         }
         case QEvent::TouchCancel: {
-            emit released(m_pressedButtons);
+            if(m_pressedButtons != Button::DPAD)
+                emit released(m_pressedButtons);
             m_pressedButtons = Button::DPAD;
             repaint();
             return true;
         }
         case QEvent::TouchBegin: {
-            emit pressed(m_pressedButtons);
+            if(m_pressedButtons != Button::DPAD)
+                emit pressed(m_pressedButtons);
             repaint();
             return true;
         }
