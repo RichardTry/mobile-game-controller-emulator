@@ -3,6 +3,9 @@
 
 #include "emulator/abstractcontrolleremulator.h"
 #include "controller/gamepad/gamepad.h"
+#include "layout/gamepadsvglayout.h"
+#include "widget/virtualdirectionalpad.h"
+#include "widget/virtualanalogstick.h"
 #include <QWidget>
 
 class GamepadControllerEmulator : public AbstractControllerEmulator {
@@ -13,9 +16,16 @@ public:
 
     void setTransceiver(AbstractTransceiver *transceiver) override;
 
+protected:
+    bool event(QEvent *event) override;
+
 private:
     AbstractTransceiver *m_transceiver;
     Gamepad *m_gamepad;
+    GamepadSvgLayout *m_svgLayout;
+    VirtualDirectionalPad *m_dpad;
+    VirtualAnalogStick *m_rightStick;
+    VirtualAnalogStick *m_leftStick;
 };
 
 #endif // GAMEPADCONTROLLEREMULATOR_H

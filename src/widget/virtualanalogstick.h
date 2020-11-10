@@ -15,12 +15,6 @@ public:
     QPointF touchPoint() const;
     QPointF normalisedTouchPoint() const;
 
-    int outerRadius() const;
-    void setOuterRadius(int outerRadius);
-
-    int innerRadius() const;
-    void setInnerRadius(int innerRadius);
-
     QColor innerColor() const;
     void setInnerColor(const QColor &innerColor);
 
@@ -28,6 +22,12 @@ public:
     void setOuterColor(const QColor &outerColor);
 
     QSize minimumSizeHint() const override;
+
+    qreal outerRadius() const;
+    void setOuterRadius(const qreal &outerRadius);
+
+    qreal innerRadius() const;
+    void setInnerRadius(const qreal &innerRadius);
 
 signals:
     void touchPointMoved(QPointF normalisedTouchPoint);
@@ -38,10 +38,10 @@ protected:
     int heightForWidth(int) const override;
 
 private:
-    int m_outerRadius;
-    int m_innerRadius;
+    qreal m_outerRadius;
+    qreal m_innerRadius;
 
-    int m_lineWidth;
+    qreal m_lineWidth;
     QColor m_innerColor;
     QColor m_outerColor;
 

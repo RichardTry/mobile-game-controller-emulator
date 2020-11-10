@@ -26,14 +26,14 @@
         <file>sb_down_arrow.cur</file>
         <file>sb_up_arrow.cur</file>
         <file>controller-layout.svg</file>
-        <file>dpad-down-right.svg</file>
-        <file>dpad-up-right.svg</file>
-        <file>dpad-up-left.svg</file>
-        <file>dpad-down-left.svg</file>
+        <file>down-right.svg</file>
+        <file>up-right.svg</file>
+        <file>up-left.svg</file>
+        <file>down-left.svg</file>
         <file>dpad.svg</file>
-        <file>dpad-right.svg</file>
-        <file>dpad-left.svg</file>
-        <file>dpad-down.svg</file>
-        <file>dpad-up.svg</file>
+        <file>right.svg</file>
+        <file>left.svg</file>
+        <file>down.svg</file>
+        <file>up.svg</file>
     </qresource>
 </RCC>

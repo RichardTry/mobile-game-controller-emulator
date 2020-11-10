@@ -25,8 +25,6 @@ protected:
     int heightForWidth(int) const override;
 
 private:
-    void loadIcons();
-
     QTimer m_timer;
     QPointF m_touchPoint;
 
@@ -37,8 +35,6 @@ private:
     qreal m_startAngle;
     qreal m_endAngle;
     qreal m_offset;
-    QMap <quint32, QPixmap> m_pixmap;
-    QPixmap m_currentPixmap;
 
     struct DpadRegion {
         DpadRegion(qreal startAngle, qreal endAngle, quint32 pressedButtons): startAngle(startAngle), endAngle(endAngle), pressedButtons(pressedButtons) {
@@ -52,9 +48,6 @@ private:
     // Button state
     quint32 m_pressedButtons;
     quint32 m_pressedButtonsPrevious;
-
-    // Flag to indiciate if it's needed to resize the pixmap
-    bool m_resizePixmap;
 };
 
 #endif // VIRTUALDIRECTIONALPAD_H

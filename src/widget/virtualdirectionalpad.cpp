@@ -15,9 +15,7 @@ VirtualDirectionalPad::VirtualDirectionalPad(QWidget *parent) : QWidget(parent) 
 
     m_outerRadius = 100;
     m_innerRadius = m_outerRadius/3;
-    m_pressedButtons = 0;
-
-    m_resizePixmap = true;
+    m_pressedButtons = Button::DPAD;
 
     // Transitional region [337.5, 22.5] broken up into two pieces because no positive angle could between these two values
     m_regions.push_back(DpadRegion(337.5, 360, Button::RIGHT));
@@ -30,8 +28,6 @@ VirtualDirectionalPad::VirtualDirectionalPad(QWidget *parent) : QWidget(parent) 
     m_regions.push_back(DpadRegion(5 * m_increment + m_offset, 6 * m_increment + m_offset, Button::LEFT | Button::UP));
     m_regions.push_back(DpadRegion(6 * m_increment + m_offset, 7 * m_increment + m_offset, Button::UP));
     m_regions.push_back(DpadRegion(7 * m_increment + m_offset, 8 * m_increment + m_offset, Button::UP | Button::RIGHT));
-
-    loadIcons();
 }
 
 VirtualDirectionalPad::~VirtualDirectionalPad() {
@@ -46,7 +42,6 @@ bool VirtualDirectionalPad::event(QEvent *event) {
 
     if(eventType == QEvent::Resize) {
         const QResizeEvent *resizeEvent = static_cast <const QResizeEvent*> (event);
-        m_resizePixmap = true;
         m_outerRadius = resizeEvent->size().width()/2;
         m_innerRadius = m_outerRadius/3;
         return QWidget::event(event);
@@ -56,11 +51,15 @@ bool VirtualDirectionalPad::event(QEvent *event) {
         return QWidget::event(event);
     }
 
+    const QTouchEvent *touchEvent = static_cast <const QTouchEvent*> (event);
+
+    if(touchEvent->target() != this) {
+        return QWidget::event(event);
+    }
+
     if(!m_timer.isActive()) {
         m_timer.start();
     }
-
-    const QTouchEvent *touchEvent = static_cast <const QTouchEvent*> (event);
 
     // DETERMINE WHICH REGION WAS TOUCHED
     const QPointF rawTouchPoint = touchEvent->touchPoints().first().pos();
@@ -70,7 +69,7 @@ bool VirtualDirectionalPad::event(QEvent *event) {
     const qreal lineAngle = 360-line.angle();
     // 1-) Central region touched
     if(0 <= distanceFromOrigin && distanceFromOrigin <= m_innerRadius) {
-        m_pressedButtons = 0;
+        m_pressedButtons = Button::DPAD;
     }
     // 2-) Button region touched, one of 4 directions or a diagonal combination of two
     else if (m_innerRadius < distanceFromOrigin && distanceFromOrigin <= m_outerRadius) {
@@ -84,7 +83,7 @@ bool VirtualDirectionalPad::event(QEvent *event) {
     }
     // 3-) No valid region touched return before emitting a signal
     else {
-        m_pressedButtons = 1453;
+        m_pressedButtons = Button::DPAD;
     }
 
     if(m_pressedButtons != m_pressedButtonsPrevious)
@@ -94,13 +93,13 @@ bool VirtualDirectionalPad::event(QEvent *event) {
     switch (event->type()) {
         case QEvent::TouchEnd: {
             emit released(m_pressedButtons);
-            m_pressedButtons = 0;
+            m_pressedButtons = Button::DPAD;
             repaint();
             return true;
         }
         case QEvent::TouchCancel: {
             emit released(m_pressedButtons);
-            m_pressedButtons = 0;
+            m_pressedButtons = Button::DPAD;
             repaint();
             return true;
         }
@@ -117,31 +116,12 @@ bool VirtualDirectionalPad::event(QEvent *event) {
 
 void VirtualDirectionalPad::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    const quint32 key = m_pixmap.contains(m_pressedButtons) ? m_pressedButtons : 0;
-    QPixmap &pixmap = m_pixmap[key];
-    if(m_resizePixmap) {
-        m_currentPixmap = pixmap.scaled(rect().size());
-    }
-    else {
-        m_currentPixmap = pixmap;
-    }
-    painter.drawPixmap(rect(), m_currentPixmap);
-    m_resizePixmap = false;
+
+    QSharedPointer<QPixmap> pixmap = Common::buttonIcon(m_pressedButtons);
+    if(!pixmap.isNull())
+        painter.drawPixmap(rect(), *pixmap);
 }
 
 int VirtualDirectionalPad::heightForWidth(int w) const {
     return w;
-}
-
-void VirtualDirectionalPad::loadIcons() {
-    Button btnArray[4] = {Button::UP, Button::DOWN, Button::LEFT, Button::RIGHT};
-    for(Button btn: btnArray) {
-        m_pixmap[static_cast<quint32>(btn)] = QPixmap(":/dpad-" + labelForButton(btn).toLower() + ".svg");
-    }
-
-    m_pixmap[0] = QPixmap(":/dpad.svg");
-    m_pixmap[Button::UP | Button::LEFT] = QPixmap(":/dpad-up-left.svg");
-    m_pixmap[Button::UP | Button::RIGHT] = QPixmap(":/dpad-up-right.svg");
-    m_pixmap[Button::DOWN | Button::LEFT] = QPixmap(":/dpad-down-left.svg");
-    m_pixmap[Button::DOWN | Button::RIGHT] = QPixmap(":/dpad-down-right.svg");
 }

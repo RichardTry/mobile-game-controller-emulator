@@ -8,7 +8,7 @@ VirtualAnalogStick::VirtualAnalogStick(QWidget *parent) : QWidget(parent), m_tou
     setAttribute(Qt::WA_AcceptTouchEvents);
 
     m_innerRadius = 50;
-    m_innerRadius = 150;
+    m_outerRadius = 150;
 
     m_innerColor = QColor(32, 32, 32, 128);
     m_outerColor = QColor(255, 32, 32, 255);
@@ -32,7 +32,7 @@ bool VirtualAnalogStick::event(QEvent *event) {
         const qreal w = resizeEvent->size().width();
         const qreal h = resizeEvent->size().height();
         qreal ri = (w < h ? w : h) / 2;
-        ri *= (qreal)innerRadius() / (qreal) outerRadius();
+        ri *= innerRadius()/outerRadius();
         setInnerRadius(ri);
         qreal ro = (w < h ? w : h) / 2;
         setOuterRadius(ro);
@@ -90,7 +90,7 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
 
     QPen pen = painter.pen();
     pen.setWidth(m_lineWidth);
-    const QPoint origin = this->rect().center();
+    const QPointF origin = this->rect().center();
 
     // Outer circle
     pen.setColor(m_outerColor);
@@ -132,6 +132,26 @@ int VirtualAnalogStick::heightForWidth(int w) const {
     return w;
 }
 
+qreal VirtualAnalogStick::innerRadius() const
+{
+    return m_innerRadius;
+}
+
+void VirtualAnalogStick::setInnerRadius(const qreal &innerRadius)
+{
+    m_innerRadius = innerRadius;
+}
+
+qreal VirtualAnalogStick::outerRadius() const
+{
+    return m_outerRadius;
+}
+
+void VirtualAnalogStick::setOuterRadius(const qreal &outerRadius)
+{
+    m_outerRadius = outerRadius;
+}
+
 QColor VirtualAnalogStick::outerColor() const
 {
     return m_outerColor;
@@ -150,22 +170,6 @@ QColor VirtualAnalogStick::innerColor() const
 void VirtualAnalogStick::setInnerColor(const QColor &innerColor)
 {
     m_innerColor = innerColor;
-}
-
-int VirtualAnalogStick::innerRadius() const {
-    return m_innerRadius;
-}
-
-void VirtualAnalogStick::setInnerRadius(int innerRadius) {
-    m_innerRadius = innerRadius;
-}
-
-int VirtualAnalogStick::outerRadius() const {
-    return m_outerRadius;
-}
-
-void VirtualAnalogStick::setOuterRadius(int outerRadius) {
-    m_outerRadius = outerRadius;
 }
 
 QSize VirtualAnalogStick::minimumSizeHint() const {

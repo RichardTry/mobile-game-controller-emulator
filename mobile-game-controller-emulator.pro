@@ -5,13 +5,15 @@ CONFIG += c++11
 QT += widgets core gui network xml svg
 
 SOURCES += \
+    src/common/common.cpp \
     src/controller/gamepad/gamepad.cpp \
     src/emulator/gamepad/gamepadcontrolleremulator.cpp \
     src/layout/gamepadsvglayout.cpp \
     src/main.cpp \
     src/transceiver/network/networktransceiver.cpp \
     src/widget/virtualanalogstick.cpp \
-    src/widget/virtualdirectionalpad.cpp
+    src/widget/virtualdirectionalpad.cpp \
+    src/widget/virtualgamepadbutton.cpp
 
 RESOURCES += \
     resources/resources.qrc
@@ -39,7 +41,8 @@ HEADERS += \
     src/transceiver/abstracttransceiver.h \
     src/transceiver/network/networktransceiver.h \
     src/widget/virtualanalogstick.h \
-    src/widget/virtualdirectionalpad.h
+    src/widget/virtualdirectionalpad.h \
+    src/widget/virtualgamepadbutton.h
 
 ANDROID_ABIS = armeabi-v7a
 
