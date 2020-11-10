@@ -35,5 +35,9 @@
         <file>left.svg</file>
         <file>down.svg</file>
         <file>up.svg</file>
+        <file>x.svg</file>
+        <file>y.svg</file>
+        <file>b.svg</file>
+        <file>a.svg</file>
     </qresource>
 </RCC>

@@ -11,6 +11,8 @@ public:
     ~VirtualGamepadButton();
 
 signals:
+    void pressed(const Button &btn);
+    void released(const Button &btn);
 
 protected:
     bool event(QEvent *event) override;
@@ -18,12 +20,10 @@ protected:
     int heightForWidth(int) const override;
 
 private:
-    void loadIcons();
-
     bool m_pressed;
     Button m_button;
-    QSharedPointer <QPixmap> m_pressedPixmap;
-    QSharedPointer <QPixmap> m_releasedPixmap;
+    QSharedPointer <QPixmap> m_pixmap;
+    qreal m_pressedScale;
 };
 
 #endif // VIRTUALGAMEPADBUTTON_H

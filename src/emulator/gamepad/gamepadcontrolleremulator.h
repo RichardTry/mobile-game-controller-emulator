@@ -6,6 +6,7 @@
 #include "layout/gamepadsvglayout.h"
 #include "widget/virtualdirectionalpad.h"
 #include "widget/virtualanalogstick.h"
+#include "widget/virtualgamepadbutton.h"
 #include <QWidget>
 
 class GamepadControllerEmulator : public AbstractControllerEmulator {
@@ -26,6 +27,11 @@ private:
     VirtualDirectionalPad *m_dpad;
     VirtualAnalogStick *m_rightStick;
     VirtualAnalogStick *m_leftStick;
+
+    VirtualGamepadButton *m_a;
+    VirtualGamepadButton *m_b;
+    VirtualGamepadButton *m_x;
+    VirtualGamepadButton *m_y;
 };
 
 #endif // GAMEPADCONTROLLEREMULATOR_H
