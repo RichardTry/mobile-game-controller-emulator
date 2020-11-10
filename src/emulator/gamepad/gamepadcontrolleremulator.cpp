@@ -42,6 +42,12 @@ GamepadControllerEmulator::GamepadControllerEmulator(QWidget *parent): AbstractC
 
     m_b = new VirtualGamepadButton(Button::B, this);
     m_svgLayout->addWidget(m_b, Button::B);
+
+    m_start = new VirtualGamepadButton(Button::START, this);
+    m_svgLayout->addWidget(m_start, Button::START);
+
+    m_back = new VirtualGamepadButton(Button::BACK, this);
+    m_svgLayout->addWidget(m_back, Button::BACK);
 }
 
 GamepadControllerEmulator::~GamepadControllerEmulator() {

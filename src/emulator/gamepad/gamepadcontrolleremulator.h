@@ -32,6 +32,9 @@ private:
     VirtualGamepadButton *m_b;
     VirtualGamepadButton *m_x;
     VirtualGamepadButton *m_y;
+
+    VirtualGamepadButton *m_start;
+    VirtualGamepadButton *m_back;
 };
 
 #endif // GAMEPADCONTROLLEREMULATOR_H
