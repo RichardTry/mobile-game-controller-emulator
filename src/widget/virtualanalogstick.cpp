@@ -36,6 +36,7 @@ bool VirtualAnalogStick::event(QEvent *event) {
         setInnerRadius(ri);
         qreal ro = (w < h ? w : h) / 2;
         setOuterRadius(ro);
+        setMask(QRegion(QRect(QPoint(0, 0), resizeEvent->size()), QRegion::Ellipse));
         return QWidget::event(event);
     }
 
