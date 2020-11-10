@@ -39,5 +39,7 @@
         <file>y.svg</file>
         <file>b.svg</file>
         <file>a.svg</file>
+        <file>back.svg</file>
+        <file>start.svg</file>
     </qresource>
 </RCC>
