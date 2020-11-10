@@ -42,8 +42,8 @@ bool VirtualDirectionalPad::event(QEvent *event) {
 
     if(eventType == QEvent::Resize) {
         const QResizeEvent *resizeEvent = static_cast <const QResizeEvent*> (event);
-        m_outerRadius = resizeEvent->size().width()/2;
-        m_innerRadius = m_outerRadius/3;
+        m_outerRadius = sqrt(resizeEvent->size().width() * resizeEvent->size().width());
+        m_innerRadius = resizeEvent->size().width()/6;
         return QWidget::event(event);
     }
 
