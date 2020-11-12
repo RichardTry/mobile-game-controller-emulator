@@ -15,10 +15,13 @@ public:
     QByteArray getData() override;
     void setData(const QByteArray &data) override;
 
-
 signals:
     void buttonPressed(Button button);
     void buttonReleased(Button button);
+
+public slots:
+    void onButtonPressed(const Button &button);
+    void onButtonReleased(const Button &button);
 
 public:
     bool getButton(Button button) const;

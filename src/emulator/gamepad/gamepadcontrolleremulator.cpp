@@ -2,9 +2,6 @@
 #include <QEvent>
 
 GamepadControllerEmulator::GamepadControllerEmulator(QWidget *parent): AbstractControllerEmulator(parent), m_transceiver(nullptr) {
-//    setAttribute(Qt::WA_AcceptTouchEvents);
-//    setAttribute(Qt::WA_TransparentForMouseEvents);
-//    setWindowFlag(Qt::WindowTransparentForInput);
     setDisabled(true);
 
     // Load layout
@@ -33,25 +30,26 @@ GamepadControllerEmulator::GamepadControllerEmulator(QWidget *parent): AbstractC
     // Load x, y, b, a buttons
     m_x = new VirtualGamepadButton(Button::X, this);
     m_svgLayout->addWidget(m_x, Button::X);
-
     m_y = new VirtualGamepadButton(Button::Y, this);
     m_svgLayout->addWidget(m_y, Button::Y);
-
     m_a = new VirtualGamepadButton(Button::A, this);
     m_svgLayout->addWidget(m_a, Button::A);
-
     m_b = new VirtualGamepadButton(Button::B, this);
     m_svgLayout->addWidget(m_b, Button::B);
 
+    // Start and back
     m_start = new VirtualGamepadButton(Button::START, this);
     m_svgLayout->addWidget(m_start, Button::START);
-
     m_back = new VirtualGamepadButton(Button::BACK, this);
     m_svgLayout->addWidget(m_back, Button::BACK);
+
+//    connect(m_x, &VirtualGamepadButton::pressed, m_gamepad, &Gamepad::setButton);
+
+    m_gamepad = new Gamepad;
 }
 
 GamepadControllerEmulator::~GamepadControllerEmulator() {
-
+    delete m_gamepad;
 }
 
 void GamepadControllerEmulator::setTransceiver(AbstractTransceiver *transceiver) {

@@ -62,3 +62,13 @@ void Gamepad::setButton(const Button &button, const bool &value) {
     }
     qDebug() << QString::number(m_buttons, 2);
 }
+
+void Gamepad::onButtonPressed(const Button &button) {
+    m_buttons |= button;
+    m_pressedEvents |= button;
+}
+
+void Gamepad::onButtonReleased(const Button &button) {
+    m_buttons &= (~0) ^ button;
+    m_releasedEvents |= button;
+}
