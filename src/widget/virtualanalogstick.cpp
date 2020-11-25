@@ -64,10 +64,12 @@ bool VirtualAnalogStick::event(QEvent *event) {
         default: {
             const QPointF rawTouchPoint = touchEvent->touchPoints().first().pos();
             const QPoint origin = this->rect().center();
-            if((rawTouchPoint - origin).manhattanLength() > m_outerRadius - m_innerRadius) {
-                QLineF line(origin, rawTouchPoint.toPoint());
-                m_touchPoint.setY(qSin(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.y());
-                m_touchPoint.setX(qCos(qDegreesToRadians(360-line.angle())) * (m_outerRadius - m_innerRadius) + origin.x());
+            const qreal maxRadius = m_outerRadius - m_innerRadius;
+            if((rawTouchPoint - origin).manhattanLength() > maxRadius) {
+                const QLineF line(origin, rawTouchPoint.toPoint());
+                const double lineAngle = qDegreesToRadians(360-line.angle());
+                m_touchPoint.setY(qSin(lineAngle) * maxRadius + origin.y());
+                m_touchPoint.setX(qCos(lineAngle) * maxRadius + origin.x());
             } else {
                 m_touchPoint = rawTouchPoint;
             }
@@ -101,12 +103,14 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
     // Outer circle
     pen.setColor(m_outerColor);
     painter.setPen(pen);
-    painter.drawEllipse(origin, m_outerRadius - m_lineWidth, m_outerRadius - m_lineWidth);
+    const int ro = m_outerRadius - m_lineWidth/2.f;
+    painter.drawEllipse(origin, ro, ro);
 
     // Inner circle
     pen.setColor(m_innerColor);
     painter.setPen(pen);
-    painter.drawEllipse(m_touchPoint, m_innerRadius - m_lineWidth, m_innerRadius - m_lineWidth);
+    const int ri = m_innerRadius - m_lineWidth/2.f;
+    painter.drawEllipse(m_touchPoint, ri, ri);
 
 //#if defined (QT_DEBUG)
 //    // Draw x axis positive side
