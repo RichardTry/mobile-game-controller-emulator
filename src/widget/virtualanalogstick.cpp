@@ -116,7 +116,7 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
 //    // Draw x axis positive side
 //    pen.setColor(QColor(0, 255, 0));
 //    painter.setPen(pen);
-//    painter.drawLine(QLine(origin + QPoint(m_lineWidth, 0), origin + QPoint(m_outerRadius, 0)));
+//    painter.drawLine(QLineF(origin + QPoint(m_lineWidth, 0), origin + QPoint(m_outerRadius, 0)));
 //    // Label axis
 //    QFontMetrics fm(painter.font());
 //    int textWidth = fm.horizontalAdvance("+x");
@@ -125,7 +125,7 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
 //    // Draw y axis positive side
 //    pen.setColor(QColor(255, 0, 0));
 //    painter.setPen(pen);
-//    painter.drawLine(QLine(origin + QPoint(0, m_lineWidth), origin + QPoint(0, m_outerRadius)));
+//    painter.drawLine(QLineF(origin + QPoint(0, m_lineWidth), origin + QPoint(0, m_outerRadius)));
 //    // Label axis
 //    int textHeight = fm.boundingRect("+y").height();
 //    painter.drawText(origin + QPoint(-textHeight, m_outerRadius), "+y");
@@ -134,7 +134,7 @@ void VirtualAnalogStick::paintEvent(QPaintEvent *event) {
 //    pen.setColor(QColor(0, 0, 0));
 //    pen.setWidth(m_lineWidth/2 > 0 ? m_lineWidth/2 : 1);
 //    painter.setPen(pen);
-//    painter.drawLine(QLine(origin, m_touchPoint.toPoint()));
+//    painter.drawLine(QLineF(origin, m_touchPoint.toPoint()));
 //#endif
 }
 
