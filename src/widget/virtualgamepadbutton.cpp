@@ -7,7 +7,8 @@
 VirtualGamepadButton::VirtualGamepadButton(const Button &btn, QWidget *parent) : QWidget(parent), m_button(btn) {
     setAttribute(Qt::WA_AcceptTouchEvents);
     m_pixmap = Common::buttonIcon(btn);
-    m_pressedScale = 0.9;
+    m_pressedScale = 0.8;
+    m_releasedScale = 0.95;
 }
 
 VirtualGamepadButton::~VirtualGamepadButton() {
@@ -55,17 +56,28 @@ bool VirtualGamepadButton::event(QEvent *event) {
 
 void VirtualGamepadButton::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
-    if(!m_pressed)
-        painter.drawPixmap(rect(), *m_pixmap);
+    if(!m_pressed) {
+        const QPixmap pixmap = m_pixmap->scaled(rect().size() * m_releasedScale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        const int sX = rect().x() + rect().width() * (1 - m_releasedScale) * 0.5;
+        const int sY = rect().y() + rect().height() * (1 - m_releasedScale) * 0.5;
+        const int sW = rect().width() * m_releasedScale;
+        const int sH = rect().height() * m_releasedScale;
+        painter.drawPixmap(QRect(sX, sY, sW, sH), pixmap);
+    }
     else {
+        const QPixmap pixmap = m_pixmap->scaled(rect().size() * m_pressedScale, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         const int sX = rect().x() + rect().width() * (1 - m_pressedScale) * 0.5;
         const int sY = rect().y() + rect().height() * (1 - m_pressedScale) * 0.5;
         const int sW = rect().width() * m_pressedScale;
         const int sH = rect().height() * m_pressedScale;
-        painter.drawPixmap(QRect(sX, sY, sW, sH), *m_pixmap);
+        painter.drawPixmap(QRect(sX, sY, sW, sH), pixmap);
     }
 }
 
 int VirtualGamepadButton::heightForWidth(int w) const {
     return w;
+}
+
+QSize VirtualGamepadButton::minimumSizeHint() const {
+    return QSize(50, 50);
 }

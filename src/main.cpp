@@ -1,13 +1,17 @@
 #include <QApplication>
 #include "emulator/gamepad/gamepadcontrolleremulator.h"
+#include "widget/gamepadwidget.h"
 
 int packetCount = 0;
 
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
 
-    GamepadControllerEmulator *emulator = new GamepadControllerEmulator;
-    emulator->show();
+//    GamepadControllerEmulator *emulator = new GamepadControllerEmulator;
+//    emulator->show();
+    GamepadWidget *gWidget = new GamepadWidget;
+    gWidget->show();
+
 
     return app.exec();
 

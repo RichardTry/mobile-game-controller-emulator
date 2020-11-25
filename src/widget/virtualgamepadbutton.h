@@ -18,12 +18,16 @@ protected:
     bool event(QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
     int heightForWidth(int) const override;
+    QSize minimumSizeHint() const override;
 
 private:
     bool m_pressed;
     Button m_button;
     QSharedPointer <QPixmap> m_pixmap;
     qreal m_pressedScale;
+    qreal m_releasedScale;
+    QRect m_pressedRect;
+    QRect m_releasedRect;
 };
 
 #endif // VIRTUALGAMEPADBUTTON_H
