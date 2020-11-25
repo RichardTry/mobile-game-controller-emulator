@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QtMath>
 
-VirtualAnalogStick::VirtualAnalogStick(QWidget *parent) : QWidget(parent), m_touchPoint(this->rect().center()) {
+VirtualAnalogStick::VirtualAnalogStick(const Button &btn, QWidget *parent) : m_btn(btn), QWidget(parent), m_touchPoint(this->rect().center()) {
     setAttribute(Qt::WA_AcceptTouchEvents);
 
     m_innerRadius = 50;
@@ -52,13 +52,13 @@ bool VirtualAnalogStick::event(QEvent *event) {
 
     switch (event->type()) {
         case QEvent::TouchEnd: {
+            emit released(m_btn, normalisedTouchPoint());
             m_touchPoint = this->rect().center();
-            emit touchPointMoved(normalisedTouchPoint());
             return true;
         }
         case QEvent::TouchCancel: {
+            emit released(m_btn, normalisedTouchPoint());
             m_touchPoint = this->rect().center();
-            emit touchPointMoved(normalisedTouchPoint());
             return true;
         }
         default: {
@@ -71,7 +71,12 @@ bool VirtualAnalogStick::event(QEvent *event) {
             } else {
                 m_touchPoint = rawTouchPoint;
             }
-            emit touchPointMoved(normalisedTouchPoint());
+
+            if(event->type() == QEvent::TouchBegin)
+                emit pressed(m_btn, normalisedTouchPoint());
+            else if(event->type() == QEvent::TouchUpdate)
+                emit moved(m_btn, normalisedTouchPoint());
+
             return true;
         }
     }
@@ -82,7 +87,7 @@ QPointF VirtualAnalogStick::touchPoint() const {
     return m_touchPoint;
 }
 
-QPointF VirtualAnalogStick::normalisedTouchPoint() const {
+inline QPointF VirtualAnalogStick::normalisedTouchPoint() const {
     return (m_touchPoint - rect().center())/(m_outerRadius - m_innerRadius);
 }
 

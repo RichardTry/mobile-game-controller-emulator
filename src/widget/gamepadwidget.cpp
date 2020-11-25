@@ -13,13 +13,13 @@ GamepadWidget::GamepadWidget(QWidget *parent) : QWidget(parent) {
     // Load right stick
     const int outerRadius = 100;
     const int innerRadius = 30;
-    m_rightStick = new VirtualAnalogStick(this);
+    m_rightStick = new VirtualAnalogStick(Button::RIGHTSTICK, this);
     m_rightStick->setOuterRadius(outerRadius);
     m_rightStick->setInnerRadius(innerRadius);
     m_svgLayout->addWidget(m_rightStick, Button::RIGHTSTICK);
 
     // Load left stick
-    m_leftStick = new VirtualAnalogStick(this);
+    m_leftStick = new VirtualAnalogStick(Button::LEFTSTICK, this);
     m_leftStick->setOuterRadius(outerRadius);
     m_leftStick->setInnerRadius(innerRadius);
     m_svgLayout->addWidget(m_leftStick, Button::LEFTSTICK);
