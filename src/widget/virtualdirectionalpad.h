@@ -16,8 +16,8 @@ public:
     QSize minimumSizeHint() const override;
 
 signals:
-    void pressed(int buttons);
-    void released(int buttons);
+    void pressed(Button buttons);
+    void released(Button buttons);
 
 protected:
     bool event(QEvent *event) override;

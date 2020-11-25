@@ -14,6 +14,7 @@ public:
     explicit GamepadWidget(QWidget *parent = nullptr);
 
 signals:
+    void stickMoved(const Button& btn, const QPointF &point);
     void stickReleased(const Button& btn, const QPointF &point);
     void stickPressed(const Button& btn, const QPointF &point);
     void buttonReleased(const Button& btn);
