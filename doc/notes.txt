@@ -43,3 +43,6 @@ TO MAKE AWESOME SCREEN RECORDING ON ANDROID USING ADB SHELL
 
 QPainter::drawText(point, text):
 Draws the text within a rectangle that has "point" as the "bottom left" corner.
+
+Linux Input Event Codes:
+/usr/include/linux/input-event-codes.h
