@@ -123,7 +123,8 @@ void NetworkTransceiverWidget::onStateChanged(NetworkTransceiver::State state) {
 
 void NetworkTransceiverWidget::onHostFound(QString address) {
     const QHostAddress hostAddress(address);
-    QListWidgetItem *item = new QListWidgetItem(masterUi->hostListWidget);
+    QListWidgetItem *item = new QListWidgetItem();
     item->setData(Qt::UserRole, QVariant::fromValue <QHostAddress> (hostAddress));
-    masterUi->hostListWidget->addItem(address);
+    item->setText(address);
+    masterUi->hostListWidget->addItem(item);
 }
