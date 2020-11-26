@@ -3,6 +3,7 @@
 
 #include "emulator/abstractcontrolleremulator.h"
 #include "controller/gamepad/gamepad.h"
+#include "widget/gamepadwidget.h"
 #include <QWidget>
 #include <QSemaphore>
 

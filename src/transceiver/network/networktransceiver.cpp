@@ -5,32 +5,20 @@
 #include <QNetworkDatagram>
 #include <QMessageBox>
 #include <QDataStream>
-#include "ui_networktransceivermaster.h"
-#include "ui_networktransceiverslave.h"
 
 unsigned int NetworkTransceiver::m_datagramId = 0;
 
-NetworkTransceiver::NetworkTransceiver(const Mode &mode, QWidget *parent):
+NetworkTransceiver::NetworkTransceiver(const Mode &mode, QObject *parent):
     AbstractTransceiver(mode, parent),
     m_port(45800),
     m_selectedInterface(QHostAddress::Null),
     m_slaveHost(QHostAddress::Null),
     m_masterHost(QHostAddress::Null)
 {
-    // Get available interfaces
-    for(const QHostAddress &address: QNetworkInterface::allAddresses()) {
-        if(address.isLoopback() || address.isNull())
-            continue;
-        else
-            m_interfaces.push_back(address);
-    }
-
-    // Load initial state and ui
     if(m_mode == Mode::Master) {
-        loadMasterUI();
         m_state = new StateInitMaster(this);
-    } else if(m_mode == Mode::Slave) {
-        loadSlaveUI();
+    }
+    else if (m_mode == Mode::Slave) {
         m_state = new StateInitSlave(this);
     }
 
@@ -71,70 +59,21 @@ void NetworkTransceiver::onReadyRead() {
     }
 }
 
-void NetworkTransceiver::loadMasterUI() {
-    masterUi = new Ui::NetworkTransceiverMaster();
-    masterUi->setupUi(this);
-    masterUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
-    masterUi->sendingIconLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
-
-    // Init
-    connect(masterUi->startPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStart);
-    connect(masterUi->backPushButton, &QPushButton::clicked, this, &AbstractTransceiver::quit);
-    connect(masterUi->pollRateSpinBox, QOverload <int>::of (&QSpinBox::valueChanged), [this] (int value) {
-        m_pollPeriodMS = 1000.f / value;
-    });
-    for(const QHostAddress &address: m_interfaces) {
-        masterUi->networkInterfaceComboBox->addItem(address.toString(), QVariant::fromValue <QHostAddress> (address));
-    }
-    connect(masterUi->networkInterfaceComboBox, QOverload <int>::of (&QComboBox::activated), [this] (int index) {
-        m_selectedInterface = masterUi->networkInterfaceComboBox->itemData(index).value <QHostAddress> ();
-    });
-
-    // Listen
-    connect(masterUi->connectPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStart);
-    connect(masterUi->backPushButton2, &QPushButton::clicked, this, &NetworkTransceiver::onStop);
-    connect(masterUi->hostListWidget, &QListWidget::itemClicked, [this] (QListWidgetItem *item) {
-        QVariant data = item->data(Qt::UserRole);
-        if(!data.canConvert <QHostAddress> ()) {
-            QMessageBox messageBox;
-            messageBox.setText(tr("Error, can't convert QVariant to QHostAddress"));
-            messageBox.setWindowTitle(tr("Error"));
-            messageBox.exec();
-        } else {
-            m_slaveHost = data.value <QHostAddress> ();
-        }
-    });
-
-    // Send Input
-    connect(masterUi->stopSendingPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStop);
+void NetworkTransceiver::setSlaveHost(const QHostAddress &slaveHost)
+{
+    m_slaveHost = slaveHost;
 }
 
-void NetworkTransceiver::loadSlaveUI() {
-    slaveUi = new Ui::NetworkTransceiverSlave();
-    slaveUi->setupUi(this);
-    slaveUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
-    slaveUi->receiveAnimationLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
-
-    // Init
-    connect(slaveUi->startPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStart);
-    connect(slaveUi->quitPushButton, &QPushButton::clicked, this, &NetworkTransceiver::quit);
-    for(const QHostAddress &address: m_interfaces) {
-        slaveUi->networkInterfaceComboBox->addItem(address.toString(), QVariant::fromValue <QHostAddress> (address));
-    }
-    connect(slaveUi->networkInterfaceComboBox, QOverload <int>::of (&QComboBox::activated), [this] (int index) {
-        m_selectedInterface = slaveUi->networkInterfaceComboBox->itemData(index).value <QHostAddress> ();
-    });
-
-    // Broadcast
-    connect(slaveUi->stopBroadcastPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStop);
-
-    // Receive Input
-    connect(slaveUi->stopReceivingPushButton, &QPushButton::clicked, this, &NetworkTransceiver::onStop);
+void NetworkTransceiver::setSelectedInterface(const QHostAddress &selectedInterface)
+{
+    m_selectedInterface = selectedInterface;
 }
+
+
 
 // MASTER INITIAL
 NetworkTransceiver::StateInitMaster::StateInitMaster(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    m_transceiver->masterUi->stackedWidget->setCurrentWidget(m_transceiver->masterUi->stateMasterInit);
+    m_transceiver->emit stateChanged(State::InitMaster);
 }
 
 NetworkTransceiver::StateInitMaster::~StateInitMaster() {
@@ -173,8 +112,7 @@ qint64 NetworkTransceiver::StateInitMaster::sendData(const QByteArray &data, con
 
 // MASTER LISTEN
 NetworkTransceiver::StateListen::StateListen(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    transceiver->masterUi->stackedWidget->setCurrentWidget(transceiver->masterUi->stateListen);
-    transceiver->masterUi->hostListWidget->clear();
+    transceiver->emit stateChanged(State::Listen);
 }
 
 NetworkTransceiver::StateListen::~StateListen() {
@@ -202,11 +140,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateListen::onReadyRead(
     QNetworkDatagram datagram = m_transceiver->m_udpSocket->receiveDatagram();
     if(!m_hosts.contains(datagram.senderAddress().toIPv4Address())) {
         m_hosts[datagram.senderAddress().toIPv4Address()] = datagram.senderAddress();
-
-        QListWidgetItem *item = new QListWidgetItem(m_transceiver->masterUi->hostListWidget);
-        item->setData(Qt::UserRole, QVariant::fromValue(datagram.senderAddress()));
-        item->setText(QString(datagram.data()) + "@ ip = " + datagram.senderAddress().toString() + ", port = " + QString::number(datagram.senderPort()));
-        m_transceiver->masterUi->hostListWidget->addItem(item);
+        m_transceiver->emit hostFound(datagram.senderAddress().toString());
     }
     return nullptr;
 }
@@ -217,7 +151,7 @@ qint64 NetworkTransceiver::StateListen::sendData(const QByteArray &data, const b
 
 // MASTER SEND INPUT
 NetworkTransceiver::StateSendInput::StateSendInput(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    transceiver->masterUi->stackedWidget->setCurrentWidget(transceiver->masterUi->stateSendnput);
+    m_transceiver->emit stateChanged(State::SendInput);
     m_transceiver->connected();
     m_transceiver->m_udpSocket->connectToHost(m_transceiver->m_slaveHost, m_transceiver->m_port);
     QMessageBox messageBox;
@@ -263,7 +197,7 @@ qint64 NetworkTransceiver::StateSendInput::sendData(const QByteArray &data, cons
 
 // SLAVE INIT
 NetworkTransceiver::StateInitSlave::StateInitSlave(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    m_transceiver->slaveUi->stackedWidget->setCurrentWidget(m_transceiver->slaveUi->StateInitSlave);
+    m_transceiver->emit stateChanged(State::InitSlave);
 }
 
 NetworkTransceiver::StateInitSlave::~StateInitSlave() {
@@ -301,7 +235,7 @@ qint64 NetworkTransceiver::StateInitSlave::sendData(const QByteArray &data, cons
 
 // SLAVE BROADCAST
 NetworkTransceiver::StateBroadcast::StateBroadcast(NetworkTransceiver *transceiver): AbstractState(transceiver), m_pollPeriodMS(200) {
-    m_transceiver->slaveUi->stackedWidget->setCurrentWidget(m_transceiver->slaveUi->StateBroadcast);
+    m_transceiver->emit stateChanged(State::Broadcast);
 
     QNetworkDatagram datagram;
     datagram.setDestination(QHostAddress::Broadcast, m_transceiver->m_port);
@@ -337,12 +271,12 @@ qint64 NetworkTransceiver::StateBroadcast::sendData(const QByteArray &data, cons
 
 // SLAVE RECEIVE INPUT
 NetworkTransceiver::StateReceiveInput::StateReceiveInput(NetworkTransceiver *transceiver): AbstractState(transceiver) {
-    m_transceiver->slaveUi->stackedWidget->setCurrentWidget(m_transceiver->slaveUi->StateReceiveInput);
-    m_transceiver->connected();
+    m_transceiver->emit stateChanged(State::ReceiveInput);
+    m_transceiver->emit connected();
 }
 
 NetworkTransceiver::StateReceiveInput::~StateReceiveInput() {
-    m_transceiver->disconnected("");
+    m_transceiver->emit disconnected("");
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateReceiveInput::start() {

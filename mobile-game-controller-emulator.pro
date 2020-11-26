@@ -12,6 +12,7 @@ SOURCES += \
     src/main.cpp \
     src/transceiver/network/networktransceiver.cpp \
     src/widget/gamepadwidget.cpp \
+    src/widget/networktransceiverwidget.cpp \
     src/widget/virtualanalogstick.cpp \
     src/widget/virtualdirectionalpad.cpp \
     src/widget/virtualgamepadbutton.cpp
@@ -42,6 +43,7 @@ HEADERS += \
     src/transceiver/abstracttransceiver.h \
     src/transceiver/network/networktransceiver.h \
     src/widget/gamepadwidget.h \
+    src/widget/networktransceiverwidget.h \
     src/widget/virtualanalogstick.h \
     src/widget/virtualdirectionalpad.h \
     src/widget/virtualgamepadbutton.h

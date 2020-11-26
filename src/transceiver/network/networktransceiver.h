@@ -4,15 +4,11 @@
 #include "transceiver/abstracttransceiver.h"
 #include <QUdpSocket>
 #include <QTimer>
+#include <QListWidgetItem>
 
-namespace Ui {
-class NetworkTransceiverMaster;
-class NetworkTransceiverSlave;
-}
-
-Q_DECLARE_METATYPE(QHostAddress)
 
 class NetworkTransceiver : public AbstractTransceiver {
+    Q_OBJECT
     class AbstractState {
     public:
         AbstractState(NetworkTransceiver *transceiver): m_transceiver(transceiver) {
@@ -104,10 +100,29 @@ class NetworkTransceiver : public AbstractTransceiver {
     };
 
 public:
-    NetworkTransceiver(const Mode &mode, QWidget *parent = nullptr);
+    enum State {
+        // Master States
+        InitMaster,
+        Listen,
+        SendInput,
+        // Slave States
+        InitSlave,
+        Broadcast,
+        ReceiveInput,
+    };
+
+    NetworkTransceiver(const Mode &mode, QObject *parent = nullptr);
     ~NetworkTransceiver();
 
     qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+
+    void setSelectedInterface(const QHostAddress &selectedInterface);
+
+    void setSlaveHost(const QHostAddress &slaveHost);
+
+signals:
+    void stateChanged(State state);
+    void hostFound(QString address);
 
 public slots:
     // Not start & stop in the strict sense, start could mean connect to target, stop could be quit etc.
@@ -119,8 +134,6 @@ private slots:
     void onReadyRead();
 
 private:
-    void loadMasterUI();
-    void loadSlaveUI();
 
     AbstractState *m_state;
     QUdpSocket *m_udpSocket;
@@ -128,14 +141,10 @@ private:
     // Configured by master only, slave receives at the rate the master dictates
     int m_pollPeriodMS;
     // Common to both modes
-    QList <QHostAddress> m_interfaces;
     QHostAddress m_selectedInterface;
     // Paired devices, slave stores master and master vice versa
     QHostAddress m_slaveHost;
     QHostAddress m_masterHost;
-    // Different ui's loaded for each mode
-    Ui::NetworkTransceiverMaster *masterUi;
-    Ui::NetworkTransceiverSlave *slaveUi;
     static unsigned int m_datagramId;
 };
 

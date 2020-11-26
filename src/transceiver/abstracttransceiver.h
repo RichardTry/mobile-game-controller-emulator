@@ -2,9 +2,9 @@
 #define ABSTRACTTRANSCEIVER_H
 
 #include <QByteArray>
-#include <QWidget>
+#include <QObject>
 
-class AbstractTransceiver: public QWidget {
+class AbstractTransceiver: public QObject {
     Q_OBJECT
 
 public:
@@ -13,11 +13,15 @@ public:
         Slave
     };
 
-    AbstractTransceiver(const Mode &mode, QWidget *parent = nullptr): QWidget(parent), m_mode(mode) {
+    AbstractTransceiver(const Mode &mode, QObject *parent = nullptr): QObject(parent), m_mode(mode) {
 
     }
 
     virtual ~AbstractTransceiver() {}
+
+    Mode mode() const {
+        return m_mode;
+    }
 
 signals:
     void dataArrived(QByteArray data);
