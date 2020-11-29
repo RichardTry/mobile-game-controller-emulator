@@ -6,7 +6,6 @@
 #include <QTimer>
 #include <QListWidgetItem>
 
-
 class NetworkTransceiver : public AbstractTransceiver {
     Q_OBJECT
     class AbstractState {

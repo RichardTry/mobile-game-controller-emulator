@@ -1,7 +1,6 @@
 #ifndef GAMEPADWIDGET_H
 #define GAMEPADWIDGET_H
 
-#include "controller/gamepad/gamepad.h"
 #include "layout/gamepadsvglayout.h"
 #include "widget/virtualdirectionalpad.h"
 #include "widget/virtualanalogstick.h"

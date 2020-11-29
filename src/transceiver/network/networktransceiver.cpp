@@ -3,7 +3,6 @@
 #include <QWidget>
 #include <QNetworkInterface>
 #include <QNetworkDatagram>
-#include <QMessageBox>
 #include <QDataStream>
 
 unsigned int NetworkTransceiver::m_datagramId = 0;
@@ -81,20 +80,16 @@ NetworkTransceiver::StateInitMaster::~StateInitMaster() {
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitMaster::start() {
-    QMessageBox messageBox;
-    messageBox.setWindowTitle(tr("Error"));
 
     if(m_transceiver->m_selectedInterface.isNull()) {
-        messageBox.setText(tr("Error, no interface selected!"));
-        messageBox.exec();
+        m_transceiver->emit error(tr("Error, no interface selected!"));
         return nullptr;
     }
 
     m_transceiver->m_udpSocket->close();
     if(!m_transceiver->m_udpSocket->bind(QHostAddress::Any, m_transceiver->m_port)) {
 //    if(!m_transceiver->m_udpSocket->bind(m_transceiver->m_selectedInterface, m_transceiver->m_port)) {
-        messageBox.setText(tr("Error binding socket to host: ") + m_transceiver->m_selectedInterface.toString() + tr(", port: ") + QString::number(m_transceiver->m_port));
-        messageBox.exec();
+        m_transceiver->emit error(tr("Error binding socket to host: ") + m_transceiver->m_selectedInterface.toString() + tr(", port: ") + QString::number(m_transceiver->m_port));
         return nullptr;
     }
 
@@ -121,10 +116,7 @@ NetworkTransceiver::StateListen::~StateListen() {
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateListen::start() {
     if(m_transceiver->m_slaveHost.isNull()) {
-        QMessageBox messageBox;
-        messageBox.setWindowTitle(tr("Error"));
-        messageBox.setText(tr("Error, no target device selected!"));
-        messageBox.exec();
+        m_transceiver->emit error(tr("Error, no target device selected!"));
         return nullptr;
     }
     else {
@@ -154,10 +146,6 @@ NetworkTransceiver::StateSendInput::StateSendInput(NetworkTransceiver *transceiv
     m_transceiver->emit stateChanged(State::SendInput);
     m_transceiver->connected();
     m_transceiver->m_udpSocket->connectToHost(m_transceiver->m_slaveHost, m_transceiver->m_port);
-    QMessageBox messageBox;
-    messageBox.setWindowTitle(tr("Info"));
-    messageBox.setText(tr("Connected to host: ") + m_transceiver->m_slaveHost.toString());
-    messageBox.exec();
 }
 
 NetworkTransceiver::StateSendInput::~StateSendInput() {
@@ -205,19 +193,14 @@ NetworkTransceiver::StateInitSlave::~StateInitSlave() {
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitSlave::start() {
-    QMessageBox messageBox;
-    messageBox.setWindowTitle(tr("Error"));
-
     if(m_transceiver->m_selectedInterface.isNull()) {
-        messageBox.setText(tr("Error, no interface selected!"));
-        messageBox.exec();
+        m_transceiver->emit error(tr("Error, no interface selected!"));
         return nullptr;
     }
 
     m_transceiver->m_udpSocket->close();
     if(!m_transceiver->m_udpSocket->bind(m_transceiver->m_selectedInterface, m_transceiver->m_port)) {
-        messageBox.setText(tr("Error binding socket to host: ") + m_transceiver->m_selectedInterface.toString() + tr(", port: ") + QString::number(m_transceiver->m_port));
-        messageBox.exec();
+        m_transceiver->emit error(tr("Error binding socket to host: ") + m_transceiver->m_selectedInterface.toString() + tr(", port: ") + QString::number(m_transceiver->m_port));
         return nullptr;
     }
 

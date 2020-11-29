@@ -16,12 +16,20 @@ public:
     void setData(const QByteArray &data) override;
 
 signals:
-    void buttonPressed(Button button);
-    void buttonReleased(Button button);
+    void stickMoved(const Button& btn, const QPointF &point);
+    void stickReleased(const Button& btn, const QPointF &point);
+    void stickPressed(const Button& btn, const QPointF &point);
+    void buttonReleased(const Button& btn);
+    void buttonPressed(const Button& btn);
 
 public slots:
-    void onButtonPressed(const Button &button);
+    void onStickMoved(const Button& btn, const QPointF &point);
+    void onStickReleased(const Button& btn, const QPointF &point);
+    void onStickPressed(const Button& btn, const QPointF &point);
     void onButtonReleased(const Button &button);
+    void onButtonPressed(const Button &button);
+    // If not called after sending the event, the event will just be repeatedly sent until it's cleared
+    void clearEvents(const Button &button);
 
 public:
     bool getButton(Button button) const;
@@ -43,6 +51,7 @@ private:
     quint32 m_buttons;
     quint32 m_pressedEvents;
     quint32 m_releasedEvents;
+    quint32 m_movedEvents;
 };
 
 #endif // GAMEPAD_H

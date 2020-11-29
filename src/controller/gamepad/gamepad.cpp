@@ -2,7 +2,7 @@
 #include <QDataStream>
 #include <QDebug>
 
-Gamepad::Gamepad(QObject *parent ): QObject(parent), m_buttons(0), m_pressedEvents(0), m_releasedEvents(0) {
+Gamepad::Gamepad(QObject *parent ): QObject(parent), m_buttons(0), m_pressedEvents(0), m_releasedEvents(0), m_movedEvents(0) {
 
 }
 
@@ -19,6 +19,7 @@ QByteArray Gamepad::getData() {
     out << m_buttons;
     out << m_pressedEvents;
     out << m_releasedEvents;
+    out << m_movedEvents;
 
     return m_data;
 }
@@ -32,6 +33,7 @@ void Gamepad::setData(const QByteArray &data) {
     in >> m_buttons;
     in >> m_pressedEvents;
     in >> m_releasedEvents;
+    in >> m_movedEvents;
 }
 
 QPointF Gamepad::getLeftStick() const {
@@ -60,15 +62,53 @@ void Gamepad::setButton(const Button &button, const bool &value) {
     } else {
         m_buttons &= (~0) ^ button;
     }
-    qDebug() << QString::number(m_buttons, 2);
+}
+
+void Gamepad::onStickMoved(const Button& button, const QPointF &point) {
+    m_movedEvents |= button;
+    if(button == Button::LEFTSTICK) {
+        m_leftStick = point;
+    } else if (button == Button::RIGHTSTICK) {
+        m_rightStick = point;
+    }
+}
+
+void Gamepad::onStickPressed(const Button& button, const QPointF &point) {
+    m_buttons |= button;
+    m_pressedEvents |= button;
+    m_releasedEvents &= (~0) ^ button;
+    if(button == Button::LEFTSTICK) {
+        m_leftStick = point;
+    } else if (button == Button::RIGHTSTICK) {
+        m_rightStick = point;
+    }
+}
+
+void Gamepad::onStickReleased(const Button& button, const QPointF &point) {
+    m_buttons &= (~0) ^ button;
+    m_releasedEvents |= button;
+    m_pressedEvents &= (~0) ^ button;
+    if(button == Button::LEFTSTICK) {
+        m_leftStick = point;
+    } else if (button == Button::RIGHTSTICK) {
+        m_rightStick = point;
+    }
 }
 
 void Gamepad::onButtonPressed(const Button &button) {
     m_buttons |= button;
     m_pressedEvents |= button;
+    m_releasedEvents &= (~0) ^ button;
 }
 
 void Gamepad::onButtonReleased(const Button &button) {
     m_buttons &= (~0) ^ button;
     m_releasedEvents |= button;
+    m_pressedEvents &= (~0) ^ button;
+}
+
+void Gamepad::clearEvents(const Button &button) {
+    m_pressedEvents &= (~0) ^ button;
+    m_releasedEvents &= (~0) ^ button;
+    m_movedEvents &= (~0) ^ button;
 }

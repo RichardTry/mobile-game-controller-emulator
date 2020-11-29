@@ -24,6 +24,7 @@ public:
     }
 
 signals:
+    void error(QString error);
     void dataArrived(QByteArray data);
     void connected();
     void disconnected(QString msg);
