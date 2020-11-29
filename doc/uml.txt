@@ -1,21 +1,21 @@
 @startuml
 
-IControllerEmulator-down->IController
+AbstractControllerEmulator-down->IController
 IDriverEmulator-down->IController
-IController-right->ITransceiver
+IController-right->AbstractTransceiver
 
 newpage
 
 /' CONTROLLER EMULATORS '/
-AndroidJoystickEmulator-up--|>IControllerEmulator
-IOSJoystickEmulator-up--|>IControllerEmulator
+AndroidJoystickEmulator-up--|>AbstractControllerEmulator
+IOSJoystickEmulator-up--|>AbstractControllerEmulator
 /' DRIVERS EMULATORS'/
 LinuxJoystickDriverEmulator-up--|>IDriverEmulator
 MacJoystickDriverEmulator-up--|>IDriverEmulator
 WindowsJoystickDriverEmulator-up--|>IDriverEmulator
 /' Transceivers '/
-NetworkTransceiver-up--|>ITransceiver
-BluetoothTransceiver-up--|>ITransceiver
+NetworkTransceiver-up--|>AbstractTransceiver
+BluetoothTransceiver-up--|>AbstractTransceiver
 /' FINAL APPLICAITONS'/
 MultiPlatformControllerApplication-up->AndroidJoystickEmulator
 MultiPlatformControllerApplication-up->IOSJoystickEmulator
@@ -30,15 +30,15 @@ MultiPlatformDriverApplication-up->BluetoothTransceiver
 newpage
 
 /' CONTROLLER EMULATORS '/
-AndroidGamepadEmulator-up--|>IControllerEmulator
-IOSGamepadEmulator-up--|>IControllerEmulator
+AndroidGamepadEmulator-up--|>AbstractControllerEmulator
+IOSGamepadEmulator-up--|>AbstractControllerEmulator
 /' DRIVERS EMULATORS'/
 LinuxGamepadDriverEmulator-up--|>IDriverEmulator
 MacGamepadDriverEmulator-up--|>IDriverEmulator
 WindowsGamepadDriverEmulator-up--|>IDriverEmulator
 /'Transceivers'/
-NetworkTransceiver-up--|>ITransceiver
-BluetoothTransceiver-up--|>ITransceiver
+NetworkTransceiver-up--|>AbstractTransceiver
+BluetoothTransceiver-up--|>AbstractTransceiver
 /' FINAL APPLICAITONS'/
 MultiPlatformControllerApplication-up->AndroidGamepadEmulator
 MultiPlatformControllerApplication-up->IOSGamepadEmulator
