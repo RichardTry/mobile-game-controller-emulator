@@ -9,48 +9,6 @@ int packetCount = 0;
 int main(int argc, char **argv) {
     QApplication app(argc, argv);
 
-//    GamepadControllerEmulator *emulator = new GamepadControllerEmulator;
-//    emulator->show();
-//    GamepadWidget *gWidget = new GamepadWidget;
-//    gWidget->show();
-
-
-//    return app.exec();
-
-//    QWidget *widget = new QWidget;
-//    widget->setWindowTitle("Virtual Analog Stick Test Run");
-
-//    VirtualAnalogStick *analogStick = new VirtualAnalogStick(widget);
-//    const int outerRadius = 250;
-//    const int innerRadius = 100;
-
-//    analogStick->setOuterRadius(outerRadius);
-//    analogStick->setInnerRadius(innerRadius);
-
-//    analogStick->setOuterColor(QColor(32, 32, 32, 128));
-//    analogStick->setInnerColor(QColor(32, 32, 32, 255));
-
-//    QLabel *label = new QLabel(widget);
-//    label->setAlignment(Qt::AlignCenter);
-//    QObject::connect(analogStick, &VirtualAnalogStick::touchPointMoved, [label] (QPointF normalisedTouchPoint){
-//        label->setText("x :" + QString::number((double)normalisedTouchPoint.x()).rightJustified(5, ' ', true) + ", y : " + QString::number((double)normalisedTouchPoint.y()).rightJustified(5, ' ', true));
-//    });
-
-//    auto vBoxLayout  = new QVBoxLayout;
-//    auto hBoxLayout  = new QHBoxLayout;
-//    widget->setLayout(vBoxLayout);
-//    vBoxLayout->addStretch();
-//    vBoxLayout->addWidget(label);
-//    vBoxLayout->addLayout(hBoxLayout);
-//    vBoxLayout->addStretch();
-
-//    hBoxLayout->addStretch();
-//    hBoxLayout->addWidget(analogStick);
-//    hBoxLayout->addStretch();
-
-//    widget->show();
-//    analogStick->show();
-
 #if defined(DRIVER)
     AbstractTransceiver *transceiver = new NetworkTransceiver(NetworkTransceiver::Mode::Slave);
     QObject::connect(transceiver, &AbstractTransceiver::dataArrived, [](QByteArray data) {
