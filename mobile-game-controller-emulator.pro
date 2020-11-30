@@ -37,8 +37,8 @@ HEADERS += \
     src/controller/gamepad/gamepad.h \
     src/controller/icontroller.h \
     src/emulator/abstractcontrolleremulator.h \
+    src/emulator/abstractdriveremulator.h \
     src/emulator/gamepad/gamepadcontrolleremulator.h \
-    src/emulator/idriveremulator.h \
     src/layout/gamepadsvglayout.h \
     src/transceiver/abstracttransceiver.h \
     src/transceiver/network/networktransceiver.h \

@@ -4,8 +4,6 @@
 #include "transceiver/network/networktransceiver.h"
 #include "widget/networktransceiverwidget.h"
 
-int packetCount = 0;
-
 class NetworkWorker: public QThread {
 public:
     NetworkWorker(const AbstractTransceiver::Mode &mode, QObject *parent = nullptr) {
