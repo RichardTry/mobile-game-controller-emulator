@@ -3,14 +3,6 @@
 #include <QHBoxLayout>
 
 GamepadControllerEmulator::GamepadControllerEmulator(AbstractTransceiver *transceiver, QWidget *parent): AbstractControllerEmulator(transceiver, parent), m_frameBufferSize(10) {
-}
-
-GamepadControllerEmulator::~GamepadControllerEmulator() {
-    m_transmittionWorker->stop();
-    m_transmittionWorker->deleteLater();
-}
-
-void GamepadControllerEmulator::init() {
     m_frames.fill(QByteArray(), m_frameBufferSize);
     m_freeFrames.release(m_frameBufferSize);
     m_frameIndex = 0;
@@ -30,6 +22,11 @@ void GamepadControllerEmulator::init() {
 
     m_transmittionWorker = new TransmittionWorker(this);
     m_transmittionWorker->start();
+}
+
+GamepadControllerEmulator::~GamepadControllerEmulator() {
+    m_transmittionWorker->stop();
+    m_transmittionWorker->deleteLater();
 }
 
 void GamepadControllerEmulator::onStickMoved(const Button& btn, const QPointF &point) {

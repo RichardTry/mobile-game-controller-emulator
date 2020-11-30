@@ -7,10 +7,13 @@
 class AbstractTransceiver;
 
 class AbstractControllerEmulator: public QWidget {
+    Q_OBJECT
 public:
     AbstractControllerEmulator(AbstractTransceiver *transceiver, QWidget *parent = nullptr): QWidget(parent), m_transceiver(transceiver) {}
     virtual ~AbstractControllerEmulator() {}
-    virtual void init() = 0;
+
+signals:
+    void quit();
 
 protected:
     AbstractTransceiver *m_transceiver;

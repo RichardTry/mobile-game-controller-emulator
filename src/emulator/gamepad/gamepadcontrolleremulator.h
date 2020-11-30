@@ -16,8 +16,6 @@ public:
     GamepadControllerEmulator(AbstractTransceiver *transceiver, QWidget *parent = nullptr);
     ~GamepadControllerEmulator();
 
-    void init() override;
-
 private slots:
     void onStickMoved(const Button& btn, const QPointF &point);
     void onStickReleased(const Button& btn, const QPointF &point);

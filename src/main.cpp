@@ -8,15 +8,12 @@ int packetCount = 0;
 
 class NetworkWorker: public QThread {
 public:
-    NetworkWorker(QObject *parent = nullptr) {
+    NetworkWorker(const AbstractTransceiver::Mode &mode, QObject *parent = nullptr) {
+        m_networkTransceiver = new NetworkTransceiver(mode);
     }
 
     ~NetworkWorker() {
         m_networkTransceiver->deleteLater();
-    }
-
-    void init(const AbstractTransceiver::Mode &mode) {
-        m_networkTransceiver = new NetworkTransceiver(mode);
     }
 
     NetworkTransceiver *networkTransceiver() const {
@@ -44,13 +41,11 @@ int main(int argc, char **argv) {
     QObject::connect(&widget, &QWidget::destroyed, transceiver, &AbstractTransceiver::deleteLater);
     widget.show();
 #elif defined(CONTROLLER)
-    NetworkWorker worker;
-    worker.init(AbstractTransceiver::Mode::Master);
+    NetworkWorker worker(AbstractTransceiver::Mode::Master);
     AbstractTransceiver *transceiver = worker.networkTransceiver();
     NetworkTransceiverWidget comWidget((NetworkTransceiver*)transceiver);
     comWidget.show();
     GamepadControllerEmulator *conemu = new GamepadControllerEmulator(transceiver);
-    conemu->init();
     QObject::connect(transceiver, &AbstractTransceiver::connected, &comWidget, &QWidget::hide);
     QObject::connect(transceiver, &AbstractTransceiver::connected, conemu, &QWidget::show);
 #endif
