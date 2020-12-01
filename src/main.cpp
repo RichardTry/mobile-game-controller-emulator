@@ -29,10 +29,20 @@ int main(int argc, char **argv) {
     AbstractTransceiver *transceiver = new NetworkTransceiver(NetworkTransceiver::Mode::Slave);
     Gamepad gamepad;
     QObject::connect(transceiver, &AbstractTransceiver::dataArrived, &gamepad, &Gamepad::setData);
-    QObject::connect(transceiver, &AbstractTransceiver::dataArrived, [&gamepad] () {
-        qDebug() << "";
-        qDebug() << "Left  : " << QString::number(gamepad.getLeftStick().x()).rightJustified(7, ' ') << ", " << QString::number(gamepad.getLeftStick().y()).rightJustified(7, ' ');
-        qDebug() << "Right : " << QString::number(gamepad.getRightStick().x()).rightJustified(7, ' ') << ", " << QString::number(gamepad.getRightStick().y()).rightJustified(7, ' ');
+    QObject::connect(&gamepad, &Gamepad::buttonPressed, [] (const Button& btn) {
+        qDebug() << "Button pressed:  " << labelForButton(btn).rightJustified(10, ' ');
+    });
+    QObject::connect(&gamepad, &Gamepad::buttonReleased, [] (const Button& btn) {
+        qDebug() << "Button released: " << labelForButton(btn).rightJustified(10, ' ');
+    });
+    QObject::connect(&gamepad, &Gamepad::stickMoved, [] (const Button& btn, const QPointF &point) {
+        qDebug() << labelForButton(btn).rightJustified(10) << " Moved:    " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
+    });
+    QObject::connect(&gamepad, &Gamepad::stickPressed, [] (const Button& btn, const QPointF &point) {
+        qDebug() << labelForButton(btn).rightJustified(10) << " Pressed:  " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
+    });
+    QObject::connect(&gamepad, &Gamepad::stickReleased, [] (const Button& btn, const QPointF &point) {
+        qDebug() << labelForButton(btn).rightJustified(10) << " Released: " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
     });
     QObject::connect(transceiver, &AbstractTransceiver::quit, &app, &QApplication::quit);
     NetworkTransceiverWidget widget((NetworkTransceiver*)transceiver);

@@ -34,6 +34,45 @@ void Gamepad::setData(const QByteArray &data) {
     in >> m_pressedEvents;
     in >> m_releasedEvents;
     in >> m_movedEvents;
+
+    if(m_pressedEvents) {
+        for(int btn = Button::X; btn < Button::COUNT; btn <<= 1) {
+            if(btn == Button::LEFTSTICK) {
+                if(m_pressedEvents & btn)
+                    emit stickPressed(Button(btn), m_leftStick);
+            }
+            else if(btn == Button::RIGHTSTICK) {
+                if(m_pressedEvents & btn)
+                    emit stickPressed(Button(btn), m_rightStick);
+            }
+            else if(m_pressedEvents & btn) {
+                emit buttonPressed(Button(btn));
+            }
+        }
+    }
+
+    if(m_releasedEvents) {
+        for(int btn = Button::X; btn < Button::COUNT; btn <<= 1) {
+            if(btn == Button::LEFTSTICK) {
+                if(m_releasedEvents & btn)
+                    emit stickReleased(Button(btn), m_leftStick);
+            }
+            else if(btn == Button::RIGHTSTICK) {
+                if(m_releasedEvents & btn)
+                    emit stickReleased(Button(btn), m_rightStick);
+            }
+            else if(m_releasedEvents & btn) {
+                emit buttonReleased(Button(btn));
+            }
+        }
+    }
+
+    if(m_movedEvents) {
+        if(m_movedEvents & Button::LEFTSTICK)
+            emit stickMoved(Button::LEFTSTICK, m_leftStick);
+        if(m_movedEvents & Button::RIGHTSTICK)
+            emit stickMoved(Button::RIGHTSTICK, m_rightStick);
+    }
 }
 
 QPointF Gamepad::getLeftStick() const {
