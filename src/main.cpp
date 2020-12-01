@@ -26,7 +26,8 @@ int main(int argc, char **argv) {
     QApplication app(argc, argv);
 
 #if defined(DRIVER)
-    AbstractTransceiver *transceiver = new NetworkTransceiver(NetworkTransceiver::Mode::Slave);
+    NetworkWorker worker(AbstractTransceiver::Mode::Slave);
+    AbstractTransceiver *transceiver = worker.networkTransceiver();
     Gamepad gamepad;
     QObject::connect(transceiver, &AbstractTransceiver::dataArrived, &gamepad, &Gamepad::setData);
     QObject::connect(&gamepad, &Gamepad::buttonPressed, [] (const Button& btn) {
@@ -44,9 +45,7 @@ int main(int argc, char **argv) {
     QObject::connect(&gamepad, &Gamepad::stickReleased, [] (const Button& btn, const QPointF &point) {
         qDebug() << labelForButton(btn).rightJustified(10) << " Released: " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
     });
-    QObject::connect(transceiver, &AbstractTransceiver::quit, &app, &QApplication::quit);
     NetworkTransceiverWidget widget((NetworkTransceiver*)transceiver);
-    QObject::connect(&widget, &QWidget::destroyed, transceiver, &AbstractTransceiver::deleteLater);
     widget.show();
 #elif defined(CONTROLLER)
     NetworkWorker worker(AbstractTransceiver::Mode::Master);
