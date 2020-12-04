@@ -8,6 +8,7 @@ SOURCES += \
     src/common/common.cpp \
     src/controller/gamepad/gamepad.cpp \
     src/emulator/gamepad/gamepadcontrolleremulator.cpp \
+    src/emulator/gamepad/gamepaddriveremulator.cpp \
     src/layout/gamepadsvglayout.cpp \
     src/main.cpp \
     src/transceiver/network/networktransceiver.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     src/emulator/abstractcontrolleremulator.h \
     src/emulator/abstractdriveremulator.h \
     src/emulator/gamepad/gamepadcontrolleremulator.h \
+    src/emulator/gamepad/gamepaddriveremulator.h \
     src/layout/gamepadsvglayout.h \
     src/transceiver/abstracttransceiver.h \
     src/transceiver/network/networktransceiver.h \

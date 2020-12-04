@@ -52,6 +52,7 @@ private:
     quint32 m_pressedEvents;
     quint32 m_releasedEvents;
     quint32 m_movedEvents;
+    ulong m_ts;
 };
 
 #endif // GAMEPAD_H
