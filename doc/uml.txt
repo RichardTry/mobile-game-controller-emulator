@@ -1,8 +1,8 @@
 @startuml
 
-AbstractControllerEmulator-down->IController
-IDriverEmulator-down->IController
-IController-right->AbstractTransceiver
+AbstractControllerEmulator-down->IControllerEvent
+IDriverEmulator-down->IControllerEvent
+IControllerEvent-right->AbstractTransceiver
 
 newpage
 
@@ -53,21 +53,21 @@ MultiPlatformDriverApplication-up->BluetoothTransceiver
 newpage
 
 /' JOYSTICK & CONTROLLER/EMULATOR RELATIONSHIPS '/
-Joystick-up--|>IController
-AndroidJoystickEmulator-right->Joystick
-IOSJoystickEmulator-right->Joystick
-LinuxJoystickDriverEmulator-left->Joystick
-MacJoystickDriverEmulator-left->Joystick
-WindowsJoystickDriverEmulator-left->Joystick
+JoystickEvent-up--|>IControllerEvent
+AndroidJoystickEmulator-right->JoystickEvent
+IOSJoystickEmulator-right->JoystickEvent
+LinuxJoystickDriverEmulator-left->JoystickEvent
+MacJoystickDriverEmulator-left->JoystickEvent
+WindowsJoystickDriverEmulator-left->JoystickEvent
 
 newpage
 
 /' GAMEPAD & CONTROLLER/EMULATOR RELATIONSHIPS '/
-Gamepad-up--|>IController
-AndroidGamepadEmulator-right->Gamepad
-IOSGamepadEmulator-right->Gamepad
-LinuxGamepadDriverEmulator-left->Gamepad
-MacGamepadDriverEmulator-left->Gamepad
-WindowsGamepadDriverEmulator-left->Gamepad
+GamepadEvent-up--|>IControllerEvent
+AndroidGamepadEmulator-right->GamepadEvent
+IOSGamepadEmulator-right->GamepadEvent
+LinuxGamepadDriverEmulator-left->GamepadEvent
+MacGamepadDriverEmulator-left->GamepadEvent
+WindowsGamepadDriverEmulator-left->GamepadEvent
 
 @enduml
