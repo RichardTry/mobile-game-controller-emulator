@@ -1,8 +1,11 @@
 #include <QApplication>
-#include "emulator/gamepad/gamepadcontrolleremulator.h"
-#include "widget/gamepadwidget.h"
+#include <QThread>
 #include "transceiver/network/networktransceiver.h"
 #include "widget/networktransceiverwidget.h"
+#include "emulator/androidcontrolleremulator.h"
+#include "controller/gamepadcontroller.h"
+#include "emulator/genericdriveremulator.h"
+#include "driver/linuxgamepaddriver.h"
 
 class NetworkWorker: public QThread {
 public:
@@ -28,23 +31,8 @@ int main(int argc, char **argv) {
 #if defined(DRIVER)
     NetworkWorker worker(AbstractTransceiver::Mode::Slave);
     AbstractTransceiver *transceiver = worker.networkTransceiver();
-    Gamepad gamepad;
-    QObject::connect(transceiver, &AbstractTransceiver::dataArrived, &gamepad, &Gamepad::setData);
-    QObject::connect(&gamepad, &Gamepad::buttonPressed, [] (const Button& btn) {
-        qDebug() << "Button pressed:  " << labelForButton(btn).rightJustified(10, ' ');
-    });
-    QObject::connect(&gamepad, &Gamepad::buttonReleased, [] (const Button& btn) {
-        qDebug() << "Button released: " << labelForButton(btn).rightJustified(10, ' ');
-    });
-    QObject::connect(&gamepad, &Gamepad::stickMoved, [] (const Button& btn, const QPointF &point) {
-        qDebug() << labelForButton(btn).rightJustified(10) << " Moved:    " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
-    });
-    QObject::connect(&gamepad, &Gamepad::stickPressed, [] (const Button& btn, const QPointF &point) {
-        qDebug() << labelForButton(btn).rightJustified(10) << " Pressed:  " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
-    });
-    QObject::connect(&gamepad, &Gamepad::stickReleased, [] (const Button& btn, const QPointF &point) {
-        qDebug() << labelForButton(btn).rightJustified(10) << " Released: " << QString::number(point.x()).rightJustified(10, ' ') << ", " << QString::number(point.y()).rightJustified(10, ' ');
-    });
+    AbstractDriver *driver = new LinuxGamepadDriver;
+    GenericDriverEmulator *drivemu = new GenericDriverEmulator(driver, transceiver);
     NetworkTransceiverWidget widget((NetworkTransceiver*)transceiver);
     widget.show();
 #elif defined(CONTROLLER)
@@ -52,7 +40,8 @@ int main(int argc, char **argv) {
     AbstractTransceiver *transceiver = worker.networkTransceiver();
     NetworkTransceiverWidget comWidget((NetworkTransceiver*)transceiver);
     comWidget.show();
-    GamepadControllerEmulator *conemu = new GamepadControllerEmulator(transceiver);
+    AbstractController *controller = new GamepadController;
+    AndroidControllerEmulator *conemu = new AndroidControllerEmulator(transceiver, controller);
     QObject::connect(transceiver, &AbstractTransceiver::connected, &comWidget, &QWidget::hide);
     QObject::connect(transceiver, &AbstractTransceiver::connected, conemu, &QWidget::show);
 #endif

@@ -4,11 +4,12 @@
 #include <QObject>
 
 class AbstractTransceiver;
+class AbstractDriver;
 
 class AbstractDriverEmulator: public QObject {
     Q_OBJECT
 public:
-    AbstractDriverEmulator(AbstractTransceiver *transceiver, QObject *parent = nullptr): QObject(parent), m_transceiver(transceiver) {
+    AbstractDriverEmulator(AbstractDriver *driver, AbstractTransceiver *transceiver, QObject *parent = nullptr): QObject(parent), m_transceiver(transceiver), m_driver(driver) {
     }
 
 public slots:
@@ -20,6 +21,7 @@ public slots:
 
 protected:
     AbstractTransceiver *m_transceiver;
+    AbstractDriver *m_driver;
 };
 
 #endif // IDRIVEREMULATOR_H
