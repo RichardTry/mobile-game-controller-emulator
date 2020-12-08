@@ -2,6 +2,8 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QDebug>
+#include <QSvgRenderer>
+#include <QGraphicsSvgItem>
 
 GamepadSvgLayout::GamepadSvgLayout() {
     m_svgRect = QRect(0, 0, 200, 200);
@@ -12,77 +14,20 @@ GamepadSvgLayout::~GamepadSvgLayout() {
 }
 
 void GamepadSvgLayout::load() {
-    QFile file(":/controller-layout.svg");
+    QSvgRenderer *renderer = new QSvgRenderer(QString(":/controller-layout.svg"));
+    m_svgRect.setSize(renderer->defaultSize());
 
-    QMessageBox messageBox;
-    messageBox.setWindowTitle("Error");
-
-    if(!file.exists()) {
-        messageBox.setText("No such file " + file.fileName());
-        messageBox.exec();
-    }
-
-    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        messageBox.setText("Failed to open file " + file.fileName());
-        messageBox.exec();
-    }
-
-    QByteArray data = file.readAll();
-    file.close();
-
-    QXmlStreamReader *xmlReader = new QXmlStreamReader(data);
-
-    // Calculate the rects for each button type
-    //Parse the XML until we reach end of it
-    while(!xmlReader->atEnd() && !xmlReader->hasError()) {
-        // Read next element
-        QXmlStreamReader::TokenType token = xmlReader->readNext();
-        //If token is just StartDocument - go to next
-        if(token == QXmlStreamReader::StartDocument) {
+    for(int btn = Button::X; btn < Button::COUNT; btn = btn << 1) {
+        const QString label = labelForButton(Button(btn)).toLower();
+        if(!renderer->elementExists(label))
             continue;
-        }
-        //If token is StartElement - read it
-        if(token == QXmlStreamReader::StartElement) {
-
-            // Get svg dimensions
-            if(xmlReader->name() == "svg") {
-                auto attributes = xmlReader->attributes();
-                const int width = attributes.value("width").toString().toInt();
-                const int height = attributes.value("height").toString().toInt();
-                m_svgRect.setWidth(width);
-                m_svgRect.setHeight(height);
-                m_svgRect.setTopLeft(QPoint(0, 0));
-                continue;
-            }
-
-            auto attributes = xmlReader->attributes();
-            const QString id = attributes.value("id").toString();
-            const Button button = buttonForLabel(id.toUpper());
-            // Check if button was added before
-            if(m_buttonRects.contains(button)) {
-                messageBox.setText("Button defined twice in svg : " + id);
-                messageBox.exec();
-            }
-            // Only rectangular and circular shapes supported
-            if(button != Button::COUNT) { // Circular svg items
-                if(attributes.hasAttribute("r")) {
-                    const qreal radius = attributes.value("r").toString().toDouble();
-                    const qreal cx = attributes.value("cx").toString().toDouble();
-                    const qreal cy = attributes.value("cy").toString().toDouble();
-                    QRectF buttonRect(cx - radius, cy - radius, radius * 2, radius * 2);
-                    m_buttonRects[button] = buttonRect;
-                }
-                else if(attributes.hasAttribute("width")) { // Rectangular svg items
-                    const qreal width = attributes.value("width").toString().toDouble();
-                    const qreal height = attributes.value("height").toString().toDouble();
-                    const qreal x = attributes.value("x").toString().toDouble();
-                    const qreal y = attributes.value("y").toString().toDouble();
-                    QRectF buttonRect(x, y, width, height);
-                    m_buttonRects[button] = buttonRect;
-                }
-            }
-        }
+        QRectF boundingRect = renderer->boundsOnElement(label);
+        QTransform transform = renderer->transformForElement(label);
+        boundingRect = transform.mapRect(boundingRect);
+        m_buttonRects[Button(btn)] = boundingRect;
     }
+
+    delete renderer;
 }
 
 void GamepadSvgLayout::add(QLayoutItem *item, const Button &button) {
