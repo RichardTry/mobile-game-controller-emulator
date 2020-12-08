@@ -46,3 +46,7 @@ Draws the text within a rectangle that has "point" as the "bottom left" corner.
 
 Linux Input Event Codes:
 /usr/include/linux/input-event-codes.h
+
+ANDROID ORIENTATION SETTING
+To lock orientation to landscape, set android:screenOrientation="unspecified" 
+to android:screenOrientation="sensorLandscape"
