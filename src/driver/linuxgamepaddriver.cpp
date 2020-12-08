@@ -15,7 +15,7 @@ inline __u16 mapButton2Input(const Button &btn) {
     case Button::DOWN: return BTN_DPAD_DOWN;
     case Button::LEFT: return BTN_DPAD_LEFT;
     case Button::RIGHT: return BTN_DPAD_RIGHT;
-    case Button::BACK: return BTN_BACK;
+    case Button::BACK: return BTN_SELECT;
     case Button::START: return BTN_START;
     }
 }
