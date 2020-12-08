@@ -14,6 +14,8 @@ GenericDriverEmulator::GenericDriverEmulator(AbstractDriver *driver, AbstractTra
     m_transmittionWorker->start();
 
     connect(transceiver, &AbstractTransceiver::dataArrived, this, &GenericDriverEmulator::onDataArrived);
+    connect(transceiver, &AbstractTransceiver::connected, driver, &AbstractDriver::onConnected);
+    connect(transceiver, &AbstractTransceiver::disconnected, driver, &AbstractDriver::onDisconnect);
 }
 
 GenericDriverEmulator::~GenericDriverEmulator() {

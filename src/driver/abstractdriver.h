@@ -10,6 +10,8 @@ public:
 
 public slots:
     virtual void onDataArrived(const QByteArray &data) = 0;
+    virtual void onConnected() = 0;
+    virtual void onDisconnect() = 0;
 };
 
 #endif // ABSTRACTDRIVER_H

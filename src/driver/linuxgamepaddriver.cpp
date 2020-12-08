@@ -2,8 +2,23 @@
 #include "controller/gamepadcontroller.h"
 #include <QDebug>
 
-#define STICK_MAX_VAL 512
-#define STICK_FLAT_VAL 10
+#define STICK_MAX_VAL 1024
+#define STICK_FLAT_VAL 15
+
+inline __u16 mapButton2Input(const Button &btn) {
+    switch (btn) {
+    case Button::X: return BTN_X;
+    case Button::Y: return BTN_Y;
+    case Button::A: return BTN_A;
+    case Button::B: return BTN_B;
+    case Button::UP: return BTN_DPAD_UP;
+    case Button::DOWN: return BTN_DPAD_DOWN;
+    case Button::LEFT: return BTN_DPAD_LEFT;
+    case Button::RIGHT: return BTN_DPAD_RIGHT;
+    case Button::BACK: return BTN_BACK;
+    case Button::START: return BTN_START;
+    }
+}
 
 LinuxGamepadDriver::LinuxGamepadDriver(QObject *parent): AbstractDriver(parent), m_syncPeriodms(1) {
     m_syncReportTimer.start(m_syncPeriodms);
@@ -26,39 +41,48 @@ void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
     const QString btnLabel = labelForButton(event.m_button);
     switch (event.m_type) {
     case GamepadController::GamepadEvent::ButtonPressEvent: {
-        qDebug() << QString("Button pressed:").leftJustified(infoTextWidth) << btnLabel.rightJustified(numberWidth, ' ');
+        pressButton(event.m_button);
         break;
     }
     case GamepadController::GamepadEvent::ButtonReleaseEvent: {
-        qDebug() << QString("Button released:").leftJustified(infoTextWidth) << btnLabel.rightJustified(numberWidth, ' ');
+        releaseButton(event.m_button);
         break;
     }
     case GamepadController::GamepadEvent::StickMoveEvent: {
         moveStick(event.m_button, event.m_value);
-        qDebug() << QString(btnLabel + " Moved:").leftJustified(infoTextWidth)
-                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-                 << " "
-                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
+//        qDebug() << QString(btnLabel + " Moved:").leftJustified(infoTextWidth)
+//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
+//                 << " "
+//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
     case GamepadController::GamepadEvent::StickPressEvent: {
         moveStick(event.m_button, event.m_value);
-        qDebug() << QString(btnLabel + " Pressed:").leftJustified(infoTextWidth)
-                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-                 << " "
-                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
+//        qDebug() << QString(btnLabel + " Pressed:").leftJustified(infoTextWidth)
+//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
+//                 << " "
+//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
     case GamepadController::GamepadEvent::StickReleaseEvent: {
-        moveStick(event.m_button, event.m_value);
-        qDebug() << QString(btnLabel + " Released:").leftJustified(infoTextWidth)
-                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-                 << " "
-                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
+        moveStick(event.m_button, QPointF(0, 0));
+//        moveStick(event.m_button, event.m_value);
+//        qDebug() << QString(btnLabel + " Released:").leftJustified(infoTextWidth)
+//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
+//                 << " "
+//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
 
     }
+}
+
+void LinuxGamepadDriver::onConnected() {
+    m_syncReportTimer.start(m_syncPeriodms);
+}
+
+void LinuxGamepadDriver::onDisconnect() {
+    m_syncReportTimer.stop();
 }
 
 void LinuxGamepadDriver::init() {
@@ -153,8 +177,22 @@ void LinuxGamepadDriver::moveStick(const Button &btn, const QPointF &value) {
     }
 }
 void LinuxGamepadDriver::pressButton(const Button &btn) {
-
+    memset(&m_ev, 0, sizeof(struct input_event)); //setting the memory for event
+    m_ev.type = EV_KEY;
+    m_ev.code = mapButton2Input(btn);
+    m_ev.value = 1;
+    if(write(m_fileDescriptor, &m_ev, sizeof(struct input_event)) < 0) //writing the thumbstick change
+    {
+        printf("error: key-write");
+    }
 }
 void LinuxGamepadDriver::releaseButton(const Button &btn) {
-
+    memset(&m_ev, 0, sizeof(struct input_event)); //setting the memory for event
+    m_ev.type = EV_KEY;
+    m_ev.code = mapButton2Input(btn);
+    m_ev.value = 0;
+    if(write(m_fileDescriptor, &m_ev, sizeof(struct input_event)) < 0) //writing the thumbstick change
+    {
+        printf("error: key-write");
+    }
 }

@@ -22,6 +22,8 @@ public:
 
 public slots:
     void onDataArrived(const QByteArray &data);
+    void onConnected();
+    void onDisconnect();
 
 private:
     void init();
