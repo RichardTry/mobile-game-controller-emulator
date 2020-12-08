@@ -41,5 +41,7 @@
         <file>a.svg</file>
         <file>back.svg</file>
         <file>start.svg</file>
+        <file>righttrigger.svg</file>
+        <file>lefttrigger.svg</file>
     </qresource>
 </RCC>

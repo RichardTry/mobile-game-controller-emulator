@@ -29,6 +29,9 @@ private:
 };
 
 int main(int argc, char **argv) {
+#if defined(CONTROLLER)
+    qputenv("QT_ANDROID_VOLUME_KEYS", "1"); // "1" is dummy
+#endif
     QApplication app(argc, argv);
 
 #if defined(DRIVER)
@@ -49,6 +52,7 @@ int main(int argc, char **argv) {
     QObject::connect(transceiver, &AbstractTransceiver::connected, &comWidget, &QWidget::hide);
     QObject::connect(transceiver, &AbstractTransceiver::connected, conemu, &QWidget::show);
     QObject::connect(transceiver, &AbstractTransceiver::quit, &app, &QApplication::quit);
+    app.installEventFilter(controller);
 #endif
 
     return app.exec();

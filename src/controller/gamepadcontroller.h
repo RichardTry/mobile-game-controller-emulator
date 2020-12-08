@@ -39,6 +39,11 @@ private slots:
     void onButtonPressed(const Button& btn);
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    bool event(QEvent *event) override; // Implement to handle volume buttons
+    Button m_volumeUpButton; // Gamepad button mapped to volume up
+    Button m_volumeDownButton; // Gamepad button mapped to volume down
+
     GamepadSvgLayout *m_svgLayout;
     VirtualDirectionalPad *m_dpad;
     VirtualAnalogStick *m_rightStick;
@@ -51,6 +56,9 @@ private:
 
     VirtualGamepadButton *m_start;
     VirtualGamepadButton *m_back;
+
+    VirtualGamepadButton *m_rightTrigger;
+    VirtualGamepadButton *m_leftTrigger;
 };
 
 #endif // GAMEPADCONTROLLER_H

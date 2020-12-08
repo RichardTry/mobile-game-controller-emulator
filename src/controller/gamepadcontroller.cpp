@@ -1,4 +1,7 @@
 #include "gamepadcontroller.h"
+#include <QEvent>
+#include <QKeyEvent>
+#include <QDebug>
 
 GamepadController::GamepadController(QWidget *parent): AbstractController(parent) {
     // Load layout
@@ -59,6 +62,16 @@ GamepadController::GamepadController(QWidget *parent): AbstractController(parent
     m_svgLayout->addWidget(m_back, Button::BACK);
     connect(m_back, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
     connect(m_back, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
+
+    // Add left and right trigger
+    m_rightTrigger = new VirtualGamepadButton(Button::RIGHTTRIGGER, this);
+    m_svgLayout->addWidget(m_rightTrigger, Button::RIGHTTRIGGER);
+    connect(m_rightTrigger, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
+    connect(m_rightTrigger, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
+    m_leftTrigger = new VirtualGamepadButton(Button::LEFTTRIGGER, this);
+    m_svgLayout->addWidget(m_leftTrigger, Button::LEFTTRIGGER);
+    connect(m_leftTrigger, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
+    connect(m_leftTrigger, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
 }
 
 void GamepadController::onStickMoved(const Button& btn, const QPointF &point) {
@@ -110,4 +123,40 @@ QByteArray GamepadController::GamepadEvent::data() const {
         out << m_value;
 
     return dt;
+}
+
+bool GamepadController::eventFilter(QObject *obj, QEvent *event) {
+    if(event->type() != QEvent::KeyPress || event->type() != QEvent::KeyRelease)
+        return false;
+
+//    const QInputEvent *inputEvent = static_cast<const QInputEvent*> (event);
+    const QKeyEvent *keyEvent = static_cast<const QKeyEvent*> (event);
+
+    if(keyEvent->key() == Qt::Key_VolumeUp) {
+        qDebug() << "Volume up";
+        return true;
+    }
+    if(keyEvent->key() == Qt::Key_VolumeDown) {
+        qDebug() << "Volume down";
+        return true;
+    }
+    return false;
+}
+
+bool GamepadController::event(QEvent *event) {
+    if(event->type() != QEvent::KeyPress || event->type() != QEvent::KeyRelease)
+        return QWidget::event(event);
+
+    const QInputEvent *inputEvent = static_cast<const QInputEvent*> (event);
+    const QKeyEvent *keyEvent = static_cast<const QKeyEvent*> (inputEvent);
+
+    if(keyEvent->key() == Qt::Key_VolumeUp) {
+        qDebug() << "Volume up";
+        return true;
+    }
+    if(keyEvent->key() == Qt::Key_VolumeDown) {
+        qDebug() << "Volume down";
+        return true;
+    }
+    return QWidget::event(event);
 }
