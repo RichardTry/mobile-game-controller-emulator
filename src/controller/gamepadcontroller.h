@@ -59,6 +59,9 @@ private:
 
     VirtualGamepadButton *m_rightTrigger;
     VirtualGamepadButton *m_leftTrigger;
+
+    VirtualGamepadButton *m_rightBumper;
+    VirtualGamepadButton *m_leftBumper;
 };
 
 #endif // GAMEPADCONTROLLER_H

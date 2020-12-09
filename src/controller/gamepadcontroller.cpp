@@ -72,6 +72,16 @@ GamepadController::GamepadController(QWidget *parent): AbstractController(parent
     m_svgLayout->addWidget(m_leftTrigger, Button::LEFTTRIGGER);
     connect(m_leftTrigger, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
     connect(m_leftTrigger, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
+
+    // Add left and right bumper
+    m_rightBumper = new VirtualGamepadButton(Button::RIGHTBUMPER, this);
+    m_svgLayout->addWidget(m_rightBumper, Button::RIGHTBUMPER);
+    connect(m_rightBumper, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
+    connect(m_rightBumper, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
+    m_leftBumper = new VirtualGamepadButton(Button::LEFTBUMPER, this);
+    m_svgLayout->addWidget(m_leftBumper, Button::LEFTBUMPER);
+    connect(m_leftBumper, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
+    connect(m_leftBumper, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
 }
 
 void GamepadController::onStickMoved(const Button& btn, const QPointF &point) {

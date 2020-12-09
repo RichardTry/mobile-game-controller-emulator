@@ -43,5 +43,7 @@
         <file>start.svg</file>
         <file>righttrigger.svg</file>
         <file>lefttrigger.svg</file>
+        <file>rightbumper.svg</file>
+        <file>leftbumper.svg</file>
     </qresource>
 </RCC>
