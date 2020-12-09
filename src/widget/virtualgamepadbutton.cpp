@@ -40,8 +40,6 @@ bool VirtualGamepadButton::event(QEvent *event) {
             m_pressedRect = QRect(sX, sY, sW, sH);
         }
 
-        // Set an elliptical mask
-        setMask(QRegion(QRect(QPoint(0, 0), resizeEvent->size()), QRegion::Ellipse));
         // Return base implementation result
         return QWidget::event(event);
     }
