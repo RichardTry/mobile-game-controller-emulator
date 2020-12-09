@@ -3,7 +3,8 @@
 #include <QDebug>
 
 #define STICK_MAX_VAL 1024
-#define STICK_FLAT_VAL 15
+#define STICK_FLAT_VAL 0
+#define STICK_FUZZ_VAL 0
 
 inline __u16 mapButton2Input(const Button &btn) {
     switch (btn) {
@@ -125,19 +126,19 @@ void LinuxGamepadDriver::init() {
     uidev.id.version = 2;
     uidev.absmax[ABS_X] = STICK_MAX_VAL; //Parameters of thumbsticks
     uidev.absmin[ABS_X] = -STICK_MAX_VAL;
-    uidev.absfuzz[ABS_X] = 0;
+    uidev.absfuzz[ABS_X] = STICK_FUZZ_VAL;
     uidev.absflat[ABS_X] = STICK_FLAT_VAL;
     uidev.absmax[ABS_Y] = STICK_MAX_VAL;
     uidev.absmin[ABS_Y] = -STICK_MAX_VAL;
-    uidev.absfuzz[ABS_Y] = 0;
+    uidev.absfuzz[ABS_Y] = STICK_FUZZ_VAL;
     uidev.absflat[ABS_Y] = STICK_FLAT_VAL;
     uidev.absmax[ABS_RX] = STICK_MAX_VAL;
     uidev.absmin[ABS_RX] = -STICK_MAX_VAL;
-    uidev.absfuzz[ABS_RX] = 0;
+    uidev.absfuzz[ABS_RX] = STICK_FUZZ_VAL;
     uidev.absflat[ABS_RX] = STICK_FLAT_VAL;
     uidev.absmax[ABS_RY] = STICK_MAX_VAL;
     uidev.absmin[ABS_RY] = -STICK_MAX_VAL;
-    uidev.absfuzz[ABS_RY] = 0;
+    uidev.absfuzz[ABS_RY] = STICK_FUZZ_VAL;
     uidev.absflat[ABS_RY] = STICK_FLAT_VAL;
     if(write(m_fileDescriptor, &uidev, sizeof(uidev)) < 0) //writing settings
     {
