@@ -24,6 +24,7 @@ private:
     bool m_pressed;
     Button m_button;
     QSharedPointer <QPixmap> m_pixmap;
+    QSharedPointer <QPixmap> m_pixmapPressed;
     qreal m_pressedScale;
     qreal m_releasedScale;
     QRect m_pressedRect;

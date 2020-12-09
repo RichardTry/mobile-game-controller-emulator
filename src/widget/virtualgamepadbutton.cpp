@@ -2,6 +2,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QTouchEvent>
+#include <QResizeEvent>
 #include <QEvent>
 
 VirtualGamepadButton::VirtualGamepadButton(const Button &btn, QWidget *parent) : QWidget(parent), m_button(btn) {
@@ -19,7 +20,29 @@ bool VirtualGamepadButton::event(QEvent *event) {
 
     if(eventType == QEvent::Resize) {
         const QResizeEvent *resizeEvent = static_cast <const QResizeEvent*> (event);
+        // Get icons
+        m_pixmap = Common::buttonIcon(m_button, resizeEvent->size() * m_releasedScale);
+        m_pixmapPressed = Common::buttonIcon(m_button, resizeEvent->size() * m_pressedScale);
+        // Set rects
+        const QRect rect = QRect(QPoint(0, 0), resizeEvent->size());
+        {
+            const int sX = rect.x() + rect.width() * (1 - m_releasedScale) * 0.5;
+            const int sY = rect.y() + rect.height() * (1 - m_releasedScale) * 0.5;
+            const int sW = rect.width() * m_releasedScale;
+            const int sH = rect.height() * m_releasedScale;
+            m_releasedRect = QRect(sX, sY, sW, sH);
+        }
+        {
+            const int sX = rect.x() + rect.width() * (1 - m_pressedScale) * 0.5;
+            const int sY = rect.y() + rect.height() * (1 - m_pressedScale) * 0.5;
+            const int sW = rect.width() * m_pressedScale;
+            const int sH = rect.height() * m_pressedScale;
+            m_pressedRect = QRect(sX, sY, sW, sH);
+        }
+
+        // Set an elliptical mask
         setMask(QRegion(QRect(QPoint(0, 0), resizeEvent->size()), QRegion::Ellipse));
+        // Return base implementation result
         return QWidget::event(event);
     }
 
@@ -55,22 +78,15 @@ bool VirtualGamepadButton::event(QEvent *event) {
 }
 
 void VirtualGamepadButton::paintEvent(QPaintEvent *event) {
+    if(m_pixmap.isNull())
+        return;
+
     QPainter painter(this);
     if(!m_pressed) {
-        const QPixmap pixmap = m_pixmap->scaled(rect().size() * m_releasedScale, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        const int sX = rect().x() + rect().width() * (1 - m_releasedScale) * 0.5;
-        const int sY = rect().y() + rect().height() * (1 - m_releasedScale) * 0.5;
-        const int sW = rect().width() * m_releasedScale;
-        const int sH = rect().height() * m_releasedScale;
-        painter.drawPixmap(QRect(sX, sY, sW, sH), pixmap);
+        painter.drawPixmap(m_releasedRect, *m_pixmap);
     }
     else {
-        const QPixmap pixmap = m_pixmap->scaled(rect().size() * m_pressedScale, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        const int sX = rect().x() + rect().width() * (1 - m_pressedScale) * 0.5;
-        const int sY = rect().y() + rect().height() * (1 - m_pressedScale) * 0.5;
-        const int sW = rect().width() * m_pressedScale;
-        const int sH = rect().height() * m_pressedScale;
-        painter.drawPixmap(QRect(sX, sY, sW, sH), pixmap);
+        painter.drawPixmap(m_pressedRect, *m_pixmapPressed);
     }
 }
 
