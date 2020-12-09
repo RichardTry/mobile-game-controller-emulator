@@ -8,7 +8,7 @@
 VirtualDirectionalPad::VirtualDirectionalPad(QWidget *parent) : QWidget(parent) {
     setAttribute(Qt::WA_AcceptTouchEvents);
 
-    m_increment = 45;
+    m_increment = 90;
     m_startAngle = 0;
     m_endAngle = 360;
     m_offset = -m_increment/2;
@@ -17,17 +17,13 @@ VirtualDirectionalPad::VirtualDirectionalPad(QWidget *parent) : QWidget(parent) 
     m_innerRadius = m_outerRadius/3;
     m_pressedButtons = Button::DPAD;
 
-    // Transitional region [337.5, 22.5] broken up into two pieces because no positive angle could between these two values
-    m_regions.push_back(DpadRegion(337.5, 360, Button::RIGHT));
-    m_regions.push_back(DpadRegion(0, 22.5, Button::RIGHT));
+    // Transitional region [315, 45] broken up into two pieces because no positive angle could between these two values
+    m_regions.push_back(DpadRegion(315, 360, Button::RIGHT));
+    m_regions.push_back(DpadRegion(0, 45, Button::RIGHT));
     // Rest are all positive values
-    m_regions.push_back(DpadRegion(1 * m_increment + m_offset, 2 * m_increment + m_offset, Button::RIGHT | Button::DOWN));
-    m_regions.push_back(DpadRegion(2 * m_increment + m_offset, 3 * m_increment + m_offset, Button::DOWN));
-    m_regions.push_back(DpadRegion(3 * m_increment + m_offset, 4 * m_increment + m_offset, Button::DOWN | Button::LEFT));
-    m_regions.push_back(DpadRegion(4 * m_increment + m_offset, 5 * m_increment + m_offset, Button::LEFT));
-    m_regions.push_back(DpadRegion(5 * m_increment + m_offset, 6 * m_increment + m_offset, Button::LEFT | Button::UP));
-    m_regions.push_back(DpadRegion(6 * m_increment + m_offset, 7 * m_increment + m_offset, Button::UP));
-    m_regions.push_back(DpadRegion(7 * m_increment + m_offset, 8 * m_increment + m_offset, Button::UP | Button::RIGHT));
+    m_regions.push_back(DpadRegion(1 * m_increment + m_offset, 2 * m_increment + m_offset, Button::DOWN));
+    m_regions.push_back(DpadRegion(2 * m_increment + m_offset, 3 * m_increment + m_offset, Button::LEFT));
+    m_regions.push_back(DpadRegion(3 * m_increment + m_offset, 4 * m_increment + m_offset, Button::UP));
 }
 
 VirtualDirectionalPad::~VirtualDirectionalPad() {
@@ -120,7 +116,7 @@ bool VirtualDirectionalPad::event(QEvent *event) {
 void VirtualDirectionalPad::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
 
-    QSharedPointer<QPixmap> pixmap = Common::buttonIcon(m_pressedButtons);
+    QSharedPointer<QPixmap> pixmap = Common::buttonIcon(m_pressedButtons, rect().size());
     if(!pixmap.isNull())
         painter.drawPixmap(rect(), *pixmap);
 }
