@@ -7,7 +7,6 @@
 
 VirtualGamepadButton::VirtualGamepadButton(const Button &btn, QWidget *parent) : QWidget(parent), m_button(btn) {
     setAttribute(Qt::WA_AcceptTouchEvents);
-    m_pixmap = Common::buttonIcon(btn);
     m_pressedScale = 0.8;
     m_releasedScale = 0.9;
 }

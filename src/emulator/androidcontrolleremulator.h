@@ -15,7 +15,8 @@ public:
     AndroidControllerEmulator(AbstractTransceiver *transceiver, AbstractController *controller, QWidget *parent = nullptr);
     ~AndroidControllerEmulator();
 
-    void onEventTriggered(const QByteArray &data);
+public slots:
+    void onEventTriggered(const QByteArray &data) override;
 
 private:
     class TransmittionWorker;
