@@ -2,7 +2,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network xml svg
+QT += widgets core gui network svg
 
 SOURCES += \
     src/common/common.cpp \
