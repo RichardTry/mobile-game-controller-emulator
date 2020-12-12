@@ -5,7 +5,7 @@ CONFIG += c++11
 QT += widgets core gui network svg
 
 android {
-Qt += androidextras
+QT += androidextras
 }
 
 SOURCES += \
