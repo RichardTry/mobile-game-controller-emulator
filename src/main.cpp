@@ -1,14 +1,15 @@
 #include <QApplication>
 #include <QThread>
 // Common to both
-#include "transceiver/network/networktransceiver.h"
+#include "transceiver/networktransceiver.h"
 #include "widget/networktransceiverwidget.h"
-// Driver Side
+#if defined(DRIVER)// Driver Side
 #include "emulator/genericdriveremulator.h"
 #include "driver/linuxgamepaddriver.h"
-// Controller Side
+#elif defined(CONTROLLER)// Controller Side
 #include "emulator/androidcontrolleremulator.h"
 #include "controller/gamepadcontroller.h"
+#endif
 
 class NetworkWorker: public QThread {
 public:

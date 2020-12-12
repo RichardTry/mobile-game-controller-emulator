@@ -13,24 +13,6 @@ class GamepadController : public AbstractController {
 public:
     GamepadController(QWidget *parent = nullptr);
 
-    struct GamepadEvent {
-        enum Type {
-            ButtonPressEvent,
-            ButtonReleaseEvent,
-            StickMoveEvent,
-            StickPressEvent,
-            StickReleaseEvent,
-        };
-
-        GamepadEvent(const Type &type, const Button &btn, const QPointF &value = QPointF());
-        GamepadEvent(const QByteArray &data);
-        QByteArray data() const;
-
-        Type m_type;
-        Button m_button;
-        QPointF m_value;
-    };
-
 private slots:
     void onStickMoved(const Button& btn, const QPointF &point);
     void onStickReleased(const Button& btn, const QPointF &point);

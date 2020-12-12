@@ -2,18 +2,18 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network svg androidextras
+QT += widgets core gui network svg
+
+android {
+Qt += androidextras
+}
 
 SOURCES += \
     src/common/common.cpp \
-    src/controller/gamepadcontroller.cpp \
-    src/driver/abstractdriver.cpp \
-    src/driver/linuxgamepaddriver.cpp \
-    src/emulator/androidcontrolleremulator.cpp \
-    src/emulator/genericdriveremulator.cpp \
+    src/event/gamepadevent.cpp \
     src/layout/gamepadsvglayout.cpp \
     src/main.cpp \
-    src/transceiver/network/networktransceiver.cpp \
+    src/transceiver/networktransceiver.cpp \
     src/widget/networktransceiverwidget.cpp \
     src/widget/virtualanalogstick.cpp \
     src/widget/virtualdirectionalpad.cpp \
@@ -27,27 +27,41 @@ INCLUDEPATH += src/
 driver {
 DEFINES += DRIVER
 TARGET = driver-emulator
+
+SOURCES += \
+    src/driver/abstractdriver.cpp \
+    src/driver/linuxgamepaddriver.cpp \
+    src/emulator/genericdriveremulator.cpp
+
+HEADERS += \
+    src/driver/abstractdriver.h \
+    src/driver/linuxgamepaddriver.h \
+    src/emulator/abstractdriveremulator.h \
+    src/emulator/genericdriveremulator.h \
 }
 
 controller {
 DEFINES += CONTROLLER
 TARGET = controller-emulator
+
+SOURCES += \
+    src/controller/gamepadcontroller.cpp \
+    src/emulator/androidcontrolleremulator.cpp
+
+HEADERS += \
+    src/controller/abstractcontroller.h \
+    src/controller/gamepadcontroller.h \
+    src/controller/icontroller.h \
+    src/emulator/abstractcontrolleremulator.h \
+    src/emulator/androidcontrolleremulator.h \
 }
 
 HEADERS += \
     src/common/common.h \
-    src/controller/abstractcontroller.h \
-    src/controller/gamepadcontroller.h \
-    src/controller/icontroller.h \
-    src/driver/abstractdriver.h \
-    src/driver/linuxgamepaddriver.h \
-    src/emulator/abstractcontrolleremulator.h \
-    src/emulator/abstractdriveremulator.h \
-    src/emulator/androidcontrolleremulator.h \
-    src/emulator/genericdriveremulator.h \
+    src/event/gamepadevent.h \
     src/layout/gamepadsvglayout.h \
     src/transceiver/abstracttransceiver.h \
-    src/transceiver/network/networktransceiver.h \
+    src/transceiver/networktransceiver.h \
     src/widget/networktransceiverwidget.h \
     src/widget/virtualanalogstick.h \
     src/widget/virtualdirectionalpad.h \

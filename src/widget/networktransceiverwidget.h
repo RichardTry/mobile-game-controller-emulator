@@ -2,7 +2,7 @@
 #define NETWORKTRANSCEIVERWIDGET_H
 
 #include <QWidget>
-#include "transceiver/network/networktransceiver.h"
+#include "transceiver/networktransceiver.h"
 
 Q_DECLARE_METATYPE(QHostAddress)
 

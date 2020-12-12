@@ -1,5 +1,5 @@
 #include "linuxgamepaddriver.h"
-#include "controller/gamepadcontroller.h"
+#include "event/gamepadevent.h"
 #include <QDebug>
 
 #define STICK_MAX_VAL 1024
@@ -39,21 +39,21 @@ LinuxGamepadDriver::~LinuxGamepadDriver() {
 }
 
 void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
-    GamepadController::GamepadEvent event(data);
+    GamepadEvent event(data);
 
     const int infoTextWidth = 20;
     const int numberWidth = 15;
     const QString btnLabel = labelForButton(event.m_button);
     switch (event.m_type) {
-    case GamepadController::GamepadEvent::ButtonPressEvent: {
+    case GamepadEvent::ButtonPressEvent: {
         pressButton(event.m_button);
         break;
     }
-    case GamepadController::GamepadEvent::ButtonReleaseEvent: {
+    case GamepadEvent::ButtonReleaseEvent: {
         releaseButton(event.m_button);
         break;
     }
-    case GamepadController::GamepadEvent::StickMoveEvent: {
+    case GamepadEvent::StickMoveEvent: {
         moveStick(event.m_button, event.m_value);
 //        qDebug() << QString(btnLabel + " Moved:").leftJustified(infoTextWidth)
 //                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
@@ -61,7 +61,7 @@ void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
 //                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
-    case GamepadController::GamepadEvent::StickPressEvent: {
+    case GamepadEvent::StickPressEvent: {
         moveStick(event.m_button, event.m_value);
 //        qDebug() << QString(btnLabel + " Pressed:").leftJustified(infoTextWidth)
 //                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
@@ -69,7 +69,7 @@ void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
 //                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
-    case GamepadController::GamepadEvent::StickReleaseEvent: {
+    case GamepadEvent::StickReleaseEvent: {
         moveStick(event.m_button, QPointF(0, 0));
 //        moveStick(event.m_button, event.m_value);
 //        qDebug() << QString(btnLabel + " Released:").leftJustified(infoTextWidth)

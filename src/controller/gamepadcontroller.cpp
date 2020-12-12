@@ -2,6 +2,7 @@
 #include <QEvent>
 #include <QKeyEvent>
 #include <QDebug>
+#include "event/gamepadevent.h"
 
 GamepadController::GamepadController(QWidget *parent): AbstractController(parent) {
     // Load layout
@@ -107,32 +108,6 @@ void GamepadController::onButtonReleased(const Button& btn) {
 void GamepadController::onButtonPressed(const Button& btn) {
     GamepadEvent gEvent(GamepadEvent::ButtonPressEvent, btn);
     emit eventTriggered(gEvent.data());
-}
-
-GamepadController::GamepadEvent::GamepadEvent(const Type &type, const Button &btn, const QPointF &value): m_type(type), m_button(btn), m_value(value) {
-
-}
-
-GamepadController::GamepadEvent::GamepadEvent(const QByteArray &data) {
-    QByteArray dt = data;
-    QDataStream in(&dt, QIODevice::ReadOnly);
-
-    in >> m_type;
-    in >> m_button;
-    if(m_type != GamepadEvent::ButtonPressEvent && m_type != GamepadEvent::ButtonReleaseEvent)
-        in >> m_value;
-}
-
-QByteArray GamepadController::GamepadEvent::data() const {
-    QByteArray dt;
-    QDataStream out(&dt, QIODevice::WriteOnly);
-
-    out << m_type;
-    out << m_button;
-    if(m_type != GamepadEvent::ButtonPressEvent && m_type != GamepadEvent::ButtonReleaseEvent)
-        out << m_value;
-
-    return dt;
 }
 
 bool GamepadController::eventFilter(QObject *obj, QEvent *event) {
