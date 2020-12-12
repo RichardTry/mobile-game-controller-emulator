@@ -20,7 +20,7 @@ public slots:
     void setVisible(bool visible) override;
 
 private:
-    bool changeAndroidScreenOrientation(const Qt::ScreenOrientation &orientation);
+    bool setScreenOrientation(const Qt::ScreenOrientation &orientation);
     class TransmittionWorker;
     TransmittionWorker *m_transmittionWorker;
 

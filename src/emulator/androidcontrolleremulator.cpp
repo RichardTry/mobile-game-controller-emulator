@@ -54,7 +54,7 @@ void AndroidControllerEmulator::TransmittionWorker::stop() {
     m_stopped = true;
 }
 
-bool AndroidControllerEmulator::changeAndroidScreenOrientation(const Qt::ScreenOrientation &orientation) {
+bool AndroidControllerEmulator::setScreenOrientation(const Qt::ScreenOrientation &orientation) {
     QAndroidJniObject activity = QtAndroid::androidActivity();
     if ( activity.isValid() )
     {
@@ -88,9 +88,9 @@ bool AndroidControllerEmulator::changeAndroidScreenOrientation(const Qt::ScreenO
 
 void AndroidControllerEmulator::setVisible(bool visible) {
     if(visible)
-        changeAndroidScreenOrientation(Qt::LandscapeOrientation);
+        setScreenOrientation(Qt::LandscapeOrientation);
     else
-        changeAndroidScreenOrientation(Qt::PrimaryOrientation); // Defaults to sensor
+        setScreenOrientation(Qt::PrimaryOrientation); // Defaults to sensor
 
     QWidget::setVisible(visible);
 }
