@@ -8,95 +8,16 @@
 
 class NetworkTransceiver : public AbstractTransceiver {
     Q_OBJECT
-    class AbstractState {
-    public:
-        AbstractState(NetworkTransceiver *transceiver): m_transceiver(transceiver) {
 
-        }
-
-        virtual ~AbstractState() {}
-
-        virtual AbstractState *start() = 0;
-        virtual AbstractState *stop() = 0;
-        virtual AbstractState *onReadyRead() { return nullptr; }
-        virtual qint64 sendData(const QByteArray &data, const bool &acknowledge = false) {}
-
-    protected:
-        NetworkTransceiver *m_transceiver;
-    };
-
+    class AbstractState;
     // MASTER STATES
-    class StateInitMaster : public AbstractState {
-    public:
-        StateInitMaster(NetworkTransceiver *transceiver);
-        ~StateInitMaster();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-    };
-
-    class StateListen: public AbstractState {
-    public:
-        StateListen(NetworkTransceiver *transceiver);
-        ~StateListen();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        AbstractState *onReadyRead() override; // When a host is found add it to host list
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-
-    private:
-        QMap <int, QHostAddress> m_hosts;
-    };
-
-    class StateSendInput: public AbstractState {
-    public:
-        StateSendInput(NetworkTransceiver *transceiver);
-        ~StateSendInput();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        AbstractState *onReadyRead() override; // When the slave informs it has quit receiving input go back to previous state and display an info message
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-    };
-
+    class StateInitMaster;
+    class StateListen;
+    class StateSendInput;
     // SLAVE STATES
-    class StateInitSlave : public AbstractState {
-    public:
-        StateInitSlave(NetworkTransceiver *transceiver);
-        ~StateInitSlave();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-    };
-
-    class StateBroadcast: public AbstractState {
-    public:
-        StateBroadcast(NetworkTransceiver *transceiver);
-        ~StateBroadcast();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        AbstractState *onReadyRead() override; // When a master sends a datagram go into receive input state and store master address
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-
-    private:
-        int m_pollPeriodMS;
-        QTimer m_timer;
-    };
-
-    class StateReceiveInput: public AbstractState {
-    public:
-        StateReceiveInput(NetworkTransceiver *transceiver);
-        ~StateReceiveInput();
-
-        AbstractState *start() override;
-        AbstractState *stop() override;
-        AbstractState *onReadyRead() override; // Receive data and emit data arrived signal
-        qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
-    };
+    class StateInitSlave;
+    class StateBroadcast;
+    class StateReceiveInput;
 
 public:
     enum State {
@@ -145,6 +66,100 @@ private:
     QHostAddress m_slaveHost;
     QHostAddress m_masterHost;
     static unsigned int m_datagramId;
+};
+
+class NetworkTransceiver::AbstractState {
+public:
+    AbstractState(NetworkTransceiver *transceiver): m_transceiver(transceiver) {
+
+    }
+
+    virtual ~AbstractState() {}
+
+    virtual AbstractState *start() = 0;
+    virtual AbstractState *stop() = 0;
+    virtual AbstractState *onReadyRead() { return nullptr; }
+    virtual qint64 sendData(const QByteArray &data, const bool &acknowledge = false) {}
+
+protected:
+    NetworkTransceiver *m_transceiver;
+};
+
+// MASTER STATES
+class NetworkTransceiver::StateInitMaster : public NetworkTransceiver::AbstractState {
+public:
+    StateInitMaster(NetworkTransceiver *transceiver);
+    ~StateInitMaster();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+};
+
+class NetworkTransceiver::StateListen: public NetworkTransceiver::AbstractState {
+public:
+    StateListen(NetworkTransceiver *transceiver);
+    ~StateListen();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    AbstractState *onReadyRead() override; // When a host is found add it to host list
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+
+private:
+    QMap <int, QHostAddress> m_hosts;
+};
+
+class NetworkTransceiver::StateSendInput: public NetworkTransceiver::AbstractState {
+public:
+    StateSendInput(NetworkTransceiver *transceiver);
+    ~StateSendInput();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    AbstractState *onReadyRead() override; // When the slave informs it has quit receiving input go back to previous state and display an info message
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+};
+
+// SLAVE STATES
+class NetworkTransceiver::StateInitSlave : public NetworkTransceiver::AbstractState {
+public:
+    StateInitSlave(NetworkTransceiver *transceiver);
+    ~StateInitSlave();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+};
+
+class NetworkTransceiver::StateBroadcast: public NetworkTransceiver::AbstractState {
+public:
+    StateBroadcast(NetworkTransceiver *transceiver);
+    ~StateBroadcast();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    AbstractState *onReadyRead() override; // When a master sends a datagram go into receive input state and store master address
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+
+private:
+    int m_pollPeriodMS;
+    QTimer m_timer;
+};
+
+class NetworkTransceiver::StateReceiveInput: public NetworkTransceiver::AbstractState {
+public:
+    StateReceiveInput(NetworkTransceiver *transceiver);
+    ~StateReceiveInput();
+
+    AbstractState *start() override;
+    AbstractState *stop() override;
+    AbstractState *onReadyRead() override; // Receive data and emit data arrived signal
+    qint64 sendData(const QByteArray &data, const bool &acknowledge = false) override;
+
+private:
+    QTimer m_timer;
+    int m_timeoutms;
 };
 
 #endif // NETWORKTRANSCEIVER_H

@@ -253,9 +253,12 @@ qint64 NetworkTransceiver::StateBroadcast::sendData(const QByteArray &data, cons
 }
 
 // SLAVE RECEIVE INPUT
-NetworkTransceiver::StateReceiveInput::StateReceiveInput(NetworkTransceiver *transceiver): AbstractState(transceiver) {
+NetworkTransceiver::StateReceiveInput::StateReceiveInput(NetworkTransceiver *transceiver): AbstractState(transceiver), m_timeoutms(1000) {
     m_transceiver->emit stateChanged(State::ReceiveInput);
     m_transceiver->emit connected();
+
+    connect(&m_timer, &QTimer::timeout, m_transceiver, &NetworkTransceiver::onStop);
+    m_timer.start(m_timeoutms);
 }
 
 NetworkTransceiver::StateReceiveInput::~StateReceiveInput() {
@@ -280,6 +283,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateReceiveInput::stop()
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateReceiveInput::onReadyRead() {
+    m_timer.start(m_timeoutms);
     QNetworkDatagram datagram = m_transceiver->m_udpSocket->receiveDatagram();
     m_transceiver->dataArrived(datagram.data());
 }
