@@ -78,6 +78,10 @@ void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
 //                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
         break;
     }
+    case GamepadEvent::DummyEvent: {
+        // Do nothing, sen to keep connection alive
+        break;
+    }
 
     }
 }

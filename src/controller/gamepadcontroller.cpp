@@ -4,7 +4,7 @@
 #include <QDebug>
 #include "event/gamepadevent.h"
 
-GamepadController::GamepadController(QWidget *parent): AbstractController(parent) {
+GamepadController::GamepadController(QWidget *parent): AbstractController(parent), m_timeoutms(250) {
     // Load layout
     m_svgLayout = new GamepadSvgLayout;
     m_svgLayout->load();
@@ -83,29 +83,40 @@ GamepadController::GamepadController(QWidget *parent): AbstractController(parent
     m_svgLayout->addWidget(m_leftBumper, Button::LEFTBUMPER);
     connect(m_leftBumper, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
     connect(m_leftBumper, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
+
+    // Timer to keep the connection alive if no events are sent
+    connect(&m_timer, &QTimer::timeout, [this](){
+        emit eventTriggered(GamepadEvent(GamepadEvent::DummyEvent, Button::COUNT).data());
+    });
+    m_timer.start(m_timeoutms);
 }
 
 void GamepadController::onStickMoved(const Button& btn, const QPointF &point) {
+    m_timer.start();
     GamepadEvent gEvent(GamepadEvent::StickMoveEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onStickReleased(const Button& btn, const QPointF &point) {
+    m_timer.start();
     GamepadEvent gEvent(GamepadEvent::StickReleaseEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onStickPressed(const Button& btn, const QPointF &point) {
+    m_timer.start();
     GamepadEvent gEvent(GamepadEvent::StickPressEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onButtonReleased(const Button& btn) {
+    m_timer.start();
     GamepadEvent gEvent(GamepadEvent::ButtonReleaseEvent, btn);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onButtonPressed(const Button& btn) {
+    m_timer.start();
     GamepadEvent gEvent(GamepadEvent::ButtonPressEvent, btn);
     emit eventTriggered(gEvent.data());
 }

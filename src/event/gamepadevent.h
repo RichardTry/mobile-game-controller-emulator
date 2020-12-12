@@ -7,6 +7,7 @@
 
 struct GamepadEvent {
     enum Type {
+        DummyEvent,
         ButtonPressEvent,
         ButtonReleaseEvent,
         StickMoveEvent,

@@ -7,6 +7,7 @@
 #include "widget/virtualanalogstick.h"
 #include "widget/virtualgamepadbutton.h"
 #include <QWidget>
+#include <QTimer>
 
 class GamepadController : public AbstractController {
     Q_OBJECT
@@ -44,6 +45,9 @@ private:
 
     VirtualGamepadButton *m_rightBumper;
     VirtualGamepadButton *m_leftBumper;
+
+    QTimer m_timer;
+    int m_timeoutms;
 };
 
 #endif // GAMEPADCONTROLLER_H
