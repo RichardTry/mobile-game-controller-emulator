@@ -17,8 +17,10 @@ public:
 
 public slots:
     void onEventTriggered(const QByteArray &data) override;
+    void setVisible(bool visible) override;
 
 private:
+    bool changeAndroidScreenOrientation(const Qt::ScreenOrientation &orientation);
     class TransmittionWorker;
     TransmittionWorker *m_transmittionWorker;
 

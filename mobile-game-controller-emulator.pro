@@ -2,7 +2,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-QT += widgets core gui network svg
+QT += widgets core gui network svg androidextras
 
 SOURCES += \
     src/common/common.cpp \
@@ -59,14 +59,15 @@ FORMS += \
     ui/networktransceivermaster.ui \
     ui/networktransceiverslave.ui
 
+android {
 DISTFILES += \
-    android/AndroidManifest.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
     android/res/values/libs.xml \
-    resources/controller-layout.svg
+    android/AndroidManifest.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+}

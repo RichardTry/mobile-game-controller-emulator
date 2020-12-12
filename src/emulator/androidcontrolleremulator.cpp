@@ -1,6 +1,9 @@
 #include "androidcontrolleremulator.h"
 #include <QEvent>
 #include <QHBoxLayout>
+#include <QAndroidJniObject>
+#include <QtAndroid>
+#include <QDebug>
 
 AndroidControllerEmulator::AndroidControllerEmulator(AbstractTransceiver *transceiver, AbstractController *controller, QWidget *parent): AbstractControllerEmulator(transceiver, controller, parent), m_frameBufferSize(10) {
     m_frames.fill(QByteArray(), m_frameBufferSize);
@@ -49,4 +52,45 @@ void AndroidControllerEmulator::TransmittionWorker::run() {
 
 void AndroidControllerEmulator::TransmittionWorker::stop() {
     m_stopped = true;
+}
+
+bool AndroidControllerEmulator::changeAndroidScreenOrientation(const Qt::ScreenOrientation &orientation) {
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    if ( activity.isValid() )
+    {
+        int code = 0;
+        switch (orientation) {
+        case Qt::LandscapeOrientation:
+            code = 0;
+            break;
+        case Qt::PortraitOrientation:
+            code = 1;
+            break;
+        case Qt::InvertedLandscapeOrientation:
+            code = 0x8;
+            break;
+        case Qt::InvertedPortraitOrientation:
+            code = 0x9;
+            break;
+        default:
+            code = 0x4; // SCREEN_ORIENTATION_SENSOR
+            break;
+        }
+        activity.callMethod<void>
+                ("setRequestedOrientation" // method name
+                 , "(I)V" // signature
+                 , code);
+        return true;
+    }
+    else
+        return false;
+}
+
+void AndroidControllerEmulator::setVisible(bool visible) {
+    if(visible)
+        changeAndroidScreenOrientation(Qt::LandscapeOrientation);
+    else
+        changeAndroidScreenOrientation(Qt::PrimaryOrientation); // Defaults to sensor
+
+    QWidget::setVisible(visible);
 }
