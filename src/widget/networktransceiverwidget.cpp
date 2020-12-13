@@ -80,6 +80,7 @@ void NetworkTransceiverWidget::loadSlaveUI() {
     connect(slaveUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
     connect(slaveUi->quitPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::quit);
     slaveUi->networkInterfaceComboBox->clear();
+    slaveUi->networkInterfaceComboBox->addItem("", QVariant::fromValue <QHostAddress> (QHostAddress::Null));
     for(const QHostAddress &address: m_interfaces) {
         slaveUi->networkInterfaceComboBox->addItem(address.toString(), QVariant::fromValue <QHostAddress> (address));
     }
