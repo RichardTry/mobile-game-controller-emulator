@@ -36,6 +36,7 @@ void NetworkTransceiverWidget::loadMasterUI() {
     // INIT
     connect(masterUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
     connect(masterUi->backPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::closeCalled);
+    masterUi->networkInterfaceComboBox->addItem("", QVariant::fromValue <QHostAddress> (QHostAddress::Null));
     for(const QHostAddress &address: m_interfaces) {
         masterUi->networkInterfaceComboBox->addItem(address.toString(), QVariant::fromValue <QHostAddress> (address));
     }
