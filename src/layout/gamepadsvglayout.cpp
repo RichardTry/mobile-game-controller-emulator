@@ -17,7 +17,7 @@ void GamepadSvgLayout::load() {
     QSvgRenderer *renderer = new QSvgRenderer(QString(":/controller-layout.svg"));
     m_svgRect.setSize(renderer->defaultSize());
 
-    for(int btn = Button::X; btn < Button::COUNT; btn = btn << 1) {
+    for(int btn = Button::X; btn <= Button::COUNT; btn = btn << 1) {
         const QString label = labelForButton(Button(btn)).toLower();
         if(!renderer->elementExists(label))
             continue;

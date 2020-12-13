@@ -28,7 +28,7 @@ signals:
     void dataArrived(QByteArray data);
     void connected();
     void disconnected(QString msg);
-    void quit();
+    void closeCalled();
 
 public slots:
     virtual qint64 sendData(const QByteArray &data, const bool &acknowledge = false) = 0;

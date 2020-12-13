@@ -97,7 +97,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitMaster::start() 
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitMaster::stop() {
-    m_transceiver->quit();
+    m_transceiver->closeCalled();
     return nullptr;
 }
 
@@ -208,7 +208,7 @@ NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitSlave::start() {
 }
 
 NetworkTransceiver::AbstractState *NetworkTransceiver::StateInitSlave::stop() {
-    m_transceiver->quit();
+    m_transceiver->closeCalled();
     return nullptr;
 }
 

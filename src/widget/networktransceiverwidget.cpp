@@ -35,7 +35,7 @@ void NetworkTransceiverWidget::loadMasterUI() {
 
     // INIT
     connect(masterUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
-    connect(masterUi->backPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::quit);
+    connect(masterUi->backPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::closeCalled);
     for(const QHostAddress &address: m_interfaces) {
         masterUi->networkInterfaceComboBox->addItem(address.toString(), QVariant::fromValue <QHostAddress> (address));
     }
@@ -78,7 +78,7 @@ void NetworkTransceiverWidget::loadSlaveUI() {
 
     // INIT
     connect(slaveUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
-    connect(slaveUi->quitPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::quit);
+    connect(slaveUi->quitPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::closeCalled);
     slaveUi->networkInterfaceComboBox->clear();
     slaveUi->networkInterfaceComboBox->addItem("", QVariant::fromValue <QHostAddress> (QHostAddress::Null));
     for(const QHostAddress &address: m_interfaces) {

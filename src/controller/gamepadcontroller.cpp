@@ -84,6 +84,11 @@ GamepadController::GamepadController(QWidget *parent): AbstractController(parent
     connect(m_leftBumper, &VirtualGamepadButton::pressed, this, &GamepadController::onButtonPressed);
     connect(m_leftBumper, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
 
+    // Add close button
+    m_close = new VirtualGamepadButton(Button::COUNT, this);
+    m_svgLayout->addWidget(m_close, Button::COUNT);
+    connect(m_close, &VirtualGamepadButton::released, this, &GamepadController::closeCalled);
+
     // Timer to keep the connection alive if no events are sent
     m_concurrentTimer = new ConcurrentTimer(m_timeoutms);
     connect(m_concurrentTimer, &ConcurrentTimer::timeout, [this](){

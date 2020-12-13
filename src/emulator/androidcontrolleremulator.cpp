@@ -15,7 +15,8 @@ AndroidControllerEmulator::AndroidControllerEmulator(AbstractTransceiver *transc
     layout()->addWidget(m_controller);
 
     connect(m_controller, &AbstractController::eventTriggered, this, &AndroidControllerEmulator::onEventTriggered);
-    connect(m_controller, &AbstractController::stop, m_transceiver, &AbstractTransceiver::onStop);
+    connect(m_controller, &AbstractController::closeCalled, m_transceiver, &AbstractTransceiver::onStop);
+    connect(m_controller, &AbstractController::closeCalled, this, &AbstractControllerEmulator::closeCalled);
 
     m_transmittionWorker = new TransmittionWorker(this);
     m_transmittionWorker->start();

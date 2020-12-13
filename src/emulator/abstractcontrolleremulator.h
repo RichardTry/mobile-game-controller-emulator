@@ -14,7 +14,7 @@ public:
     virtual ~AbstractControllerEmulator() {}
 
 signals:
-    void quit();
+    void closeCalled();
     void sendData(const QByteArray &data);
 
 public slots:

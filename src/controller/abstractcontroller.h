@@ -10,7 +10,7 @@ public:
 
 signals:
     void eventTriggered(const QByteArray &data);
-    void stop();
+    void closeCalled();
 };
 
 #endif // ABSTRACTCONTROLLER_H

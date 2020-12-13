@@ -49,6 +49,8 @@ private:
     VirtualGamepadButton *m_rightBumper;
     VirtualGamepadButton *m_leftBumper;
 
+    VirtualGamepadButton *m_close;
+
     ConcurrentTimer *m_concurrentTimer;
     int m_timeoutms;
 };

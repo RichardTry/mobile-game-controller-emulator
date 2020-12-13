@@ -46,5 +46,6 @@
         <file>rightbumper.svg</file>
         <file>leftbumper.svg</file>
         <file>emulator-logo.svg</file>
+        <file>count.svg</file>
     </qresource>
 </RCC>
