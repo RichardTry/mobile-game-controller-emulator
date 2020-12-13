@@ -31,6 +31,7 @@ private:
     // Different ui's loaded for each mode
     Ui::NetworkTransceiverMaster *masterUi;
     Ui::NetworkTransceiverSlave *slaveUi;
+    QSharedPointer<QPixmap> m_logoPixmap;
     class StatusAnimation;
     StatusAnimation *m_broadcastAnimation;
     StatusAnimation *m_receiveAnimation;

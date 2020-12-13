@@ -29,8 +29,9 @@ NetworkTransceiverWidget::NetworkTransceiverWidget(NetworkTransceiver *transceiv
 void NetworkTransceiverWidget::loadMasterUI() {
     masterUi = new Ui::NetworkTransceiverMaster();
     masterUi->setupUi(this);
-    masterUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
-    masterUi->sendingIconLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
+    int logoSize = width() < height() ? width() * 0.75 : height() * 0.75;
+    m_logoPixmap = Common::renderSvg(":/emulator-logo.svg", QSize(logoSize, logoSize));
+    masterUi->logoLabel->setPixmap(*m_logoPixmap);
 
     // INIT
     connect(masterUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
@@ -66,7 +67,9 @@ void NetworkTransceiverWidget::loadMasterUI() {
 void NetworkTransceiverWidget::loadSlaveUI() {
     slaveUi = new Ui::NetworkTransceiverSlave();
     slaveUi->setupUi(this);
-    slaveUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
+    int logoSize = width() < height() ? width() * 0.75 : height() * 0.75;
+    m_logoPixmap = Common::renderSvg(":/emulator-logo.svg", QSize(logoSize, logoSize));
+    slaveUi->logoLabel->setPixmap(*m_logoPixmap);
 
     m_broadcastAnimation = new StatusAnimation(StatusAnimation::Broadcast, this);
     m_receiveAnimation = new StatusAnimation(StatusAnimation::ReceiveInput, this);
