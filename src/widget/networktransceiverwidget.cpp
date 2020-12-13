@@ -29,7 +29,7 @@ NetworkTransceiverWidget::NetworkTransceiverWidget(NetworkTransceiver *transceiv
 void NetworkTransceiverWidget::loadMasterUI() {
     masterUi = new Ui::NetworkTransceiverMaster();
     masterUi->setupUi(this);
-    int logoSize = width() < height() ? width() * 0.75 : height() * 0.75;
+    int logoSize = width() < height() ? width() * 0.5 : height() * 0.5;
     m_logoPixmap = Common::renderSvg(":/emulator-logo.svg", QSize(logoSize, logoSize));
     masterUi->logoLabel->setPixmap(*m_logoPixmap);
 
