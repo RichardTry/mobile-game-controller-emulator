@@ -177,9 +177,11 @@ void NetworkTransceiverWidget::StatusAnimation::paintEvent(QPaintEvent *event) {
 void NetworkTransceiverWidget::StatusAnimation::stop() {
     m_timer.stop();
 }
+
 void NetworkTransceiverWidget::StatusAnimation::start() {
     m_timer.start(m_periodms);
 }
+
 void NetworkTransceiverWidget::StatusAnimation::loadPixmaps() {
     const QSize imageSize = this->size() * 0.5;
     m_pixmap.clear();
