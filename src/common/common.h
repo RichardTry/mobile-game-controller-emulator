@@ -50,9 +50,9 @@ BUTTONS_DEFINITIONS
 
 class Common {
 public:
-    static QSharedPointer <QPixmap> buttonIcon(const int& btns);
     static QSharedPointer <QPixmap> buttonIcon(const int& btn, const QSize &size);
     static QSharedPointer <QPixmap> buttonPressedIcon(const int& btn, const QSize &size);
+    static QSharedPointer <QPixmap> renderSvg(const QString &fileName, const QSize &size);
     static void loadIcons();
 
 private:

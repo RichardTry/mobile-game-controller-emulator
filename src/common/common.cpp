@@ -7,6 +7,19 @@
 QMap <int, QSharedPointer<QPixmap>> Common::m_iconMap;
 QMap <int, QSharedPointer<QPixmap>> Common::m_iconPressedMap;
 
+QSharedPointer <QPixmap> Common::renderSvg(const QString &filename, const QSize &size) {
+    if(!QFile::exists(filename))
+        return nullptr;
+
+    QSharedPointer <QPixmap> pixmap(new QPixmap(size));
+    pixmap->fill(QColor(0, 0, 0, 0));
+    QSvgRenderer renderer(filename);
+    QPainter painter(pixmap.data());
+    painter.setBackgroundMode(Qt::BGMode::TransparentMode);
+    renderer.render(&painter, QRectF(QPointF(0, 0), size));
+    return pixmap;
+}
+
 void Common::loadIcons() {
     if(!m_iconMap.isEmpty())
         return;
@@ -24,52 +37,26 @@ void Common::loadIcons() {
     }
 }
 
-QSharedPointer <QPixmap> Common::buttonIcon(const int& btns) {
-    if(m_iconMap.isEmpty())
-        loadIcons();
-
-    if(m_iconMap.contains(btns))
-        return m_iconMap[btns];
-    else
-        return nullptr;
-}
-
 QSharedPointer <QPixmap> Common::buttonIcon(const int& btn, const QSize &size) {
-    if(m_iconMap.contains(btn) && m_iconMap[btn]->size() == size)
-        return m_iconMap[btn];
-
+    auto it = m_iconMap.find(btn);
+    if(it != m_iconMap.end() && it.value()->size() == size)
+        return it.value();
     QString filename = ":/" + labelForButton(Button(btn)).toLower() + ".svg";
-    if(!QFile::exists(filename))
+    QSharedPointer <QPixmap> pixmap = renderSvg(filename, size);
+    if(pixmap.isNull())
         return nullptr;
-
-    QSharedPointer <QPixmap> pixmap(new QPixmap(size));
-    pixmap->fill(QColor(0, 0, 0, 0));
-    QSvgRenderer renderer(filename);
-    QPainter painter(pixmap.data());
-    painter.setBackgroundMode(Qt::BGMode::TransparentMode);
-    renderer.render(&painter, QRectF(QPointF(0, 0), size));
-
-    m_iconMap[btn] = pixmap;
-
-    return m_iconMap[btn];
+    m_iconMap.insert(it, btn, pixmap);
+    return pixmap;
 }
 
 QSharedPointer <QPixmap> Common::buttonPressedIcon(const int &btn, const QSize &size) {
-    if(m_iconPressedMap.contains(btn) && m_iconPressedMap[btn]->size() == size)
-        return m_iconPressedMap[btn];
-
+    auto it = m_iconPressedMap.find(btn);
+    if(it != m_iconPressedMap.end() && it.value()->size() == size)
+        return it.value();
     QString filename = ":/" + labelForButton(Button(btn)).toLower() + ".svg";
-    if(!QFile::exists(filename))
+    QSharedPointer <QPixmap> pixmap = renderSvg(filename, size);
+    if(pixmap.isNull())
         return nullptr;
-
-    QSharedPointer <QPixmap> pixmap(new QPixmap(size));
-    pixmap->fill(QColor(0, 0, 0, 0));
-    QSvgRenderer renderer(filename);
-    QPainter painter(pixmap.data());
-    painter.setBackgroundMode(Qt::BGMode::TransparentMode);
-    renderer.render(&painter, QRectF(QPointF(0, 0), size));
-
-    m_iconPressedMap[btn] = pixmap;
-
-    return m_iconPressedMap[btn];
+    m_iconPressedMap.insert(it, btn, pixmap);
+    return pixmap;
 }

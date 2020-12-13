@@ -7,12 +7,14 @@
 #include "widget/virtualanalogstick.h"
 #include "widget/virtualgamepadbutton.h"
 #include <QWidget>
+#include <QThread>
 #include <QTimer>
 
 class GamepadController : public AbstractController {
     Q_OBJECT
 public:
     GamepadController(QWidget *parent = nullptr);
+    ~GamepadController();
 
 private slots:
     void onStickMoved(const Button& btn, const QPointF &point);
@@ -22,6 +24,7 @@ private slots:
     void onButtonPressed(const Button& btn);
 
 private:
+    class ConcurrentTimer;
     bool eventFilter(QObject *obj, QEvent *event) override;
     bool event(QEvent *event) override; // Implement to handle volume buttons
     Button m_volumeUpButton; // Gamepad button mapped to volume up
@@ -46,8 +49,26 @@ private:
     VirtualGamepadButton *m_rightBumper;
     VirtualGamepadButton *m_leftBumper;
 
-    QTimer m_timer;
+    ConcurrentTimer *m_concurrentTimer;
     int m_timeoutms;
 };
+
+class GamepadController::ConcurrentTimer: public QThread {
+    Q_OBJECT
+public:
+    ConcurrentTimer(int periodms, bool singleShot = false);
+
+signals:
+    void timeout();
+
+public slots:
+    void startTimer();
+    void stopTimer();
+
+private:
+    int m_periodms;
+    QTimer m_timer;
+};
+
 
 #endif // GAMEPADCONTROLLER_H

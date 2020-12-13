@@ -85,38 +85,44 @@ GamepadController::GamepadController(QWidget *parent): AbstractController(parent
     connect(m_leftBumper, &VirtualGamepadButton::released, this, &GamepadController::onButtonReleased);
 
     // Timer to keep the connection alive if no events are sent
-    connect(&m_timer, &QTimer::timeout, [this](){
+    m_concurrentTimer = new ConcurrentTimer(m_timeoutms);
+    connect(m_concurrentTimer, &ConcurrentTimer::timeout, [this](){
         emit eventTriggered(GamepadEvent(GamepadEvent::DummyEvent, Button::COUNT).data());
     });
-    m_timer.start(m_timeoutms);
+    m_concurrentTimer->startTimer();
+    m_concurrentTimer->start();
+}
+
+GamepadController::~GamepadController() {
+    delete m_concurrentTimer;
 }
 
 void GamepadController::onStickMoved(const Button& btn, const QPointF &point) {
-    m_timer.start();
+    m_concurrentTimer->startTimer();
     GamepadEvent gEvent(GamepadEvent::StickMoveEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onStickReleased(const Button& btn, const QPointF &point) {
-    m_timer.start();
+    m_concurrentTimer->startTimer();
     GamepadEvent gEvent(GamepadEvent::StickReleaseEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onStickPressed(const Button& btn, const QPointF &point) {
-    m_timer.start();
+    m_concurrentTimer->startTimer();
     GamepadEvent gEvent(GamepadEvent::StickPressEvent, btn, point);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onButtonReleased(const Button& btn) {
-    m_timer.start();
+    m_concurrentTimer->startTimer();
     GamepadEvent gEvent(GamepadEvent::ButtonReleaseEvent, btn);
     emit eventTriggered(gEvent.data());
 }
 
 void GamepadController::onButtonPressed(const Button& btn) {
-    m_timer.start();
+    m_concurrentTimer->startTimer();
     GamepadEvent gEvent(GamepadEvent::ButtonPressEvent, btn);
     emit eventTriggered(gEvent.data());
 }
@@ -155,4 +161,18 @@ bool GamepadController::event(QEvent *event) {
         return true;
     }
     return QWidget::event(event);
+}
+
+GamepadController::ConcurrentTimer::ConcurrentTimer(int periodms, bool singleShot) {
+    m_timer.setInterval(periodms);
+    m_timer.setSingleShot(singleShot);
+    connect(&m_timer, &QTimer::timeout, this, &ConcurrentTimer::timeout);
+}
+
+void GamepadController::ConcurrentTimer::startTimer() {
+    m_timer.start();
+}
+
+void GamepadController::ConcurrentTimer::stopTimer() {
+    m_timer.stop();
 }

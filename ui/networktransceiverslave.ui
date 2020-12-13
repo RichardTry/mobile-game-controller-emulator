@@ -72,14 +72,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="broadcastAnimationLabel">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="broadcastAnimationLayout"/>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -101,17 +94,7 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_6">
          <item>
-          <widget class="QLabel" name="receiveAnimationLabel">
-           <property name="text">
-            <string/>
-           </property>
-           <property name="pixmap">
-            <pixmap resource="../resources/resources.qrc">:/network-transmit-receive.svg</pixmap>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="receiveInputAnimationLayout"/>
          </item>
          <item>
           <widget class="QPushButton" name="stopReceivingPushButton">
@@ -128,8 +111,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

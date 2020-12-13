@@ -1,5 +1,7 @@
 #include <QNetworkInterface>
 #include <QMessageBox>
+#include <QPainter>
+#include "common/common.h"
 #include "networktransceiverwidget.h"
 #include "ui_networktransceivermaster.h"
 #include "ui_networktransceiverslave.h"
@@ -65,7 +67,11 @@ void NetworkTransceiverWidget::loadSlaveUI() {
     slaveUi = new Ui::NetworkTransceiverSlave();
     slaveUi->setupUi(this);
     slaveUi->logoLabel->setPixmap(QIcon(":/applications-simulation.svg").pixmap(256, 256));
-    slaveUi->receiveAnimationLabel->setPixmap(QIcon(":/network-transmit-receive.svg").pixmap(256, 256));
+
+    m_broadcastAnimation = new StatusAnimation(StatusAnimation::Broadcast, this);
+    m_receiveAnimation = new StatusAnimation(StatusAnimation::ReceiveInput, this);
+    slaveUi->broadcastAnimationLayout->addWidget(m_broadcastAnimation);
+    slaveUi->receiveInputAnimationLayout->addWidget(m_receiveAnimation);
 
     // INIT
     connect(slaveUi->startPushButton, &QPushButton::clicked, m_transceiver, &NetworkTransceiver::onStart);
@@ -108,14 +114,19 @@ void NetworkTransceiverWidget::onStateChanged(NetworkTransceiver::State state) {
     // SLAVE STATES
     case NetworkTransceiver::State::InitSlave: {
         slaveUi->stackedWidget->setCurrentWidget(slaveUi->StateInitSlave);
+        setWindowTitle(tr("Setup"));
         break;
     }
     case NetworkTransceiver::State::Broadcast: {
         slaveUi->stackedWidget->setCurrentWidget(slaveUi->StateBroadcast);
+        setWindowTitle(tr("Broadcasting"));
+        m_broadcastAnimation->start();
         break;
     }
     case NetworkTransceiver::State::ReceiveInput: {
         slaveUi->stackedWidget->setCurrentWidget(slaveUi->StateReceiveInput);
+        setWindowTitle(tr("Receiving Input"));
+        m_receiveAnimation->start();
         break;
     }
     }
@@ -127,4 +138,58 @@ void NetworkTransceiverWidget::onHostFound(QString address) {
     item->setData(Qt::UserRole, QVariant::fromValue <QHostAddress> (hostAddress));
     item->setText(address);
     masterUi->hostListWidget->addItem(item);
+}
+
+NetworkTransceiverWidget::StatusAnimation::StatusAnimation(const Status status, NetworkTransceiverWidget *transWidget):
+QWidget(transWidget), m_status(status), m_transWidget(transWidget), m_currentPixmapIndex(0) {
+    connect(&m_timer, &QTimer::timeout, this, &StatusAnimation::onTimeOut);
+    if(status == Status::Broadcast)
+        m_periodms = 100;
+    else if (status == Status::ReceiveInput)
+        m_periodms = 750;
+    m_pixmapLoadTimer.setInterval(1000);
+    m_pixmapLoadTimer.setSingleShot(true);
+    connect(&m_pixmapLoadTimer, &QTimer::timeout, this, &StatusAnimation::loadPixmaps);
+}
+
+void NetworkTransceiverWidget::StatusAnimation::onTimeOut() {
+    ++m_currentPixmapIndex;
+    m_currentPixmapIndex %= m_pixmap.size();
+    repaint();
+}
+
+void NetworkTransceiverWidget::StatusAnimation::paintEvent(QPaintEvent *event) {
+    if(m_pixmap.empty())
+        loadPixmaps();
+    QPixmap *pixmap = m_pixmap[m_currentPixmapIndex].data();
+    const int sX = rect().x() + (rect().width() - pixmap->width())/2;
+    const int sY = rect().y() + (rect().height() - pixmap->height())/2;
+    const int sW = pixmap->width();
+    const int sH = pixmap->height();
+    QPainter painter(this);
+    painter.drawPixmap(QRect(sX, sY, sW, sH), *pixmap);
+}
+
+void NetworkTransceiverWidget::StatusAnimation::stop() {
+    m_timer.stop();
+}
+void NetworkTransceiverWidget::StatusAnimation::start() {
+    m_timer.start(m_periodms);
+}
+void NetworkTransceiverWidget::StatusAnimation::loadPixmaps() {
+    const QSize imageSize = this->size() * 0.5;
+    m_pixmap.clear();
+    if(m_status == Status::Broadcast) {
+        for(int i = 1; i <= 11; ++i)
+            m_pixmap.push_back(Common::renderSvg(":/nm-stage01-connecting" + QString::number(i).rightJustified(2, '0') +  ".svg", imageSize));
+    } else if(m_status == Status::ReceiveInput) {
+        m_pixmap.push_back(Common::renderSvg(":/network-receive.svg", imageSize));
+        m_pixmap.push_back(Common::renderSvg(":/network-transmit-receive.svg", imageSize));
+        m_pixmap.push_back(Common::renderSvg(":/network-transmit.svg", imageSize));
+    }
+}
+
+void NetworkTransceiverWidget::StatusAnimation::resizeEvent(QResizeEvent *event) {
+    if(isVisible())
+        m_pixmapLoadTimer.start();
 }
