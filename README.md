@@ -9,6 +9,6 @@ A controller emulating gamepad on mobile devices, and connecting to computers vi
 ![screenshot](doc/screenshot.png){width=360 height=180}
 
 
-Here's a [video](https://youtu.be/DFS32ejTlV0) example of how it works on a laptop with ubuntu 20 and an android phone. 
+Here's a [video](https://youtu.be/MWMWvk8R2r0) example of how it works on a laptop with ubuntu 20 and an android phone. 
 
 
