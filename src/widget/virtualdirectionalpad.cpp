@@ -60,26 +60,13 @@ bool VirtualDirectionalPad::event(QEvent *event) {
     // DETERMINE WHICH REGION WAS TOUCHED
     const QPointF rawTouchPoint = touchEvent->touchPoints().first().pos();
     const QPoint origin = this->rect().center();
-    const qreal distanceFromOrigin = (rawTouchPoint - origin).manhattanLength();
     const QLineF line(origin, rawTouchPoint.toPoint());
     const qreal lineAngle = 360-line.angle();
-    // 1-) Central region touched
-    if(0 <= distanceFromOrigin && distanceFromOrigin <= m_innerRadius) {
-        m_pressedButtons = Button::DPAD;
-    }
-    // 2-) Button region touched, one of 4 directions or a diagonal combination of two
-    else if (m_innerRadius < distanceFromOrigin && distanceFromOrigin <= m_outerRadius) {
-        // Iterate through all regions to see which region the click has happened in
-        for(DpadRegion region: m_regions) {
-            if(region.startAngle < lineAngle && lineAngle <= region.endAngle) {
-                m_pressedButtons = region.pressedButtons;
-                break;
-            }
+    for(DpadRegion region: m_regions) {
+        if(region.startAngle < lineAngle && lineAngle <= region.endAngle) {
+            m_pressedButtons = region.pressedButtons;
+            break;
         }
-    }
-    // 3-) No valid region touched return before emitting a signal
-    else {
-        m_pressedButtons = Button::DPAD;
     }
 
     if(m_pressedButtons != m_pressedButtonsPrevious)
