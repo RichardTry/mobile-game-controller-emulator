@@ -37,6 +37,8 @@ bool VirtualAnalogStick::event(QEvent *event) {
         qreal ro = (w < h ? w : h) / 2;
         setOuterRadius(ro);
         setMask(QRegion(QRect(QPoint(0, 0), resizeEvent->size()), QRegion::Ellipse));
+        m_touchPoint = QPointF(w/2, h/2);
+        m_timer.start();
         return QWidget::event(event);
     }
 
