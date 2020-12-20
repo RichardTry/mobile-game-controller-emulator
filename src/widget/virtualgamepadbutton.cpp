@@ -5,7 +5,7 @@
 #include <QResizeEvent>
 #include <QEvent>
 
-VirtualGamepadButton::VirtualGamepadButton(const Button &btn, QWidget *parent) : QWidget(parent), m_button(btn) {
+VirtualGamepadButton::VirtualGamepadButton(const Button &btn, QWidget *parent) : QWidget(parent), m_button(btn), m_pressed(false) {
     setAttribute(Qt::WA_AcceptTouchEvents);
     m_pressedScale = 0.8;
     m_releasedScale = 0.9;
