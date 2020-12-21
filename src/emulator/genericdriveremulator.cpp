@@ -14,8 +14,9 @@ GenericDriverEmulator::GenericDriverEmulator(AbstractDriver *driver, AbstractTra
     m_transmittionWorker->start();
 
     connect(transceiver, &AbstractTransceiver::dataArrived, this, &GenericDriverEmulator::onDataArrived);
-    connect(transceiver, &AbstractTransceiver::connected, driver, &AbstractDriver::onConnected);
-    connect(transceiver, &AbstractTransceiver::disconnected, driver, &AbstractDriver::onDisconnect);
+    connect(transceiver, &AbstractTransceiver::connected, m_driver, &AbstractDriver::onConnected);
+    connect(transceiver, &AbstractTransceiver::disconnected, m_driver, &AbstractDriver::onDisconnect);
+    connect(this, &GenericDriverEmulator::dataReadyForDriver, m_driver, &AbstractDriver::onDataArrived);
 }
 
 GenericDriverEmulator::~GenericDriverEmulator() {
@@ -58,7 +59,7 @@ void GenericDriverEmulator::TransmittionWorker::run() {
         index %= m_emulator->m_frameBufferSize;
         QByteArray &payload = m_emulator->m_frames[index];
         ++index;
-        m_emulator->m_driver->onDataArrived(payload);
+        m_emulator->emit dataReadyForDriver(payload);
         m_emulator->m_freeFrames.release();
     }
 }

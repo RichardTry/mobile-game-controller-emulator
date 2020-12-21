@@ -26,7 +26,8 @@ inline __u16 mapButton2Input(const Button &btn) {
 }
 
 LinuxGamepadDriver::LinuxGamepadDriver(QObject *parent): AbstractDriver(parent), m_syncPeriodms(1) {
-    m_syncReportTimer.start(m_syncPeriodms);
+    m_syncReportTimer.setInterval(m_syncPeriodms);
+    m_syncReportTimer.setSingleShot(true);
     connect(&m_syncReportTimer, &QTimer::timeout, this, &LinuxGamepadDriver::writeSyncReport);
     init();
 }
@@ -41,48 +42,32 @@ LinuxGamepadDriver::~LinuxGamepadDriver() {
 void LinuxGamepadDriver::onDataArrived(const QByteArray &data) {
     GamepadEvent event(data);
 
-    const int infoTextWidth = 20;
-    const int numberWidth = 15;
     const QString btnLabel = labelForButton(event.m_button);
     switch (event.m_type) {
-    case GamepadEvent::ButtonPressEvent: {
-        pressButton(event.m_button);
-        break;
-    }
-    case GamepadEvent::ButtonReleaseEvent: {
-        releaseButton(event.m_button);
-        break;
-    }
-    case GamepadEvent::StickMoveEvent: {
-        moveStick(event.m_button, event.m_value);
-//        qDebug() << QString(btnLabel + " Moved:").leftJustified(infoTextWidth)
-//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-//                 << " "
-//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
-        break;
-    }
-    case GamepadEvent::StickPressEvent: {
-        moveStick(event.m_button, event.m_value);
-//        qDebug() << QString(btnLabel + " Pressed:").leftJustified(infoTextWidth)
-//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-//                 << " "
-//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
-        break;
-    }
-    case GamepadEvent::StickReleaseEvent: {
-        moveStick(event.m_button, QPointF(0, 0));
-//        moveStick(event.m_button, event.m_value);
-//        qDebug() << QString(btnLabel + " Released:").leftJustified(infoTextWidth)
-//                 << QString::number(event.m_value.x()).rightJustified(numberWidth)
-//                 << " "
-//                 << QString::number(event.m_value.y()).rightJustified(numberWidth);
-        break;
-    }
-    case GamepadEvent::DummyEvent: {
-        // Do nothing, sen to keep connection alive
-        break;
-    }
-
+        case GamepadEvent::ButtonPressEvent: {
+            pressButton(event.m_button);
+            break;
+        }
+        case GamepadEvent::ButtonReleaseEvent: {
+            releaseButton(event.m_button);
+            break;
+        }
+        case GamepadEvent::StickMoveEvent: {
+            moveStick(event.m_button, event.m_value);
+            break;
+        }
+        case GamepadEvent::StickPressEvent: {
+            moveStick(event.m_button, event.m_value);
+            break;
+        }
+        case GamepadEvent::StickReleaseEvent: {
+            moveStick(event.m_button, QPointF(0, 0));
+            break;
+        }
+        case GamepadEvent::DummyEvent: {
+            // Do nothing, sent to keep connection alive
+            break;
+        }
     }
 }
 
@@ -184,6 +169,9 @@ void LinuxGamepadDriver::moveStick(const Button &btn, const QPointF &value) {
     {
         printf("error: thumbstick-write");
     }
+
+    if(!m_syncReportTimer.isActive())
+        m_syncReportTimer.start();
 }
 void LinuxGamepadDriver::pressButton(const Button &btn) {
     memset(&m_ev, 0, sizeof(struct input_event)); //setting the memory for event
@@ -194,6 +182,9 @@ void LinuxGamepadDriver::pressButton(const Button &btn) {
     {
         printf("error: key-write");
     }
+
+    if(!m_syncReportTimer.isActive())
+        m_syncReportTimer.start();
 }
 void LinuxGamepadDriver::releaseButton(const Button &btn) {
     memset(&m_ev, 0, sizeof(struct input_event)); //setting the memory for event
@@ -204,4 +195,7 @@ void LinuxGamepadDriver::releaseButton(const Button &btn) {
     {
         printf("error: key-write");
     }
+
+    if(!m_syncReportTimer.isActive())
+        m_syncReportTimer.start();
 }

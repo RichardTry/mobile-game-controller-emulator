@@ -18,6 +18,9 @@ public slots:
     void onDisconnected(QString msg) override;
     void onQuit() override;
 
+signals:
+    void dataReadyForDriver(QByteArray data);
+
 private:
     class TransmittionWorker;
     TransmittionWorker *m_transmittionWorker;
