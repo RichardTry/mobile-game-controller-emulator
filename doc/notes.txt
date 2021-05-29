@@ -50,3 +50,10 @@ Linux Input Event Codes:
 ANDROID ORIENTATION SETTING
 To lock orientation to landscape, set android:screenOrientation="unspecified" 
 to android:screenOrientation="sensorLandscape"
+
+IMPORTANT BUILD NOTE:
+    to build the driver:
+        pass "CONFIG+=driver" to qmake without the quotes
+    to build the controller:
+        pass "CONFIG+=controller" to qmake without the quotes
+
