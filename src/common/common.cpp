@@ -23,12 +23,6 @@ QSharedPointer <QPixmap> Common::renderSvg(const QString &filename, const QSize 
 void Common::loadIcons() {
     if(!m_iconMap.isEmpty())
         return;
-
-    m_iconMap[Button::UP | Button::LEFT] = QSharedPointer <QPixmap> (new QPixmap(":/up-left.svg"));
-    m_iconMap[Button::UP | Button::RIGHT] = QSharedPointer <QPixmap> (new QPixmap(":/up-right.svg"));
-    m_iconMap[Button::DOWN | Button::LEFT] = QSharedPointer <QPixmap> (new QPixmap(":/down-left.svg"));
-    m_iconMap[Button::DOWN | Button::RIGHT] = QSharedPointer <QPixmap> (new QPixmap(":/down-right.svg"));
-
     for(int i = Button::X; i < Button::COUNT; i*=2) {
         QString filename = ":/" + labelForButton(Button(i)).toLower() + ".svg";
         if(!QFile::exists(filename))
