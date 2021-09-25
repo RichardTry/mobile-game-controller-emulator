@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>applications-simulation.svg</file>
         <file>nm-stage01-connecting11.svg</file>
         <file>nm-stage01-connecting09.svg</file>
         <file>nm-stage01-connecting05.svg</file>
@@ -15,16 +14,6 @@
         <file>network-transmit-receive.svg</file>
         <file>network-transmit.svg</file>
         <file>network-receive.svg</file>
-        <file>JoystickSplitted.png</file>
-        <file>Joystick.png</file>
-        <file>LargeHandleFilled.png</file>
-        <file>LargeHandleFilledGrey.png</file>
-        <file>SmallHandleFilledGrey.png</file>
-        <file>SmallHandle.png</file>
-        <file>sb_right_arrow.cur</file>
-        <file>sb_left_arrow.cur</file>
-        <file>sb_down_arrow.cur</file>
-        <file>sb_up_arrow.cur</file>
         <file>controller-layout.svg</file>
         <file>down-right.svg</file>
         <file>up-right.svg</file>
