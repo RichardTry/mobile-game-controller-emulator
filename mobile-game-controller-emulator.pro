@@ -51,7 +51,6 @@ SOURCES += \
 HEADERS += \
     src/controller/abstractcontroller.h \
     src/controller/gamepadcontroller.h \
-    src/controller/icontroller.h \
     src/emulator/abstractcontrolleremulator.h \
     src/emulator/androidcontrolleremulator.h \
 }
