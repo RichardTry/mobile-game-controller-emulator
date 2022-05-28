@@ -57,3 +57,7 @@ IMPORTANT BUILD NOTE:
     to build the controller:
         pass "CONFIG+=controller" to qmake without the quotes
 
+
+ANOTHER IMPORTANT BUILD NOTE:
+	If you get a stupid error about some missing *so file that seems to exist in the build dir. Create a the exact same dir structure in the build and copy the file to whatever path Qt expects that should solve the issue.
+
