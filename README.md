@@ -12,7 +12,7 @@ A controller emulating gamepad on mobile devices, and connecting to computers vi
 Here's a [video](https://youtu.be/MWMWvk8R2r0) example of how it works on a laptop with ubuntu 20 and an android phone. 
 
 ## Build
-There are two components to build, the controller and the driver. Both require Qt 5.15.
+There are two components to build, the controller and the driver. You'll need Qt 5.15 and all the modules listed in `mobile-game-controller-emulator.pro`.
 
 ### Controller
 The controller works on Android alone and it was tested on a GM8 phone with Android 9. Pass the argument `CONFIG+=controller` when calling qmake to build the controller. You'll also have to modify the statement `ANDROID_ABIS = armeabi-v7a` at line 69 in the file `mobile-game-controller-emulator.pro` if your android phone is a different architecture.
