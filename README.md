@@ -20,5 +20,8 @@ The controller works on Android alone and it was tested on a GM8 phone with Andr
 ### Driver
 The driver currently supports linux alone (tested on Ubuntu 18.04 and Ubuntu 20.04). Pass the argument `CONFIG+=driver` when calling qmake to build the driver. You'll need to call the executable with sudo otherwise it will fail to open uinput.
 
+## Modifying the Controller Layout
+You can move around and resize the elements in `resources/controller-layout.svg` to get the exact controller layout you want. You can use any svg editor you like (e.g Inkscape), just don't change the labels of the elements because that's how the svg elements are mapped to layout elements in the code.
+
 ## Credit
 I'd like to thank [Marek Kraus](https://blog.marekkraus.sk) for putting together this awesome [example](https://blog.marekkraus.sk/c/linuxs-uinput-usage-tutorial-virtual-gamepad/) and making it publicly available. Using the linux documentation alone would have taken me much longer to write the driver side. Thanks to Marek it was a piece of cake.
