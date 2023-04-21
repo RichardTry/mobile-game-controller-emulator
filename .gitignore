@@ -76,3 +76,6 @@ Thumbs.db
 
 # Android deployment configuration files
 android/*
+
+# Dockerized build outputs
+output
