@@ -66,8 +66,6 @@ HEADERS += \
     src/widget/virtualdirectionalpad.h \
     src/widget/virtualgamepadbutton.h
 
-ANDROID_ABIS = armeabi-v7a
-
 FORMS += \
     ui/networktransceivermaster.ui \
     ui/networktransceiverslave.ui
