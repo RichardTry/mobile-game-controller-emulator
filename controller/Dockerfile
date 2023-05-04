@@ -6,7 +6,7 @@ COPY . /home/user/mocon
 RUN cp /home/user/mocon/controller/entrypoint.sh .
 
 # Call QMake
-RUN qmake ../mocon/mobile-game-controller-emulator.pro -spec android-clang CONFIG+=release CONFIG+=controller ANDROID_ABIS="armeabi-v7a arm64-v8a"
+RUN qmake ../mocon/mobile-game-controller-emulator.pro -spec android-clang CONFIG+=release CONFIG+=controller ANDROID_ABIS="armeabi-v7a arm64-v8a x86 x86_64"
 
 # Build
 RUN sudo $ANDROID_NDK_ROOT/prebuilt/linux-x86_64/bin/make apk
